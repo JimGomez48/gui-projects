@@ -1,52 +1,33 @@
 import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 
-/** User: Jim Date: 1/30/13 Time: 10:48 PM */
+/**
+ * User: Jim Date: 1/30/13 Time: 10:48 PM
+ */
 public class CalcPanel extends JPanel {
 
     public static JFrame frame;
+    public static final int PANEL_WIDTH = 250, PANEL_HEIGHT = 250;
 
-    private ArrayList<CalcButton> numButtons;
-    private CalcButton add;
-    private CalcButton subtract;
-    private CalcButton multiply;
-    private CalcButton divide;
-    private CalcButton leftParens;
-    private CalcButton rightParens;
     private CalcDisplay display;
 
-    public CalcPanel() {
-        super(true);
+    public CalcPanel(LayoutManager manager) {
+        super(manager, true);
 
+        GridBagConstraints displayConstraints = new GridBagConstraints();
         display = new CalcDisplay();
-        add(display);
-
-        numButtons = new ArrayList<CalcButton>(10);
-
-        //Add number buttons to the numButtons arraylist, then add them to the panel
-        for (int i = 0; i < 10; i++) {
-            CalcButton button = new CalcButton(String.valueOf(i));
-            numButtons.add(button);
-            add(button);
-        }
-
-        add = new CalcButton("+");
-        add(add);
-        subtract = new CalcButton("-");
-        add(subtract);
-        multiply = new CalcButton("*");
-        add(multiply);
-        divide = new CalcButton("/");
-        add(divide);
-        leftParens = new CalcButton("(");
-        add(leftParens);
-        rightParens = new CalcButton(")");
-        add(rightParens);
+        displayConstraints.fill = GridBagConstraints.HORIZONTAL;
+        //displayConstraints.gridheight = CalcDisplay.PREF_HEIGHT;
+        displayConstraints.gridx = 0;
+        displayConstraints.gridy = 0;
+        add(display, displayConstraints);
     }
 
     public static void buildGui() {
         frame = new JFrame("Calculator");
-        CalcPanel panel = new CalcPanel();
+        frame.setResizable(false);
+        CalcPanel panel = new CalcPanel(new GridBagLayout());
         frame.setContentPane(panel);
         frame.setSize(250, 250);
         frame.setVisible(true);
