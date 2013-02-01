@@ -1,9 +1,7 @@
 import javax.swing.*;
-import javax.swing.plaf.FontUIResource;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 /**
  * User: Jim
@@ -29,7 +27,7 @@ public class NumPanel extends JPanel {
     private CalcButton rightParen;
 
 
-    public NumPanel(CalcDisplay display) {
+    public NumPanel(final CalcDisplay display) {
         super(new GridBagLayout(), true);
         setPreferredSize(new Dimension(PREF_WIDTH, PREF_HEIGHT));
 
@@ -48,22 +46,67 @@ public class NumPanel extends JPanel {
         leftParen = new CalcButton("(");
         rightParen = new CalcButton(")");
 
-        createActionListeners();
-    }
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.gridwidth = 1;
+        constraints.gridheight = 1;
+        constraints.fill = GridBagConstraints.BOTH;
 
-    private void createActionListeners(){
-        zero.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //TODO: implement 0 button listener
-            }
-        });
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        add(seven, constraints);
+
+        constraints.gridx = 1;
+        constraints.gridy = 0;
+        add(eight, constraints);
+
+        constraints.gridx = 2;
+        constraints.gridy = 0;
+        add(nine, constraints);
+
+        constraints.gridx = 0;
+        constraints.gridy = 1;
+        add(four, constraints);
+
+        constraints.gridx = 1;
+        constraints.gridy = 1;
+        add(five, constraints);
+
+        constraints.gridx = 2;
+        constraints.gridy = 1;
+        add(six, constraints);
+
+        constraints.gridx = 0;
+        constraints.gridy = 2;
+        add(one, constraints);
+
+        constraints.gridx = 1;
+        constraints.gridy = 2;
+        add(two, constraints);
+
+        constraints.gridx = 2;
+        constraints.gridy = 2;
+        add(three, constraints);
+
+        constraints.gridx = 0;
+        constraints.gridy = 3;
+        add(leftParen, constraints);
+
+        constraints.gridx = 1;
+        constraints.gridy = 3;
+        add(zero, constraints);
+
+        constraints.gridx = 2;
+        constraints.gridy = 3;
+        add(rightParen, constraints);
 
         one.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //TODO: implement 1 button listener
+                String text = display.getText();
+                display.setText(text.concat(one.getText()));
             }
         });
+
+
     }
 }

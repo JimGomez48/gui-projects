@@ -7,29 +7,51 @@ import java.util.ArrayList;
  */
 public class CalcPanel extends JPanel {
 
-    public static JFrame frame;
     public static final int PANEL_WIDTH = 250, PANEL_HEIGHT = 250;
+    private static JFrame frame;
+    private NumPanel numPanel;
+    private OpPanel opPanel;
 
     private CalcDisplay display;
 
     public CalcPanel(LayoutManager manager) {
         super(manager, true);
 
-        GridBagConstraints displayConstraints = new GridBagConstraints();
+        //create panels and a constraints objects
+        GridBagConstraints constraints = new GridBagConstraints();
         display = new CalcDisplay();
-        displayConstraints.fill = GridBagConstraints.HORIZONTAL;
-        //displayConstraints.gridheight = CalcDisplay.PREF_HEIGHT;
-        displayConstraints.gridx = 0;
-        displayConstraints.gridy = 0;
-        add(display, displayConstraints);
+        numPanel = new NumPanel(display);
+        opPanel = new OpPanel(display);
+
+        //setup and attach display
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.gridwidth = 1;
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        add(display, constraints);
+
+        constraints.gridx =0;
+        constraints.gridy = 1;
+        constraints.weightx = 70;
+        constraints.fill  = GridBagConstraints.HORIZONTAL;
+        add(numPanel, constraints);
+
+        constraints.gridx =1;
+        constraints.gridy = 1;
+        constraints.weightx = 30;
+        constraints.fill  = GridBagConstraints.HORIZONTAL;
+        add(opPanel, constraints);
+
     }
 
     public static void buildGui() {
         frame = new JFrame("Calculator");
-        frame.setResizable(false);
+        //frame.setResizable(false);
         CalcPanel panel = new CalcPanel(new GridBagLayout());
         frame.setContentPane(panel);
-        frame.setSize(250, 250);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setPreferredSize(new Dimension(250, 250));
+        frame.pack();
         frame.setVisible(true);
     }
 

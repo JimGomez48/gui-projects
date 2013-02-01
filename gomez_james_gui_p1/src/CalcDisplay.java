@@ -8,7 +8,7 @@ public class CalcDisplay extends JTextField {
 
     public CalcDisplay(){
         super("0");
-        setPreferredSize(new Dimension(PREF_WIDTH, PREF_HEIGHT));
+        //setPreferredSize(new Dimension(PREF_WIDTH, PREF_HEIGHT));
         //TODO: set a nicely visible font for this display panel
     }
 }

@@ -10,7 +10,7 @@ public class CalcButton extends JButton {
 
     public CalcButton(String text) {
         super(text);
-        setPreferredSize(new Dimension(PREF_WIDTH, PREF_HEIGHT));
+        //setPreferredSize(new Dimension(PREF_WIDTH, PREF_HEIGHT));
         //TODO: set a nice font and font size for these buttons
     }
 }
