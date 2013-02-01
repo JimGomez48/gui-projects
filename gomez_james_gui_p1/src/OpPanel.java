@@ -11,7 +11,7 @@ import java.util.ArrayList;
  */
 public class OpPanel extends JPanel {
 
-    public static final int PREF_WIDTH = 70, PREF_HEIGHT = 200;
+    public static final int PREF_WIDTH = 50, PREF_HEIGHT = 160;
     private CalcDisplay dislay;
 
     private CalcButton add;
@@ -21,7 +21,8 @@ public class OpPanel extends JPanel {
 
     public OpPanel(CalcDisplay display) {
         super(new GridBagLayout(), true);
-        //setPreferredSize(new Dimension(PREF_WIDTH, PREF_HEIGHT));
+        setMinimumSize(new Dimension(PREF_WIDTH, PREF_HEIGHT));
+        setPreferredSize(new Dimension(PREF_WIDTH, PREF_HEIGHT));
 
         this.dislay = display;
 
@@ -31,7 +32,7 @@ public class OpPanel extends JPanel {
         divide = new CalcButton("/");
 
         GridBagConstraints constraints = new GridBagConstraints();
-        constraints.insets = new Insets(0, 5, 0, 5);
+        constraints.insets = new Insets(0, 5, 0, 0);
         constraints.fill = GridBagConstraints.HORIZONTAL;
 
         constraints.gridx = 0;

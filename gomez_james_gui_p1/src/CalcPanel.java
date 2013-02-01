@@ -2,9 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-/**
- * User: Jim Date: 1/30/13 Time: 10:48 PM
- */
+/** User: Jim Date: 1/30/13 Time: 10:48 PM */
 public class CalcPanel extends JPanel {
 
     public static final int PANEL_WIDTH = 250, PANEL_HEIGHT = 250;
@@ -24,22 +22,22 @@ public class CalcPanel extends JPanel {
         opPanel = new OpPanel(display);
 
         //setup and attach display
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-        constraints.gridwidth = 1;
+        //constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.gridwidth = GridBagConstraints.REMAINDER;
         constraints.gridx = 0;
         constraints.gridy = 0;
         add(display, constraints);
 
-        constraints.gridx =0;
+        constraints.gridx = 0;
         constraints.gridy = 1;
-        constraints.weightx = 70;
-        constraints.fill  = GridBagConstraints.HORIZONTAL;
+        //constraints.weightx = 70;
+        //constraints.fill  = GridBagConstraints.HORIZONTAL;
         add(numPanel, constraints);
 
-        constraints.gridx =1;
+        constraints.gridx = 1;
         constraints.gridy = 1;
-        constraints.weightx = 30;
-        constraints.fill  = GridBagConstraints.HORIZONTAL;
+        //constraints.weightx = 30;
+        //constraints.fill  = GridBagConstraints.HORIZONTAL;
         add(opPanel, constraints);
 
     }
@@ -50,7 +48,7 @@ public class CalcPanel extends JPanel {
         CalcPanel panel = new CalcPanel(new GridBagLayout());
         frame.setContentPane(panel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setPreferredSize(new Dimension(250, 250));
+        //frame.setPreferredSize(new Dimension(260, 280));
         frame.pack();
         frame.setVisible(true);
     }

@@ -3,14 +3,10 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-/**
- * User: Jim
- * Date: 1/31/13
- * Time: 10:33 AM
- */
+/** User: Jim Date: 1/31/13 Time: 10:33 AM */
 public class NumPanel extends JPanel {
 
-    public static final int PREF_WIDTH = 240, PREF_HEIGHT = 200;
+    public static final int PREF_WIDTH = 150, PREF_HEIGHT = 160;
     private CalcDisplay display;
 
     private CalcButton zero;
@@ -29,6 +25,7 @@ public class NumPanel extends JPanel {
 
     public NumPanel(final CalcDisplay display) {
         super(new GridBagLayout(), true);
+        setMinimumSize(new Dimension(PREF_WIDTH, PREF_HEIGHT));
         setPreferredSize(new Dimension(PREF_WIDTH, PREF_HEIGHT));
 
         this.display = display;
@@ -99,6 +96,11 @@ public class NumPanel extends JPanel {
         constraints.gridy = 3;
         add(rightParen, constraints);
 
+
+        createButtonListeners();
+    }
+
+    private void createButtonListeners() {
         one.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -107,6 +109,92 @@ public class NumPanel extends JPanel {
             }
         });
 
+        two.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String text = display.getText();
+                display.setText(text.concat(two.getText()));
+            }
+        });
 
+        three.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String text = display.getText();
+                display.setText(text.concat(three.getText()));
+            }
+        });
+
+        four.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String text = display.getText();
+                display.setText(text.concat(four.getText()));
+            }
+        });
+
+        five.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String text = display.getText();
+                display.setText(text.concat(five.getText()));
+            }
+        });
+
+        six.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String text = display.getText();
+                display.setText(text.concat(six.getText()));
+            }
+        });
+
+        seven.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String text = display.getText();
+                display.setText(text.concat(seven.getText()));
+            }
+        });
+
+        eight.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String text = display.getText();
+                display.setText(text.concat(eight.getText()));
+            }
+        });
+
+        nine.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String text = display.getText();
+                display.setText(text.concat(nine.getText()));
+            }
+        });
+
+        zero.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String text = display.getText();
+                display.setText(text.concat(zero.getText()));
+            }
+        });
+
+        leftParen.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String text = display.getText();
+                display.setText(text.concat(leftParen.getText()));
+            }
+        });
+
+        rightParen.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String text = display.getText();
+                display.setText(text.concat(rightParen.getText()));
+            }
+        });
     }
 }
