@@ -30,12 +30,14 @@ public class CalcPanel extends JPanel {
 
         constraints.gridx = 0;
         constraints.gridy = 1;
+        constraints.gridwidth = 1;
         //constraints.weightx = 70;
         //constraints.fill  = GridBagConstraints.HORIZONTAL;
         add(numPanel, constraints);
 
         constraints.gridx = 1;
         constraints.gridy = 1;
+        constraints.gridwidth = 1;
         //constraints.weightx = 30;
         //constraints.fill  = GridBagConstraints.HORIZONTAL;
         add(opPanel, constraints);
@@ -50,6 +52,7 @@ public class CalcPanel extends JPanel {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //frame.setPreferredSize(new Dimension(260, 280));
         frame.pack();
+        frame.setResizable(false);
         frame.setVisible(true);
     }
 

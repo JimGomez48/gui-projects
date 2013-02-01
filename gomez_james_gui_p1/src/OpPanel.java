@@ -2,17 +2,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
-/**
- * User: Jim
- * Date: 1/31/13
- * Time: 10:33 AM
- */
+/** User: Jim Date: 1/31/13 Time: 10:33 AM */
 public class OpPanel extends JPanel {
 
     public static final int PREF_WIDTH = 50, PREF_HEIGHT = 160;
-    private CalcDisplay dislay;
+    private CalcDisplay display;
 
     private CalcButton add;
     private CalcButton subtract;
@@ -24,7 +19,7 @@ public class OpPanel extends JPanel {
         setMinimumSize(new Dimension(PREF_WIDTH, PREF_HEIGHT));
         setPreferredSize(new Dimension(PREF_WIDTH, PREF_HEIGHT));
 
-        this.dislay = display;
+        this.display = display;
 
         add = new CalcButton("+");
         subtract = new CalcButton("-");
@@ -58,28 +53,32 @@ public class OpPanel extends JPanel {
         add.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //TODO: implement add button listener
+                String text = display.getText();
+                display.setText(text.concat(add.getText()));
             }
         });
 
         subtract.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //TODO: implement subtract button listener
+                String text = display.getText();
+                display.setText(text.concat(subtract.getText()));
             }
         });
 
         multiply.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //TODO: implement multiply button listener
+                String text = display.getText();
+                display.setText(text.concat(multiply.getText()));
             }
         });
 
         divide.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //TODO: implement divide button listener
+                String text = display.getText();
+                display.setText(text.concat(divide.getText()));
             }
         });
     }
