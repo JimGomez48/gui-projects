@@ -16,6 +16,7 @@ public class OpPanel extends JPanel {
 
     public OpPanel(CalcDisplay display, CalcPanel.ButtonListener listener) {
         super(new GridBagLayout(), true);
+
         setMinimumSize(new Dimension(PREF_WIDTH, PREF_HEIGHT));
         setPreferredSize(new Dimension(PREF_WIDTH, PREF_HEIGHT));
 
