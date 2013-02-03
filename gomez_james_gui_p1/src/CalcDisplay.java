@@ -7,6 +7,7 @@ import java.awt.event.KeyListener;
 public class CalcDisplay extends JTextField {
 
     public static final int PREF_WIDTH = 220, PREF_HEIGHT = 40;
+    private final String allowed = "0123456789()+-*/";
 
     public CalcDisplay() {
         super("0");
@@ -19,20 +20,13 @@ public class CalcDisplay extends JTextField {
         addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
-                char key = e.getKeyChar();
-
-                if (!(key == '0' || key == '1' || key == '2' || key == '3' || key ==
-                        '4' || key == '5' || key == '6' || key == '7' || key ==
-                        '8' || key == '9' || key == '(' || key == ')' || key ==
-                        '+' || key == '-' || key == '*' || key == '/'))
+                if (allowed.indexOf(e.getKeyChar()) == -1)
                     e.consume();
             }
 
             @Override
             public void keyPressed(KeyEvent e) {
-                int keycode = e.getKeyCode();
-
-                if (keycode == KeyEvent.VK_ENTER) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     evaluateExpression();
                     System.out.println("Enter pressed");
                 }
