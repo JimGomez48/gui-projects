@@ -1,48 +1,44 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
-/** User: Jim Date: 1/31/13 Time: 10:33 AM */
+/**
+ * User: Jim Date: 1/31/13 Time: 10:33 AM
+ */
 public class NumPanel extends JPanel {
 
     public static final int PREF_WIDTH = 150, PREF_HEIGHT = 160;
+    private final int ZERO = 0, ONE = 1, TWO = 2, THREE = 3, FOUR = 4, FIVE = 5,
+            SIX = 6, SEVEN = 7, EIGHT = 8,
+            NINE = 9, LEFT_PAREN = 10, RIGHT_PAREN = 11;
+
     private CalcDisplay display;
+    private ArrayList<CalcButton> buttons;
 
-    private CalcButton zero;
-    private CalcButton one;
-    private CalcButton two;
-    private CalcButton three;
-    private CalcButton four;
-    private CalcButton five;
-    private CalcButton six;
-    private CalcButton seven;
-    private CalcButton eight;
-    private CalcButton nine;
-    private CalcButton leftParen;
-    private CalcButton rightParen;
-
-
-    public NumPanel(final CalcDisplay display) {
+    public NumPanel(final CalcDisplay display, CalcPanel.ButtonListener listener) {
         super(new GridBagLayout(), true);
         setMinimumSize(new Dimension(PREF_WIDTH, PREF_HEIGHT));
         setPreferredSize(new Dimension(PREF_WIDTH, PREF_HEIGHT));
 
         this.display = display;
 
-        zero = new CalcButton("0");
-        one = new CalcButton("1");
-        two = new CalcButton("2");
-        three = new CalcButton("3");
-        four = new CalcButton("4");
-        five = new CalcButton("5");
-        six = new CalcButton("6");
-        seven = new CalcButton("7");
-        eight = new CalcButton("8");
-        nine = new CalcButton("9");
-        leftParen = new CalcButton("(");
-        rightParen = new CalcButton(")");
+        //create the op panel buttons and store them in the buttons arraylist
+        buttons = new ArrayList<CalcButton>(12);
 
+        buttons.add(new CalcButton("0"));
+        buttons.add(new CalcButton("1"));
+        buttons.add(new CalcButton("2"));
+        buttons.add(new CalcButton("3"));
+        buttons.add(new CalcButton("4"));
+        buttons.add(new CalcButton("5"));
+        buttons.add(new CalcButton("6"));
+        buttons.add(new CalcButton("7"));
+        buttons.add(new CalcButton("8"));
+        buttons.add(new CalcButton("9"));
+        buttons.add(new CalcButton("("));
+        buttons.add(new CalcButton(")"));
+
+        //arrange the buttons in a vertical grid
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.gridwidth = 1;
         constraints.gridheight = 1;
@@ -50,151 +46,55 @@ public class NumPanel extends JPanel {
 
         constraints.gridx = 0;
         constraints.gridy = 0;
-        add(seven, constraints);
+        add(buttons.get(SEVEN), constraints);
 
         constraints.gridx = 1;
         constraints.gridy = 0;
-        add(eight, constraints);
+        add(buttons.get(EIGHT), constraints);
 
         constraints.gridx = 2;
         constraints.gridy = 0;
-        add(nine, constraints);
+        add(buttons.get(NINE), constraints);
 
         constraints.gridx = 0;
         constraints.gridy = 1;
-        add(four, constraints);
+        add(buttons.get(FOUR), constraints);
 
         constraints.gridx = 1;
         constraints.gridy = 1;
-        add(five, constraints);
+        add(buttons.get(FIVE), constraints);
 
         constraints.gridx = 2;
         constraints.gridy = 1;
-        add(six, constraints);
+        add(buttons.get(SIX), constraints);
 
         constraints.gridx = 0;
         constraints.gridy = 2;
-        add(one, constraints);
+        add(buttons.get(ONE), constraints);
 
         constraints.gridx = 1;
         constraints.gridy = 2;
-        add(two, constraints);
+        add(buttons.get(TWO), constraints);
 
         constraints.gridx = 2;
         constraints.gridy = 2;
-        add(three, constraints);
+        add(buttons.get(THREE), constraints);
 
         constraints.gridx = 0;
         constraints.gridy = 3;
-        add(leftParen, constraints);
+        add(buttons.get(LEFT_PAREN), constraints);
 
         constraints.gridx = 1;
         constraints.gridy = 3;
-        add(zero, constraints);
+        add(buttons.get(ZERO), constraints);
 
         constraints.gridx = 2;
         constraints.gridy = 3;
-        add(rightParen, constraints);
+        add(buttons.get(RIGHT_PAREN), constraints);
 
-
-        createButtonListeners();
-    }
-
-    private void createButtonListeners() {
-        one.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String text = display.getText();
-                display.setText(text.concat(one.getText()));
-            }
-        });
-
-        two.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String text = display.getText();
-                display.setText(text.concat(two.getText()));
-            }
-        });
-
-        three.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String text = display.getText();
-                display.setText(text.concat(three.getText()));
-            }
-        });
-
-        four.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String text = display.getText();
-                display.setText(text.concat(four.getText()));
-            }
-        });
-
-        five.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String text = display.getText();
-                display.setText(text.concat(five.getText()));
-            }
-        });
-
-        six.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String text = display.getText();
-                display.setText(text.concat(six.getText()));
-            }
-        });
-
-        seven.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String text = display.getText();
-                display.setText(text.concat(seven.getText()));
-            }
-        });
-
-        eight.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String text = display.getText();
-                display.setText(text.concat(eight.getText()));
-            }
-        });
-
-        nine.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String text = display.getText();
-                display.setText(text.concat(nine.getText()));
-            }
-        });
-
-        zero.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String text = display.getText();
-                display.setText(text.concat(zero.getText()));
-            }
-        });
-
-        leftParen.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String text = display.getText();
-                display.setText(text.concat(leftParen.getText()));
-            }
-        });
-
-        rightParen.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String text = display.getText();
-                display.setText(text.concat(rightParen.getText()));
-            }
-        });
+        //register the button listener with all of the buttons
+        for (CalcButton b : buttons) {
+            b.addActionListener(listener);
+        }
     }
 }
