@@ -10,7 +10,10 @@ public class Token {
     public int type;
     String value;
 
-    public Token() {}
+    public Token() {
+        type = NUM;
+        value = null;
+    }
 
     public Token(int type, String value) {
         this.type = type;

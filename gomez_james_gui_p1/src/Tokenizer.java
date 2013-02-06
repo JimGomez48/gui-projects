@@ -9,34 +9,36 @@ public class Tokenizer {
 
     //TODO: finish this tokenize method
     public static ArrayList<Token> tokenize(String s) {
-        ArrayList<Token> tokens = new ArrayList<Token>(s.length());
-        String buffer = new String("");
+
+        ArrayList<Token> tokens = new ArrayList<Token>();
+        String stringBuffer = "";
+        Boolean currentIsNum = false;
 
         for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
 
-            Token t = null;
-            try {
-                t = new Token();
-                char c = s.charAt(i);
+            if (Character.isDigit(c)) {
 
-                if (isOp(c)) {
-                    t.type = Token.OP;
-                    t.value = String.valueOf(c);
-                } else if (isLP(c)) {
+                currentIsNum = true;
+                stringBuffer += String.valueOf(c);
+            }
+            else {
 
-                } else if (isRP(c)) {
-
-                } else if (Character.isDigit(c)) {
-
-                } else {
-                    throw new Exception("Invalid character entered in display.");
+                if (currentIsNum) {
+                    currentIsNum = false;
+                    tokens.add(new Token(Token.NUM, stringBuffer));
+                    stringBuffer = "";
                 }
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-                e.printStackTrace();
+
+                if (isOp(c))
+                    tokens.add(new Token(Token.OP, String.valueOf(c)));
+                else if (isLP(c))
+                    tokens.add(new Token(Token.LEFT_PAREN, String.valueOf(c)));
+                else if (isRP(c))
+                    tokens.add(new Token(Token.RIGHT_PAREN, String.valueOf(c)));
+
             }
 
-            tokens.add(t);
         }
 
         return tokens;
