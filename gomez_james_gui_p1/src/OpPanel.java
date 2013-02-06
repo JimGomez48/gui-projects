@@ -2,7 +2,9 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * User: Jim Date: 1/31/13 Time: 10:33 AM
+ * User: Jim
+ * Date: 1/31/13
+ * Time: 10:33 AM
  */
 public class OpPanel extends JPanel {
 

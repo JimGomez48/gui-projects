@@ -3,7 +3,9 @@ import java.awt.*;
 import java.util.ArrayList;
 
 /**
- * User: Jim Date: 1/31/13 Time: 10:33 AM
+ * User: Jim
+ * Date: 1/31/13
+ * Time: 10:33 AM
  */
 public class NumPanel extends JPanel {
 

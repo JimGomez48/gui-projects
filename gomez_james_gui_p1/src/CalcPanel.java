@@ -4,7 +4,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * User: Jim Date: 1/30/13 Time: 10:48 PM
+ * User: Jim
+ * Date: 1/30/13
+ * Time: 10:48 PM
  */
 public class CalcPanel extends JPanel {
 

@@ -5,9 +5,12 @@ import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
- * User: Jim Date: 1/30/13 Time: 10:58 PM
+ * User: Jim
+ * Date: 1/30/13
+ * Time: 10:58 PM
  */
 public class CalcDisplay extends JTextField {
 
@@ -85,5 +88,10 @@ public class CalcDisplay extends JTextField {
         */
 
         ArrayList<Token> tokens = Tokenizer.tokenize(getText());
+        Iterator<Token> iterator = tokens.iterator();
+
+        while (iterator.hasNext()) {
+            System.out.println(iterator.next().value);
+        }
     }
 }

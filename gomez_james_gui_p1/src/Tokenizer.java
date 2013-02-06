@@ -7,7 +7,6 @@ import java.util.ArrayList;
  */
 public class Tokenizer {
 
-    //TODO: finish this tokenize method
     public static ArrayList<Token> tokenize(String s) {
 
         ArrayList<Token> tokens = new ArrayList<Token>();
@@ -44,20 +43,20 @@ public class Tokenizer {
         return tokens;
     }
 
-    private static boolean isOp(char c) {
+    public static boolean isOp(char c) {
 
         if (c == '+' || c == '-' || c == '*' || c == '/') return true;
 
         return false;
     }
 
-    private static boolean isLP(char c) {
+    public static boolean isLP(char c) {
         if (c == '(') return true;
 
         return false;
     }
 
-    private static boolean isRP(char c) {
+    public static boolean isRP(char c) {
         if (c == ')') return true;
 
         return false;
