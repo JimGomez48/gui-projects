@@ -37,10 +37,10 @@ public class CalcDisplay extends JTextField {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    System.out.println("Enter pressed");
+
                     if (focused)
                         evaluateExpression();
-
-                    System.out.println("Enter pressed");
                 }
             }
 

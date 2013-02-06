@@ -40,11 +40,45 @@ public class Tokenizer {
 
         }
 
-        return tokens;
+        return adjust(tokens);
+    }
+
+    private static ArrayList<Token> adjust(ArrayList<Token> tokens) {
+        ArrayList<Token> newList = new ArrayList<Token>();
+        boolean isFirstElement = true;
+
+        //TODO: fix bug: does not get full list of tokens. last token is omitted.
+        for (Token t : tokens) {
+
+            /*if (t.type == Token.OP && t.value.equals("-")) {
+
+                //if t is the first element of the list
+                if (isFirstElement) {
+                    isFirstElement = false;
+                    newList.add(new Token(Token.NUM, "-1"));
+                    newList.add(new Token(Token.OP, "*"));
+                    continue;
+                }
+
+                Token previous = newList.get(newList.size() - 1);
+
+                if (previous.value == "(" || previous.type == Token.OP) {
+                    newList.add(new Token(Token.NUM, "-1"));
+                    newList.add(new Token(Token.OP, "*"));
+                }
+                else
+                    newList.add(t);
+
+            }
+            else
+                newList.add(t);*/
+
+            System.out.println(t.value);
+        }
+        return newList;
     }
 
     public static boolean isOp(char c) {
-
         if (c == '+' || c == '-' || c == '*' || c == '/') return true;
 
         return false;
