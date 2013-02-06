@@ -63,7 +63,10 @@ public class CalcPanel extends JPanel {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            display.setText(display.getText().concat(e.getActionCommand()));
+            if (display.isFocused())
+                ;
+            else
+                display.setText(display.getText().concat(e.getActionCommand()));
         }
     }
 }
