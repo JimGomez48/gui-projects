@@ -7,8 +7,8 @@ import java.awt.*;
 public class OpPanel extends JPanel {
 
     public static final int PREF_WIDTH = 50, PREF_HEIGHT = 160;
-    private CalcDisplay display;
 
+    private CalcDisplay display;
     private CalcButton add;
     private CalcButton subtract;
     private CalcButton multiply;

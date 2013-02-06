@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
 
 /**
  * User: Jim Date: 1/30/13 Time: 10:58 PM
@@ -57,5 +58,7 @@ public class CalcDisplay extends JTextField {
         an alert box is displayed, and the selection or display is
         not modified.
         */
+
+        ArrayList<Token> tokens = Tokenizer.tokenize(getText());
     }
 }
