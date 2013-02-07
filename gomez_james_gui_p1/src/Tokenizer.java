@@ -10,6 +10,7 @@ public class Tokenizer {
     public static ArrayList<Token> tokenize(String s) {
 
         ArrayList<Token> tokens = new ArrayList<Token>();
+        Token currentToken;
         String stringBuffer = "";
         Boolean currentIsNum = false;
 
@@ -40,6 +41,10 @@ public class Tokenizer {
 
         }
 
+        if (!stringBuffer.equals("")|| stringBuffer != null)
+            tokens.add(new Token(Token.NUM, stringBuffer));
+
+        //return tokens;
         return adjust(tokens);
     }
 
@@ -47,10 +52,9 @@ public class Tokenizer {
         ArrayList<Token> newList = new ArrayList<Token>();
         boolean isFirstElement = true;
 
-        //TODO: fix bug: does not get full list of tokens. last token is omitted.
         for (Token t : tokens) {
 
-            /*if (t.type == Token.OP && t.value.equals("-")) {
+            if (t.type == Token.OP && t.value.equals("-")) {
 
                 //if t is the first element of the list
                 if (isFirstElement) {
@@ -62,7 +66,7 @@ public class Tokenizer {
 
                 Token previous = newList.get(newList.size() - 1);
 
-                if (previous.value == "(" || previous.type == Token.OP) {
+                if (previous.value.equals("(") || previous.type == Token.OP) {
                     newList.add(new Token(Token.NUM, "-1"));
                     newList.add(new Token(Token.OP, "*"));
                 }
@@ -71,7 +75,7 @@ public class Tokenizer {
 
             }
             else
-                newList.add(t);*/
+                newList.add(t);
 
             System.out.println(t.value);
         }

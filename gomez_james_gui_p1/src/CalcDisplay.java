@@ -4,6 +4,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -40,7 +41,13 @@ public class CalcDisplay extends JTextField {
                     System.out.println("Enter pressed");
 
                     if (focused)
-                        evaluateExpression();
+                        try {
+                            evaluateExpression();
+                        }
+                        catch (ParseException exception) {
+                            System.out.println(exception.getMessage());
+                            exception.printStackTrace();
+                        }
                 }
             }
 
@@ -70,24 +77,26 @@ public class CalcDisplay extends JTextField {
         return focused;
     }
 
-    private void evaluateExpression() {
-        //TODO: evaluate the expression in the display
+    /**
+     * <p>Evaluates the expression currently held in the display.</p>
+     * <p>If the selection is not empty, then the selection is evaluated to a
+     * numerical value, and the numerical value replaces the selection in the
+     * display. Other parts of the display before and after the selection are not
+     * examined or modified. If the selection is empty, then the entire contents of
+     * the display is evaluated to a numerical value, and the numerical value
+     * replaces the entire contents of the display. If a parse exception is detected
+     * during evaluation, an alert box is displayed, and the selection or display is
+     * not modified.
+     * </p> @throws ParseException
+     */
+    private void evaluateExpression() throws ParseException {
+        //TODO: evaluate the expression in the display. Throw ParseException when invalid input is detected.
+        String text = getSelectedText();
 
-        /*
-        - If the selection is not empty, then the selection is evaluated to a
-        numerical value, and the numerical value
-        replaces the selection in the display.  Other parts of the display before
-        and after the selection are not
-        examined or modified.
-        - If the selection is empty, then the entire contents of the display is
-        evaluated to a numerical value, and the
-        numerical value replaces the entire contents of the display.
-        - If a parse exception is detected during evaluation,
-        an alert box is displayed, and the selection or display is
-        not modified.
-        */
+        if (text == null)
+            text = getText();
 
-        ArrayList<Token> tokens = Tokenizer.tokenize(getText());
+        ArrayList<Token> tokens = Tokenizer.tokenize(text);
         Iterator<Token> iterator = tokens.iterator();
 
         while (iterator.hasNext()) {
