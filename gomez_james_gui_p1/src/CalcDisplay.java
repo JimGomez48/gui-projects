@@ -7,8 +7,9 @@ import java.awt.event.KeyListener;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Stack;
 
-/**
+/*
  * User: Jim
  * Date: 1/30/13
  * Time: 10:58 PM
@@ -45,16 +46,20 @@ public class CalcDisplay extends JTextField {
                             evaluateExpression();
                         }
                         catch (ParseException exception) {
-                            System.out.println(exception.getMessage());
                             exception.printStackTrace();
+                            JOptionPane.showMessageDialog(getRootPane(),
+                                    "Invalid input entered. Please try again.",
+                                    "Error", JOptionPane.ERROR_MESSAGE);
+                            setText("");
+                        }
+                        finally {
+                            //might not be needed?
                         }
                 }
             }
 
             @Override
-            public void keyReleased(KeyEvent e) {
-                //Do nothing
-            }
+            public void keyReleased(KeyEvent e) {}
         });
 
         addFocusListener(new FocusListener() {
@@ -90,17 +95,20 @@ public class CalcDisplay extends JTextField {
      * </p> @throws ParseException
      */
     private void evaluateExpression() throws ParseException {
-        //TODO: evaluate the expression in the display. Throw ParseException when invalid input is detected.
+        //TODO: evaluate the expression in the display. Throw ParseException when
+        // invalid input is detected.
         String text = getSelectedText();
 
         if (text == null)
             text = getText();
 
-        ArrayList<Token> tokens = Tokenizer.tokenize(text);
-        Iterator<Token> iterator = tokens.iterator();
+        ArrayList<Token> tokens = Tokenizer.infixToPostfix(Tokenizer.tokenize(text));
 
-        while (iterator.hasNext()) {
-            System.out.println(iterator.next().value);
+        for (Token t : tokens) {
+            System.out.println(t.value);
         }
+
+        throw new ParseException("Ivalid text input.", 1);
     }
+
 }

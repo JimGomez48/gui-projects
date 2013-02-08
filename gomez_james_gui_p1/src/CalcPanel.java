@@ -3,7 +3,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-/**
+/*
  * User: Jim
  * Date: 1/30/13
  * Time: 10:48 PM
@@ -52,6 +52,11 @@ public class CalcPanel extends JPanel {
         frame.pack();
         frame.setResizable(false);
         frame.setVisible(true);
+
+        //center the JFrame
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        frame.setLocation(dim.width / 2 - frame.getSize().width / 2,
+                dim.height / 2 - frame.getSize().height / 2);
     }
 
     public static void main(String[] args) {
