@@ -101,36 +101,25 @@ public class CalcDisplay extends JTextField {
         if (text == null)
             text = getText();
 
-        ArrayList<Token> tokens = Tokenizer.tokenize(text);
-        //DEGUG PRINT TO CONSOLE
-        System.out.println("INFIX TOKENS");
-        for (Token t : tokens) {
-            System.out.print(t.value + " ");
+        try {
+            ArrayList<Token> tokens = Tokenizer.tokenize(text);
+            //DEGUG PRINT TO CONSOLE
+            System.out.println("POSTFIX TOKENS");
+            for (Token t : tokens) {
+                System.out.print(t.value + " ");
+            }
+            System.out.println("\n");
+
+            if (text == null)
+                setText(Tokenizer.evaluate(tokens));
+            else ;
+            //replace only the selected text
         }
-        System.out.println("\n");
-
-        tokens = Tokenizer.adjust(tokens);
-        //DEGUG PRINT TO CONSOLE
-        System.out.println("ADJUSTED TOKENS");
-        for (Token t : tokens) {
-            System.out.print(t.value + " ");
+        catch (ParseException e) {
+            throw e;
         }
-        System.out.println("\n");
 
-        tokens = Tokenizer.infixToPostfix(tokens);
-        //DEGUG PRINT TO CONSOLE
-        System.out.println("POSTFIX TOKENS");
-        for (Token t : tokens) {
-            System.out.print(t.value + " ");
-        }
-        System.out.println("\n");
 
-        //throw new ParseException("Ivalid text input.", 1);
-
-        if (text == null)
-            setText(Tokenizer.evaluate(tokens));
-        else ;
-        //replace only the selected text
     }
 
 }

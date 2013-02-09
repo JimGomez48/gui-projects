@@ -17,23 +17,26 @@ public class Tokenizer {
     /**
      * Takes in a String representing an arithmetic expression as its argument and
      * returns a List of tokens in the order that they are found within the String
-     * expression.
+     * expression. If incorrect infix syntax is detected, a ParseException is thrown.
      *
      * @param expression A string representing an arithmetic expression
      * @return An ArrayList of arithmetic tokens.
+     * @throws ParseException
      */
-    public static ArrayList<Token> tokenize(String expression) {
+    public static ArrayList<Token> tokenize(String expression) throws
+            ParseException {
 
         ArrayList<Token> tokens = new ArrayList<Token>();
         String stringBuffer = "";
-        Boolean currentIsNum = false;
+        Boolean currentIsNum = false, currentIsOp = false;
+        int lpCount = 0, rpCount = 0;
 
         for (int i = 0; i < expression.length(); i++) {
             char c = expression.charAt(i);
 
             if (Character.isDigit(c)) {
-
                 currentIsNum = true;
+                currentIsOp = false;
                 stringBuffer += String.valueOf(c);
             }
             else {
@@ -44,28 +47,44 @@ public class Tokenizer {
                     stringBuffer = "";
                 }
 
-                if (isOp(c))
+                if (isOp(c)) {
+                    if (currentIsOp)
+                        throw new ParseException("Invalid Infix Expression: more " +
+                                "than one operator in a row.", i);
+
                     tokens.add(new Token(Token.OP, String.valueOf(c)));
-                else if (isLP(c))
+                    currentIsOp = true;
+                }
+                else if (isLP(c)) {
                     tokens.add(new Token(Token.LEFT_PAREN, String.valueOf(c)));
-                else if (isRP(c))
+                    lpCount++;
+                    currentIsOp = false;
+                }
+                else if (isRP(c)) {
                     tokens.add(new Token(Token.RIGHT_PAREN, String.valueOf(c)));
+                    rpCount++;
+                    currentIsOp = false;
+                }
 
             }
 
         }
 
+        if (lpCount != rpCount)
+            throw new ParseException("Invalid infix expression: Parentheses do not" +
+                    " match.", expression.length());
+
+        //one more token left in stringBuffer to add.
         if (!stringBuffer.equals("") || stringBuffer != null)
             tokens.add(new Token(Token.NUM, stringBuffer));
 
-        //return adjust(tokens);
-        return tokens;
+        return infixToPostfix(adjust(tokens));
     }
 
     /**
      * Adjusts the tokens so that any token representing negation is replaced with
      * two tokens: "-1" and "*". This allows for easier evaluation of the
-     * expression that the tokens represent.
+     * expression that the tokens represent. Correct infix syntax is assumed.
      *
      * @param tokens An ArrayList of tokens representing integers,
      *               arithmetic operators, and parentheses.
@@ -108,15 +127,12 @@ public class Tokenizer {
 
     /**
      * An implementation of the Shunting Yard algorithm. Converts a list of tokens
-     * from infix order to postfix order. If incorrect infix syntax is detected,
-     * a ParseException is thrown.
+     * from infix order to postfix order. Correct infix syntax is assumed.
      *
      * @param infix An ArrayList of tokens in infix order
      * @return An ArrayList of the tokens in postfix order
-     * @throws ParseException
      */
-    public static ArrayList<Token> infixToPostfix(ArrayList<Token> infix) throws
-            ParseException {
+    public static ArrayList<Token> infixToPostfix(ArrayList<Token> infix) {
         ArrayList<Token> postfix = new ArrayList<Token>(infix.size());
         Stack<Token> tokenStack = new Stack<Token>();
 
