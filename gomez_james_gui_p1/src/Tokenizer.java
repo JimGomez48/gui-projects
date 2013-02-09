@@ -1,3 +1,4 @@
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -8,17 +9,18 @@ import java.util.Stack;
  */
 
 /**
- * Contains static methods for tokenizing strings. Also contains methods for
- * classifying some character types.
+ * Contains static methods for tokenizing strings and manipulating those tokens.
+ * Also contains methods for classifying some character types.
  */
 public class Tokenizer {
 
     /**
-     * Takes in a String as its argument and returns a List of tokens suitable
-     * for use in evaluating the arithmetic operation represented by the String.
+     * Takes in a String representing an arithmetic expression as its argument and
+     * returns a List of tokens in the order that they are found within the String
+     * expression.
      *
      * @param expression A string representing an arithmetic expression
-     * @return A List of arithmetic tokens.
+     * @return An ArrayList of arithmetic tokens.
      */
     public static ArrayList<Token> tokenize(String expression) {
 
@@ -57,7 +59,7 @@ public class Tokenizer {
             tokens.add(new Token(Token.NUM, stringBuffer));
 
         //return tokens;
-        return adjust(tokens);
+        return tokens;
     }
 
     /**
@@ -69,9 +71,10 @@ public class Tokenizer {
      *               arithmetic operators, and parentheses.
      * @return An ArrayList of adjusted tokens.
      */
-    private static ArrayList<Token> adjust(ArrayList<Token> tokens) {
+    public static ArrayList<Token> adjust(ArrayList<Token> tokens) {
         ArrayList<Token> newList = new ArrayList<Token>();
         boolean isFirstElement = true;
+        //TODO: ERROR in adjust method
 
         for (Token t : tokens) {
 
@@ -98,61 +101,100 @@ public class Tokenizer {
             else
                 newList.add(t);
 
-            System.out.println(t.value);
         }
         return newList;
     }
 
     /**
-     * Converts a list of tokens from infix order to postfix order.
+     * An implementation of the Shunting Yard algorithm. Converts a list of tokens
+     * from infix order to postfix order. If incorrect infix syntax is detected,
+     * a ParseException is thrown.
      *
      * @param infix An ArrayList of tokens in infix order
      * @return An ArrayList of the tokens in postfix order
+     * @throws ParseException
      */
-    public static ArrayList<Token> infixToPostfix(ArrayList<Token> infix) {
+    public static ArrayList<Token> infixToPostfix(ArrayList<Token> infix) throws
+            ParseException {
         ArrayList<Token> postfix = new ArrayList<Token>(infix.size());
         Stack<Token> tokenStack = new Stack<Token>();
 
-        for (Token t : infix) {
+        for (Token currentToken : infix) {
 
-            if (t.type == Token.NUM) {
-                postfix.add(t);
+            if (currentToken.type == Token.NUM) {
+                postfix.add(currentToken);
             }
-            else if (t.type == Token.OP) {
-                for (Token stackT : tokenStack) {
-                    if (getOpPrecedence(stackT.value) >= getOpPrecedence(t.value)) {
-                        postfix.add(tokenStack.pop());
-                    }
-                }
-            }
-            else if (t.type == Token.LEFT_PAREN) {
-                tokenStack.push(t);
-            }
-            else if (t.type == Token.RIGHT_PAREN) {
-                for (Token stackT : tokenStack) {
-                    if (stackT.type == Token.LEFT_PAREN) {
-                        tokenStack.pop();
-                        break;
-                    }
+            else if (currentToken.type == Token.OP) {
+                Stack<Token> temp = new Stack<Token>();
+
+                for (int i = 0; i < tokenStack.size(); i++) {
+                    Token top = tokenStack.pop();
+
+                    /* if top is an operator with precedence >= currentToken,
+                    add to postfix. Else, add to a temporary stack. */
+                    if (top.type == Token.OP && getOpPrecedence(top.value) >=
+                            getOpPrecedence(currentToken.value))
+                        postfix.add(top);
                     else
-                        postfix.add(tokenStack.pop());
+                        temp.push(top);
+
+                }
+
+                /* replace all tokens in the temp stack onto the tokenStack in LIFO
+                order */
+                for (int i = 0; i < temp.size(); i++)
+                    tokenStack.push(temp.pop());
+
+                tokenStack.push(currentToken);
+            }
+            else if (currentToken.type == Token.LEFT_PAREN) {
+                tokenStack.push(currentToken);
+            }
+            else if (currentToken.type == Token.RIGHT_PAREN) {
+                for (int i = 0; i < tokenStack.size(); i++) {
+                    Token token = tokenStack.pop();
+
+                    if (token.type == Token.LEFT_PAREN)
+                        break;
+                    else
+                        postfix.add(token);
                 }
             }
+            //TODO: validity testing for this method. Currently wrong. FIX!
+            //TODO: throw parse exception if bad syntax is detected
+        }
 
-            for (Token stackT2 : tokenStack) {
-                postfix.add(tokenStack.pop());
-            }
-            //TODO: validity testing for this method
-
+        while (!tokenStack.empty()) {
+            postfix.add(tokenStack.pop());
         }
 
         return postfix;
     }
 
-    private static int getOpPrecedence(String op) {
+    /**
+     * Takes an ArrayList of arithmetic tokens in postfix order and evaluates the
+     * expression that the list represents.
+     *
+     * @param tokens an ArrayList of tokens in postfix order
+     * @return A String whose value represents the evaluation of the tokens
+     */
+    public static String evaluate(ArrayList<Token> tokens) {
+        String answer = "";
+        //TODO: evaluate a list of postfix order tokens
+        return answer;
+    }
+
+    /**
+     * Takes a String representing an arithmetic operator and determines its order
+     * of precedence.
+     *
+     * @param op A string representing an arithmetic operator
+     * @return An integer representing the precedence of String op
+     */
+    public static int getOpPrecedence(String op) {
         if (op.equals("+") || op.equals("-")) return 1;
         else if (op.equals("*") || op.equals("/")) return 2;
-        else return 0;
+        return 0;
     }
 
     /**
@@ -164,7 +206,6 @@ public class Tokenizer {
      */
     public static boolean isOp(char c) {
         if (c == '+' || c == '-' || c == '*' || c == '/') return true;
-
         return false;
     }
 
@@ -176,7 +217,6 @@ public class Tokenizer {
      */
     public static boolean isLP(char c) {
         if (c == '(') return true;
-
         return false;
     }
 
@@ -188,7 +228,6 @@ public class Tokenizer {
      */
     public static boolean isRP(char c) {
         if (c == ')') return true;
-
         return false;
     }
 

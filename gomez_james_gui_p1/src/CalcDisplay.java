@@ -21,7 +21,7 @@ public class CalcDisplay extends JTextField {
     private boolean focused;
 
     public CalcDisplay() {
-        super("0");
+        super();
         requestFocusInWindow();
 
         setMinimumSize(new Dimension(PREF_WIDTH, PREF_HEIGHT));
@@ -95,20 +95,39 @@ public class CalcDisplay extends JTextField {
      * </p> @throws ParseException
      */
     private void evaluateExpression() throws ParseException {
-        //TODO: evaluate the expression in the display. Throw ParseException when
-        // invalid input is detected.
+        //TODO: evaluate expression in display. Throw exception when invalid input
         String text = getSelectedText();
 
         if (text == null)
             text = getText();
 
-        ArrayList<Token> tokens = Tokenizer.infixToPostfix(Tokenizer.tokenize(text));
-
+        ArrayList<Token> tokens = Tokenizer.tokenize(text);
+        //DEGUG PRINT TO CONSOLE
         for (Token t : tokens) {
             System.out.println(t.value);
         }
+        System.out.println();
 
-        throw new ParseException("Ivalid text input.", 1);
+        tokens = Tokenizer.adjust(tokens);
+        //DEGUG PRINT TO CONSOLE
+        for (Token t : tokens) {
+            System.out.println(t.value);
+        }
+        System.out.println();
+
+        tokens = Tokenizer.infixToPostfix(tokens);
+        //DEGUG PRINT TO CONSOLE
+        for (Token t : tokens) {
+            System.out.println(t.value);
+        }
+        System.out.println();
+
+        //throw new ParseException("Ivalid text input.", 1);
+
+        if (text == null)
+            setText(Tokenizer.evaluate(tokens));
+        else ;
+        //replace only the selected text
     }
 
 }
