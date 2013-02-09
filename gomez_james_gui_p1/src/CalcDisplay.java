@@ -48,8 +48,8 @@ public class CalcDisplay extends JTextField {
                         catch (ParseException exception) {
                             exception.printStackTrace();
                             JOptionPane.showMessageDialog(getRootPane(),
-                                    "Invalid input entered. Please try again.",
-                                    "Error", JOptionPane.ERROR_MESSAGE);
+                                    exception.getMessage(), "Error",
+                                    JOptionPane.ERROR_MESSAGE);
                             setText("");
                         }
                         finally {
@@ -95,7 +95,7 @@ public class CalcDisplay extends JTextField {
      * </p> @throws ParseException
      */
     private void evaluateExpression() throws ParseException {
-        //TODO: evaluate expression in display. Throw exception when invalid input
+        //TODO: evaluate expression in display.
         String text = getSelectedText();
 
         if (text == null)
@@ -116,9 +116,9 @@ public class CalcDisplay extends JTextField {
             //replace only the selected text
         }
         catch (ParseException e) {
+            e.printStackTrace();
             throw e;
         }
-
 
     }
 

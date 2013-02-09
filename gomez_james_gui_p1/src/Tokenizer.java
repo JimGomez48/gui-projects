@@ -177,7 +177,6 @@ public class Tokenizer {
                         postfix.add(token);
                 }
             }
-            //TODO: throw parse exception if bad syntax is detected
         }
 
         while (!tokenStack.empty()) {
