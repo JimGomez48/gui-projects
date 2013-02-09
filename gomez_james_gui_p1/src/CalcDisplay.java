@@ -103,24 +103,27 @@ public class CalcDisplay extends JTextField {
 
         ArrayList<Token> tokens = Tokenizer.tokenize(text);
         //DEGUG PRINT TO CONSOLE
+        System.out.println("INFIX TOKENS");
         for (Token t : tokens) {
-            System.out.println(t.value);
+            System.out.print(t.value + " ");
         }
-        System.out.println();
+        System.out.println("\n");
 
         tokens = Tokenizer.adjust(tokens);
         //DEGUG PRINT TO CONSOLE
+        System.out.println("ADJUSTED TOKENS");
         for (Token t : tokens) {
-            System.out.println(t.value);
+            System.out.print(t.value + " ");
         }
-        System.out.println();
+        System.out.println("\n");
 
         tokens = Tokenizer.infixToPostfix(tokens);
         //DEGUG PRINT TO CONSOLE
+        System.out.println("POSTFIX TOKENS");
         for (Token t : tokens) {
-            System.out.println(t.value);
+            System.out.print(t.value + " ");
         }
-        System.out.println();
+        System.out.println("\n");
 
         //throw new ParseException("Ivalid text input.", 1);
 

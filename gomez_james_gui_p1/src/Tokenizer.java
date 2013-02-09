@@ -58,7 +58,7 @@ public class Tokenizer {
         if (!stringBuffer.equals("") || stringBuffer != null)
             tokens.add(new Token(Token.NUM, stringBuffer));
 
-        //return tokens;
+        //return adjust(tokens);
         return tokens;
     }
 
@@ -74,7 +74,6 @@ public class Tokenizer {
     public static ArrayList<Token> adjust(ArrayList<Token> tokens) {
         ArrayList<Token> newList = new ArrayList<Token>();
         boolean isFirstElement = true;
-        //TODO: ERROR in adjust method
 
         for (Token t : tokens) {
 
@@ -98,8 +97,10 @@ public class Tokenizer {
                     newList.add(t);
 
             }
-            else
+            else {
+                isFirstElement = false;
                 newList.add(t);
+            }
 
         }
         return newList;
@@ -127,12 +128,12 @@ public class Tokenizer {
             else if (currentToken.type == Token.OP) {
                 Stack<Token> temp = new Stack<Token>();
 
-                for (int i = 0; i < tokenStack.size(); i++) {
+                while (!tokenStack.empty()) {
                     Token top = tokenStack.pop();
 
                     /* if top is an operator with precedence >= currentToken,
                     add to postfix. Else, add to a temporary stack. */
-                    if (top.type == Token.OP && getOpPrecedence(top.value) >=
+                    if (top.type == Token.OP && getOpPrecedence(top.value) >
                             getOpPrecedence(currentToken.value))
                         postfix.add(top);
                     else
@@ -142,7 +143,7 @@ public class Tokenizer {
 
                 /* replace all tokens in the temp stack onto the tokenStack in LIFO
                 order */
-                for (int i = 0; i < temp.size(); i++)
+                while (!temp.empty())
                     tokenStack.push(temp.pop());
 
                 tokenStack.push(currentToken);
@@ -151,7 +152,7 @@ public class Tokenizer {
                 tokenStack.push(currentToken);
             }
             else if (currentToken.type == Token.RIGHT_PAREN) {
-                for (int i = 0; i < tokenStack.size(); i++) {
+                while (!tokenStack.empty()) {
                     Token token = tokenStack.pop();
 
                     if (token.type == Token.LEFT_PAREN)
@@ -160,7 +161,6 @@ public class Tokenizer {
                         postfix.add(token);
                 }
             }
-            //TODO: validity testing for this method. Currently wrong. FIX!
             //TODO: throw parse exception if bad syntax is detected
         }
 
@@ -189,7 +189,8 @@ public class Tokenizer {
      * of precedence.
      *
      * @param op A string representing an arithmetic operator
-     * @return An integer representing the precedence of String op
+     * @return An integer representing the precedence of String op (0, 1,
+     *         or 2). Higher values have higher precedence than lower values.
      */
     public static int getOpPrecedence(String op) {
         if (op.equals("+") || op.equals("-")) return 1;
