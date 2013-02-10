@@ -1,13 +1,13 @@
+package com.jamesgomez.calculator;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.text.ParseException;
+
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Stack;
 
 /*
  * User: Jim
@@ -45,15 +45,11 @@ public class CalcDisplay extends JTextField {
                         try {
                             evaluateExpression();
                         }
-                        catch (ParseException exception) {
+                        catch (CalcPanel.CalcParseException exception) {
                             exception.printStackTrace();
                             JOptionPane.showMessageDialog(getRootPane(),
                                     exception.getMessage(), "Error",
                                     JOptionPane.ERROR_MESSAGE);
-                            setText("");
-                        }
-                        finally {
-                            //might not be needed?
                         }
                 }
             }
@@ -94,12 +90,15 @@ public class CalcDisplay extends JTextField {
      * not modified.
      * </p> @throws ParseException
      */
-    private void evaluateExpression() throws ParseException {
-        //TODO: evaluate expression in display.
-        String text = getSelectedText();
+    private void evaluateExpression() throws CalcPanel.CalcParseException {
 
-        if (text == null)
+        String text = getSelectedText();
+        boolean selectedText = true;
+
+        if (text == null) {
             text = getText();
+            selectedText = false;
+        }
 
         try {
             ArrayList<Token> tokens = Tokenizer.tokenize(text);
@@ -109,14 +108,15 @@ public class CalcDisplay extends JTextField {
                 System.out.print(t.value + " ");
             }
             System.out.println("\n");
+            String answer = Tokenizer.evaluate(tokens);
+            System.out.println("ANSWER\n" + answer + "\n");
 
-            if (text == null)
-                setText(Tokenizer.evaluate(tokens));
-            else ;
-            //replace only the selected text
+            if (selectedText)
+                replaceSelection(answer);
+            else
+                setText(answer);
         }
-        catch (ParseException e) {
-            e.printStackTrace();
+        catch (CalcPanel.CalcParseException e) {
             throw e;
         }
 

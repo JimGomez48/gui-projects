@@ -1,3 +1,5 @@
+package com.jamesgomez.calculator;
+
 import javax.swing.*;
 import java.awt.*;
 

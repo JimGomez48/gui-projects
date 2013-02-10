@@ -1,6 +1,10 @@
+package com.jamesgomez.calculator;
+
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Stack;
+
+import com.jamesgomez.calculator.CalcPanel.CalcParseException;
 
 /*
  * User: Jim
@@ -24,7 +28,7 @@ public class Tokenizer {
      * @throws ParseException
      */
     public static ArrayList<Token> tokenize(String expression) throws
-            ParseException {
+            CalcParseException {
 
         ArrayList<Token> tokens = new ArrayList<Token>();
         String stringBuffer = "";
@@ -49,8 +53,8 @@ public class Tokenizer {
 
                 if (isOp(c)) {
                     if (currentIsOp)
-                        throw new ParseException("Invalid Infix Expression: more " +
-                                "than one operator in a row.", i);
+                        throw new CalcParseException("More than one operator in a " +
+                                "row.");
 
                     tokens.add(new Token(Token.OP, String.valueOf(c)));
                     currentIsOp = true;
@@ -71,11 +75,10 @@ public class Tokenizer {
         }
 
         if (lpCount != rpCount)
-            throw new ParseException("Invalid infix expression: Parentheses do not" +
-                    " match.", expression.length());
+            throw new CalcParseException("Parentheses do not match.");
 
-        //one more token left in stringBuffer to add.
-        if (!stringBuffer.equals("") || stringBuffer != null)
+        //If last token is NUM, add it to tokens as new NUM token.
+        if (!stringBuffer.equals("") && stringBuffer != null)
             tokens.add(new Token(Token.NUM, stringBuffer));
 
         return infixToPostfix(adjust(tokens));
@@ -194,9 +197,35 @@ public class Tokenizer {
      * @return A String whose value represents the evaluation of the tokens
      */
     public static String evaluate(ArrayList<Token> tokens) {
-        String answer = "";
-        //TODO: evaluate a list of postfix order tokens
-        return answer;
+        Stack<Token> stack = new Stack<Token>();
+
+        for (Token t : tokens) {
+
+            if (t.type == Token.NUM)
+                stack.push(t);
+            else if (t.type == Token.OP) {
+                double v2 = Double.parseDouble(stack.pop().value);
+                double v1 = Double.parseDouble(stack.pop().value);
+                double result = 0;
+
+                if (t.value.equals("+")) {
+                    result = v1 + v2;
+                }
+                else if (t.value.equals("-")) {
+                    result = v1 - v2;
+                }
+                else if (t.value.equals("*")) {
+                    result = v1 * v2;
+                }
+                else if (t.value.equals("-")) {
+                    result = v1 / v2;
+                }
+
+                stack.push(new Token(Token.NUM, Double.toString(result)));
+            }
+        }
+
+        return stack.pop().value;
     }
 
     /**

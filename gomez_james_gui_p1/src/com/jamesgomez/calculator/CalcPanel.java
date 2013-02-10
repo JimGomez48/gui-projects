@@ -1,3 +1,5 @@
+package com.jamesgomez.calculator;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -13,8 +15,14 @@ public class CalcPanel extends JPanel {
     private static JFrame frame;
     private NumPanel numPanel;
     private OpPanel opPanel;
-
     private CalcDisplay display;
+
+    public static class CalcParseException extends Exception {
+
+        public CalcParseException(String msg) {
+            super("Invalid Infix Expression: " + msg);
+        }
+    }
 
     public CalcPanel(LayoutManager manager) {
         super(manager, true);
@@ -63,9 +71,7 @@ public class CalcPanel extends JPanel {
         CalcPanel.buildGui();
     }
 
-    /**
-     * This class should be instantiated once and reused for all buttons
-     */
+    /** This class should be instantiated once and reused for all buttons */
     public class ButtonListener implements ActionListener {
 
         @Override
