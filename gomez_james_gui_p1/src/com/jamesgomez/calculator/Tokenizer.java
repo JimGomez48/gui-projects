@@ -18,6 +18,9 @@ import com.jamesgomez.calculator.CalcPanel.CalcParseException;
  */
 public class Tokenizer {
 
+    //flag for turning debug messages on or off
+    private static final boolean debug = true;
+
     /**
      * Takes in a String representing an arithmetic expression as its argument and
      * returns a List of tokens in the order that they are found within the String
@@ -81,7 +84,15 @@ public class Tokenizer {
         if (!stringBuffer.equals("") && stringBuffer != null)
             tokens.add(new Token(Token.NUM, stringBuffer));
 
-        return infixToPostfix(adjust(tokens));
+        //debug code. turn on with debug boolean.
+        if (debug) {
+            System.out.println("\nINFIX Tokens");
+            for (Token t : tokens)
+                System.out.print(t.value + " ");
+            System.out.println();
+        }
+
+        return tokens;
     }
 
     /**
@@ -93,8 +104,8 @@ public class Tokenizer {
      *               arithmetic operators, and parentheses.
      * @return An ArrayList of adjusted tokens.
      */
-    public static ArrayList<Token> adjust(ArrayList<Token> tokens) {
-        ArrayList<Token> newList = new ArrayList<Token>();
+    public static ArrayList<Token> adjustNegatives(ArrayList<Token> tokens) {
+        ArrayList<Token> adjustedList = new ArrayList<Token>();
         boolean isFirstElement = true;
 
         for (Token t : tokens) {
@@ -104,28 +115,37 @@ public class Tokenizer {
                 //if t is the first element of the list
                 if (isFirstElement) {
                     isFirstElement = false;
-                    newList.add(new Token(Token.NUM, "-1"));
-                    newList.add(new Token(Token.OP, "*"));
+                    adjustedList.add(new Token(Token.NUM, "-1"));
+                    adjustedList.add(new Token(Token.OP, "*"));
                     continue;
                 }
 
-                Token previous = newList.get(newList.size() - 1);
+                Token previous = adjustedList.get(adjustedList.size() - 1);
 
                 if (previous.value.equals("(") || previous.type == Token.OP) {
-                    newList.add(new Token(Token.NUM, "-1"));
-                    newList.add(new Token(Token.OP, "*"));
+                    adjustedList.add(new Token(Token.NUM, "-1"));
+                    adjustedList.add(new Token(Token.OP, "*"));
                 }
                 else
-                    newList.add(t);
+                    adjustedList.add(t);
 
             }
             else {
                 isFirstElement = false;
-                newList.add(t);
+                adjustedList.add(t);
             }
 
         }
-        return newList;
+
+        //debug code. turn on with debug boolean.
+        if (debug) {
+            System.out.println("\nADJUSTED Tokens");
+            for (Token t : adjustedList)
+                System.out.print(t.value + " ");
+            System.out.println();
+        }
+
+        return adjustedList;
     }
 
     /**
@@ -186,6 +206,14 @@ public class Tokenizer {
             postfix.add(tokenStack.pop());
         }
 
+        //debug code. turn on with debug boolean.
+        if (debug) {
+            System.out.println("\nPOSTFIX Tokens");
+            for (Token t : postfix)
+                System.out.print(t.value + " ");
+            System.out.println();
+        }
+
         return postfix;
     }
 
@@ -196,7 +224,7 @@ public class Tokenizer {
      * @param tokens an ArrayList of tokens in postfix order
      * @return A String whose value represents the evaluation of the tokens
      */
-    public static String evaluate(ArrayList<Token> tokens) {
+    public static String evaluatePostfix(ArrayList<Token> tokens) {
         Stack<Token> stack = new Stack<Token>();
 
         for (Token t : tokens) {
@@ -250,8 +278,7 @@ public class Tokenizer {
      *         false otherwise.
      */
     public static boolean isOp(char c) {
-        if (c == '+' || c == '-' || c == '*' || c == '/') return true;
-        return false;
+        return (c == '+' || c == '-' || c == '*' || c == '/');
     }
 
     /**
@@ -261,8 +288,7 @@ public class Tokenizer {
      * @return True if the character represents a left parentheses, false otherwise.
      */
     public static boolean isLP(char c) {
-        if (c == '(') return true;
-        return false;
+        return c == '(';
     }
 
     /**
@@ -272,8 +298,7 @@ public class Tokenizer {
      * @return True if the character represents a right parentheses, false otherwise.
      */
     public static boolean isRP(char c) {
-        if (c == ')') return true;
-        return false;
+        return c == ')';
     }
 
 }

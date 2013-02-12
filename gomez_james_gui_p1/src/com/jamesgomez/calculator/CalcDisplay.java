@@ -18,11 +18,13 @@ public class CalcDisplay extends JTextField {
 
     public static final int PREF_WIDTH = 220, PREF_HEIGHT = 40;
     private final String allowed = "0123456789()+-*/";
-    private boolean focused;
+    private boolean focused, debug;
 
     public CalcDisplay() {
         super();
-        requestFocusInWindow();
+        requestFocusInWindow(); //ensure initial focus is on this calc display
+
+        debug = true;
 
         setMinimumSize(new Dimension(PREF_WIDTH, PREF_HEIGHT));
         setPreferredSize(new Dimension(PREF_WIDTH, PREF_HEIGHT));
@@ -63,13 +65,17 @@ public class CalcDisplay extends JTextField {
             @Override
             public void focusGained(FocusEvent e) {
                 focused = true;
-                System.out.println("Focused");
+
+                if (debug)
+                    System.out.println("Focused");
             }
 
             @Override
             public void focusLost(FocusEvent e) {
                 focused = false;
-                System.out.println("unfocused");
+
+                if (debug)
+                    System.out.println("unfocused");
             }
         });
     }
@@ -101,15 +107,9 @@ public class CalcDisplay extends JTextField {
         }
 
         try {
-            ArrayList<Token> tokens = Tokenizer.tokenize(text);
-            //DEGUG PRINT TO CONSOLE
-            System.out.println("POSTFIX TOKENS");
-            for (Token t : tokens) {
-                System.out.print(t.value + " ");
-            }
-            System.out.println("\n");
-            String answer = Tokenizer.evaluate(tokens);
-            System.out.println("ANSWER\n" + answer + "\n");
+            ArrayList<Token> PostfixTokens = Tokenizer.infixToPostfix(Tokenizer
+                    .adjustNegatives(Tokenizer.tokenize(text)));
+            String answer = Tokenizer.evaluatePostfix(PostfixTokens);
 
             if (selectedText)
                 replaceSelection(answer);
