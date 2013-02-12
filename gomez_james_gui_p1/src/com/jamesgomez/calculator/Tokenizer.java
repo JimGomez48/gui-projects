@@ -140,7 +140,7 @@ public class Tokenizer {
         Stack<Token> tokenStack = new Stack<Token>();
 
         for (Token currentToken : infix) {
-
+            //TODO: fix error in op precedence and postfix op ordering
             if (currentToken.type == Token.NUM) {
                 postfix.add(currentToken);
             }
