@@ -28,7 +28,6 @@ public class Tokenizer {
      *
      * @param expression A string representing an arithmetic expression
      * @return An ArrayList of arithmetic tokens.
-     * @throws ParseException
      */
     public static ArrayList<Token> tokenize(String expression) throws
             CalcParseException {
@@ -278,7 +277,7 @@ public class Tokenizer {
      *         false otherwise.
      */
     public static boolean isOp(char c) {
-        return (c == '+' || c == '-' || c == '*' || c == '/');
+        return c == '+' || c == '-' || c == '*' || c == '/';
     }
 
     /**

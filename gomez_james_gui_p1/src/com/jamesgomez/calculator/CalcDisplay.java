@@ -50,7 +50,7 @@ public class CalcDisplay extends JTextField {
                         catch (CalcPanel.CalcParseException exception) {
                             exception.printStackTrace();
                             JOptionPane.showMessageDialog(getRootPane(),
-                                    exception.getMessage(), "Error",
+                                    exception.getMessage(), "Input Error",
                                     JOptionPane.ERROR_MESSAGE);
                         }
                 }
@@ -92,9 +92,7 @@ public class CalcDisplay extends JTextField {
      * examined or modified. If the selection is empty, then the entire contents of
      * the display is evaluated to a numerical value, and the numerical value
      * replaces the entire contents of the display. If a parse exception is detected
-     * during evaluation, an alert box is displayed, and the selection or display is
-     * not modified.
-     * </p> @throws ParseException
+     * during evaluation, a CalcParseException is thrown.</p>
      */
     private void evaluateExpression() throws CalcPanel.CalcParseException {
 
@@ -116,9 +114,7 @@ public class CalcDisplay extends JTextField {
             else
                 setText(answer);
         }
-        catch (CalcPanel.CalcParseException e) {
-            throw e;
-        }
+        catch (CalcPanel.CalcParseException e) { throw e; }
 
     }
 

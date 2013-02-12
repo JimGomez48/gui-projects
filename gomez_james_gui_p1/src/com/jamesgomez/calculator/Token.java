@@ -1,4 +1,6 @@
-package com.jamesgomez.calculator;/*
+package com.jamesgomez.calculator;
+
+/*
  * User: Jim
  * Date: 2/5/13
  * Time: 5:38 PM

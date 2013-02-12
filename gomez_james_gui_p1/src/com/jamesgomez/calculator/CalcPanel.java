@@ -49,7 +49,6 @@ public class CalcPanel extends JPanel {
         constraints.gridy = 1;
         constraints.gridwidth = 1;
         add(opPanel, constraints);
-
     }
 
     public static void buildGui() {
