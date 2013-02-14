@@ -244,15 +244,28 @@ public class Tokenizer {
                 else if (t.value.equals("*")) {
                     result = v1 * v2;
                 }
-                else if (t.value.equals("-")) {
+                else if (t.value.equals("/")) {
                     result = v1 / v2;
                 }
 
-                stack.push(new Token(Token.NUM, Double.toString(result)));
+                //if trailing zeros exist, use regular expressions to remove them.
+                stack.push(new Token(Token.NUM, removeTrailingZeros(result)));
             }
         }
 
         return stack.pop().value;
+    }
+
+    /**
+     * Removes any trailing zeros and unecessary decimals from  the specified
+     * double argument and returns that number as a String.
+     *
+     * @param d a number with double floating point precision
+     * @return The String representation of d with trailing zeros and unecessary
+     *         decimals removed.
+     */
+    public static String removeTrailingZeros(double d) {
+        return String.valueOf(d).replaceAll("[0]*$", "").replaceAll(".$", "");
     }
 
     /**

@@ -22,10 +22,8 @@ public class CalcDisplay extends JTextField {
 
     public CalcDisplay() {
         super();
-        requestFocusInWindow(); //ensure initial focus is on this calc display
 
         debug = true;
-
         setMinimumSize(new Dimension(PREF_WIDTH, PREF_HEIGHT));
         setPreferredSize(new Dimension(PREF_WIDTH, PREF_HEIGHT));
         setFont(new Font("SansSerif", Font.PLAIN, 20));
@@ -40,7 +38,9 @@ public class CalcDisplay extends JTextField {
 
             @Override
             public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+
+                if (e.getKeyCode() == KeyEvent.VK_ENTER &&
+                        !getText().trim().equals("")) {
                     System.out.println("Enter pressed");
 
                     if (focused)
@@ -57,7 +57,7 @@ public class CalcDisplay extends JTextField {
             }
 
             @Override
-            public void keyReleased(KeyEvent e) {}
+            public void keyReleased(KeyEvent e) { /*do nothing*/ }
         });
 
         addFocusListener(new FocusListener() {

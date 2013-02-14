@@ -49,6 +49,8 @@ public class CalcPanel extends JPanel {
         constraints.gridy = 1;
         constraints.gridwidth = 1;
         add(opPanel, constraints);
+
+        display.requestFocusInWindow(); //ensure initial focus is on this display
     }
 
     public static void buildGui() {
