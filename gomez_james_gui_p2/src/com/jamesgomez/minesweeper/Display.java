@@ -3,9 +3,9 @@ package com.jamesgomez.minesweeper;
 import javax.swing.*;
 import java.awt.*;
 
-public class Board extends JPanel {
+public class Display extends JPanel {
 
-    public Board(LayoutManager manager) {
+    public Display(LayoutManager manager) {
         super(manager, true);
     }
 }
