@@ -21,31 +21,28 @@ public class ImageManager {
     public static BufferedImage OPEN_7;
     public static BufferedImage OPEN_8;
 
-    private String path = "gomez_james_gui_p2/res/";
-
     public static void LoadResources() {
         try {
             COVERED = ImageIO.read(new File(toFullPath("blank")));
-            MARKED =ImageIO.read(new File(toFullPath("bombflagged")));
-            BOMB_DEATH =ImageIO.read(new File(toFullPath("bombdeath")));
-            BOMB_REVEALED =ImageIO.read(new File(toFullPath("bombrevealed")));
-            OPEN_0 =ImageIO.read(new File(toFullPath("open0")));
-            OPEN_1 =ImageIO.read(new File(toFullPath("open0")));
-            OPEN_2 =ImageIO.read(new File(toFullPath("open2")));
-            OPEN_3 =ImageIO.read(new File(toFullPath("open3")));
-            OPEN_4 =ImageIO.read(new File(toFullPath("open4")));
-            OPEN_5 =ImageIO.read(new File(toFullPath("open5")));
-            OPEN_6 =ImageIO.read(new File(toFullPath("open6")));
-            OPEN_7 =ImageIO.read(new File(toFullPath("open7")));
-            OPEN_8 =ImageIO.read(new File(toFullPath("open8")));
-
+            MARKED = ImageIO.read(new File(toFullPath("bombflagged")));
+            BOMB_DEATH = ImageIO.read(new File(toFullPath("bombdeath")));
+            BOMB_REVEALED = ImageIO.read(new File(toFullPath("bombrevealed")));
+            OPEN_0 = ImageIO.read(new File(toFullPath("open0")));
+            OPEN_1 = ImageIO.read(new File(toFullPath("open1")));
+            OPEN_2 = ImageIO.read(new File(toFullPath("open2")));
+            OPEN_3 = ImageIO.read(new File(toFullPath("open3")));
+            OPEN_4 = ImageIO.read(new File(toFullPath("open4")));
+            OPEN_5 = ImageIO.read(new File(toFullPath("open5")));
+            OPEN_6 = ImageIO.read(new File(toFullPath("open6")));
+            OPEN_7 = ImageIO.read(new File(toFullPath("open7")));
+            OPEN_8 = ImageIO.read(new File(toFullPath("open8")));
         }
         catch (IOException e) {
-             e.printStackTrace();
+            e.printStackTrace();
         }
     }
 
-    private static String toFullPath(String filename){
+    private static String toFullPath(String filename) {
         return new String("gomez_james_gui_p2/res/" + filename + ".gif");
     }
 }
