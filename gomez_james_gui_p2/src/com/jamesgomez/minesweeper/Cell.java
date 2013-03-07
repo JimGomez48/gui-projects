@@ -1,10 +1,8 @@
 package com.jamesgomez.minesweeper;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-public class Cell implements IDrawable, ActionListener {
+public class Cell implements IDrawable {
 
     public enum CellState {COVERED, UNCOVERED, MARKED}
 
@@ -40,41 +38,35 @@ public class Cell implements IDrawable, ActionListener {
     public void draw(Graphics g) {
         switch (state) {
             case COVERED:
-                drawCovered(g);
+                g.drawImage(ImageManager.COVERED, PIXEL_SIZE * x, PIXEL_SIZE * y,
+                        null);
                 break;
             case UNCOVERED:
                 if (mined)
-                    drawBombDeath(g);
+                    g.drawImage(ImageManager.BOMB_DEATH, PIXEL_SIZE * x,
+                            PIXEL_SIZE * y, null);
                 else
                     drawAdjacencyCount(g);
                 break;
             case MARKED:
-                drawMarked(g);
+                g.drawImage(ImageManager.MARKED, PIXEL_SIZE * x, PIXEL_SIZE * y,
+                        null);
                 break;
         }
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        //TODO change state on click
-    }
-
     //TODO implement cell drawings
-    private void drawCovered(Graphics g) {
-        g.drawImage(ImageManager.COVERED, PIXEL_SIZE * x, PIXEL_SIZE * y, null);
+    public void cover() {
+        state = CellState.COVERED;
     }
 
-    private void drawMarked(Graphics g) {
-        g.drawImage(ImageManager.MARKED, PIXEL_SIZE * x, PIXEL_SIZE * y, null);
+    public void uncover() {
+        state = CellState.UNCOVERED;
     }
 
-    private void drawBombDeath(Graphics g) {
-        g.drawImage(ImageManager.BOMB_DEATH, PIXEL_SIZE * x, PIXEL_SIZE * y, null);
-    }
 
-    private void drawBombRevealed(Graphics g) {
-        g.drawImage(ImageManager.BOMB_REVEALED, PIXEL_SIZE * x, PIXEL_SIZE * y,
-                null);
+    public void mark() {
+        state = CellState.MARKED;
     }
 
     private void drawAdjacencyCount(Graphics g) {

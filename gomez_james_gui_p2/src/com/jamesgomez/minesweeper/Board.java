@@ -2,30 +2,67 @@ package com.jamesgomez.minesweeper;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 public class Board extends JPanel {
 
     public enum Dir {N, NW, W, SW, S, SE, E, NE}
 
-    private Cell[][] cell;
-    private int rows, columns, numMines, pixelWidth, pixelHeight;
+    private Cell[][] cells;
+    private int numRows, numColumns, numMines, pixelWidth, pixelHeight;
 
     public Board(LayoutManager manager, int rows, int columns, int numMines) {
         super(manager, true);
 
-        this.rows = rows;
-        this.columns = columns;
+        numRows = rows;
+        numColumns = columns;
         this.numMines = numMines;
 
         reset(rows, columns, numMines);
+
+        addMouseListener(new MouseListener() {
+
+            @Override
+            public void mouseClicked(MouseEvent e) {}
+
+            @Override
+            public void mousePressed(MouseEvent e) {}
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                int x = e.getX() / Cell.PIXEL_SIZE;
+                int y = e.getY() / Cell.PIXEL_SIZE;
+
+                if (x < numColumns && y < numRows && cells[y][x] != null)
+                    switch (e.getButton()) {
+                        case MouseEvent.BUTTON1:
+                            cells[y][x].uncover();
+                            break;
+                        case MouseEvent.BUTTON3:
+                            cells[y][x].mark();
+                            break;
+                        default:
+                            e.consume();
+                    }
+
+                repaint();
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {}
+
+            @Override
+            public void mouseExited(MouseEvent e) {}
+        });
     }
 
-    public int getRows() {
-        return rows;
+    public int getNumRows() {
+        return numRows;
     }
 
-    public int getColumns() {
-        return columns;
+    public int getNumColumns() {
+        return numColumns;
     }
 
     public int getNumMines() {
@@ -33,26 +70,35 @@ public class Board extends JPanel {
     }
 
     public int getPixelWidth() {
-        return columns * Cell.PIXEL_SIZE;
+        return numColumns * Cell.PIXEL_SIZE;
     }
 
     public int getPixelHeight() {
-        return rows * Cell.PIXEL_SIZE;
+        return numRows * Cell.PIXEL_SIZE;
     }
 
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        if (cell[0][0] != null)
-            cell[0][0].draw(g);
+        for (int i = 0; i < numRows; i++)
+            for (int j = 0; j < numColumns; j++) {
+                if (cells[i][j] != null)
+                    cells[i][j].draw(g);
+            }
     }
 
     public void reset(int rows, int columns, int numMines) {
-        this.rows = rows;
-        this.columns = columns;
+        this.numRows = rows;
+        this.numColumns = columns;
 
-        cell = new Cell[rows][columns];
-        cell[0][0] = new Cell(1, 1, true);
+        cells = new Cell[rows][columns];
+
+        for (int i = 0; i < numRows; i++)
+            for (int j = 0; j < numColumns; j++) {
+                cells[i][j] = new Cell(j, i, true);
+            }
+
+
     }
 }
