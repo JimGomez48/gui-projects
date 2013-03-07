@@ -8,6 +8,7 @@ public class Cell implements IDrawable, ActionListener {
 
     public enum CellState {COVERED, UNCOVERED, MARKED}
 
+    public final int dimension = 16;
     private CellState state;
     private boolean mined;
 
@@ -18,7 +19,7 @@ public class Cell implements IDrawable, ActionListener {
 
     @Override
     public void draw(Graphics g) {
-        switch (state) {
+ /*       switch (state) {
             case COVERED:
                 drawBlank(g);
                 break;
@@ -31,7 +32,9 @@ public class Cell implements IDrawable, ActionListener {
             case MARKED:
                 drawMarked(g);
                 break;
-        }
+        }*/
+
+        g.drawImage(ImageManager.COVERED, dimension*1, dimension*0, null);
     }
 
     @Override

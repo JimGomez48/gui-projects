@@ -118,12 +118,15 @@ public class GamePanel extends JPanel {
 
         frame.setSize(new Dimension(300, 300));
         //frame.setResizable(false);
-        frame.setVisible(true);
 
         //center the JFrame
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         frame.setLocation(dim.width / 2 - frame.getSize().width / 2,
                 dim.height / 2 - frame.getSize().height / 2);
+
+        ImageManager.LoadResources();
+
+        frame.setVisible(true);
     }
 
     public static void main(String[] args) {
