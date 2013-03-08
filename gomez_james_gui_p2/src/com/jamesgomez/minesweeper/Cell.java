@@ -10,6 +10,7 @@ public class Cell implements IDrawable {
     private CellState state;
     private boolean mined;
     private int x, y;
+    private int adjCount;
 
     public Cell(int x, int y, boolean isMined) {
         this.x = x;
@@ -55,7 +56,6 @@ public class Cell implements IDrawable {
         }
     }
 
-    //TODO implement cell drawings
     public void cover() {
         state = CellState.COVERED;
     }
@@ -66,7 +66,14 @@ public class Cell implements IDrawable {
 
 
     public void mark() {
-        state = CellState.MARKED;
+        switch (state) {
+            case MARKED:
+                state = CellState.COVERED;
+                break;
+            case COVERED:
+                state = CellState.MARKED;
+                break;
+        }
     }
 
     private void drawAdjacencyCount(Graphics g) {

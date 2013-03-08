@@ -51,7 +51,6 @@ public class GamePanel extends JPanel {
         JMenuItem expert = new JMenuItem("Expert");
         JMenuItem custom = new JMenuItem("Custom");
 
-        //TODO implement correct action on menu item clicks
         beginner.addActionListener(new ActionListener() {
 
             @Override
@@ -82,6 +81,7 @@ public class GamePanel extends JPanel {
             }
         });
 
+        //TODO implement "custom" click with new CustomDialog
         custom.addActionListener(new ActionListener() {
 
             @Override
@@ -148,7 +148,7 @@ public class GamePanel extends JPanel {
         GamePanel gamePanel = new GamePanel(new BorderLayout(5, 5));
         frame.add(gamePanel, BorderLayout.CENTER);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(600, 400);
+        frame.setSize(500, 360);
         frame.setResizable(false);
 
         //center the JFrame
@@ -156,12 +156,11 @@ public class GamePanel extends JPanel {
         frame.setLocation(dim.width / 2 - frame.getSize().width / 2,
                 dim.height / 2 - frame.getSize().height / 2);
 
-        ImageManager.LoadResources();
-
         frame.setVisible(true);
     }
 
     public static void main(String[] args) {
+        ImageManager.LoadResources();
         GamePanel.start();
     }
 

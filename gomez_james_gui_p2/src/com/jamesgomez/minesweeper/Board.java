@@ -88,6 +88,11 @@ public class Board extends JPanel {
             }
     }
 
+    public Cell getAdjacent(Cell cell, Dir d) {
+        //TODO implement
+        return new Cell(1, 1, true);
+    }
+
     public void reset(int rows, int columns, int numMines) {
         this.numRows = rows;
         this.numColumns = columns;
