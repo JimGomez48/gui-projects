@@ -10,7 +10,7 @@ public class Board extends JPanel {
     public enum Dir {N, NW, W, SW, S, SE, E, NE}
 
     private Cell[][] cells;
-    private int numRows, numColumns, numMines, pixelWidth, pixelHeight;
+    private int numRows, numColumns, numMines;
 
     public Board(LayoutManager manager, int rows, int columns, int numMines) {
         super(manager, true);
@@ -99,6 +99,6 @@ public class Board extends JPanel {
                 cells[i][j] = new Cell(j, i, true);
             }
 
-
+        repaint();
     }
 }

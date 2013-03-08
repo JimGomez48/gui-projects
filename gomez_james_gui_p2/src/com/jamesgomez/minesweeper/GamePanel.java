@@ -1,6 +1,7 @@
 package com.jamesgomez.minesweeper;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,24 +15,29 @@ public class GamePanel extends JPanel {
 
     public enum GameDifficulty {BEGINNER, INTERMEDIATE, EXPERT, CUSTOM}
 
-    public GamePanel() {
-        super(new BorderLayout(), true);
-
-        setLayout(new BorderLayout(5, 5));
+    public GamePanel(LayoutManager manager) {
+        super(manager, true);
 
         difficulty = GameDifficulty.BEGINNER;
 
         gameBoard = new Board(new GridLayout(2, 2), 9, 9, 10);
-        display = new Display(new BorderLayout(5, 5));
-
         gameBoard.setBackground(Color.LIGHT_GRAY);
-        display.setPreferredSize(new Dimension(600, 30));
+
+        /*Border raisedbevel = BorderFactory.createRaisedBevelBorder();
+        Border loweredbevel = BorderFactory.createLoweredBevelBorder();
+        gameBoard.setBorder(BorderFactory.createCompoundBorder(
+                raisedbevel, loweredbevel));*/
+
+        display = new Display(new BorderLayout(5, 5));
         display.setBackground(Color.LIGHT_GRAY);
 
         add(gameBoard, BorderLayout.CENTER);
         add(display, BorderLayout.NORTH);
 
         frame.add(createMenuBar(), BorderLayout.NORTH);
+        display.setPreferredSize(new Dimension(gameBoard.getPixelWidth(), 30));
+        /*frame.setSize(new Dimension(gameBoard.getPixelWidth()+16,
+                gameBoard.getPixelHeight() + 100));*/
     }
 
     public JMenuBar createMenuBar() {
@@ -50,9 +56,9 @@ public class GamePanel extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(frame, "Beginner");
                 difficulty = GameDifficulty.BEGINNER;
                 newGame();
+                gameBoard.repaint();
             }
         });
 
@@ -60,9 +66,9 @@ public class GamePanel extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(frame, "Intermediate");
                 difficulty = GameDifficulty.INTERMEDIATE;
                 newGame();
+                gameBoard.repaint();
             }
         });
 
@@ -70,9 +76,9 @@ public class GamePanel extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(frame, "Expert");
                 difficulty = GameDifficulty.EXPERT;
                 newGame();
+                gameBoard.repaint();
             }
         });
 
@@ -85,6 +91,7 @@ public class GamePanel extends JPanel {
                 CustomDialog custom = new CustomDialog();
                 custom.setLocationRelativeTo(frame);
                 custom.setVisible(true);
+                gameBoard.repaint();
 
             }
         });
@@ -93,7 +100,6 @@ public class GamePanel extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(frame, "New Game");
                 newGame();
             }
         });
@@ -125,10 +131,13 @@ public class GamePanel extends JPanel {
         switch (difficulty) {
             case BEGINNER:
                 gameBoard.reset(9, 9, 10);
+                break;
             case INTERMEDIATE:
                 gameBoard.reset(16, 16, 40);
+                break;
             case EXPERT:
-                gameBoard.reset(30, 16, 99);
+                gameBoard.reset(16, 30, 99);
+                break;
             case CUSTOM:
                 break;
         }
@@ -136,13 +145,11 @@ public class GamePanel extends JPanel {
 
     public static void start() {
         frame = new JFrame("Minesweeper");
-        GamePanel gamePanel = new GamePanel();
+        GamePanel gamePanel = new GamePanel(new BorderLayout(5, 5));
         frame.add(gamePanel, BorderLayout.CENTER);
-
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        frame.setSize(new Dimension(600, 400));
-        //frame.setResizable(false);
+        frame.setSize(600, 400);
+        frame.setResizable(false);
 
         //center the JFrame
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -158,10 +165,10 @@ public class GamePanel extends JPanel {
         GamePanel.start();
     }
 
-    private class CustomDialog extends JDialog{
+    private class CustomDialog extends JDialog {
         //TODO implement custom dialog on "custom" menu item click
 
-        public CustomDialog(){
+        public CustomDialog() {
             super();
         }
     }
