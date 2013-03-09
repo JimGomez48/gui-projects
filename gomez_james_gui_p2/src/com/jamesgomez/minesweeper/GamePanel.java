@@ -29,15 +29,13 @@ public class GamePanel extends JPanel {
                 raisedbevel, loweredbevel));*/
 
         display = new Display(new BorderLayout(5, 5));
-        display.setBackground(Color.LIGHT_GRAY);
+        display.setBackground(new Color(0, 35, 93));
 
         add(gameBoard, BorderLayout.CENTER);
         add(display, BorderLayout.NORTH);
 
         frame.add(createMenuBar(), BorderLayout.NORTH);
         display.setPreferredSize(new Dimension(gameBoard.getPixelWidth(), 30));
-        /*frame.setSize(new Dimension(gameBoard.getPixelWidth()+16,
-                gameBoard.getPixelHeight() + 100));*/
     }
 
     public JMenuBar createMenuBar() {
@@ -145,6 +143,7 @@ public class GamePanel extends JPanel {
 
     public static void start() {
         frame = new JFrame("Minesweeper");
+        frame.setIconImage(ImageManager.BOMB_REVEALED);
         GamePanel gamePanel = new GamePanel(new BorderLayout(5, 5));
         frame.add(gamePanel, BorderLayout.CENTER);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

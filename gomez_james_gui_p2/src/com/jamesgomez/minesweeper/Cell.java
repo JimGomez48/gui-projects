@@ -4,27 +4,29 @@ import java.awt.*;
 
 public class Cell implements IDrawable {
 
-    public enum CellState {COVERED, UNCOVERED, MARKED}
-
     public static final int PIXEL_SIZE = 16;
-    private CellState state;
-    private boolean mined;
-    private int x, y;
-    private int adjCount;
+    private boolean mined, marked, covered;
+    private int x, y, adjCount;
 
     public Cell(int x, int y, boolean isMined) {
         this.x = x;
         this.y = y;
-        state = CellState.COVERED;
         mined = isMined;
-    }
-
-    public CellState getState() {
-        return state;
+        marked = false;
+        covered = true;
+        adjCount = 0;
     }
 
     public boolean isMined() {
         return mined;
+    }
+
+    public boolean isMarked() {
+        return marked;
+    }
+
+    public boolean isCovered() {
+        return covered;
     }
 
     public int getX() {
@@ -35,45 +37,42 @@ public class Cell implements IDrawable {
         return y;
     }
 
-    @Override
-    public void draw(Graphics g) {
-        switch (state) {
-            case COVERED:
-                g.drawImage(ImageManager.COVERED, PIXEL_SIZE * x, PIXEL_SIZE * y,
-                        null);
-                break;
-            case UNCOVERED:
-                if (mined)
-                    g.drawImage(ImageManager.BOMB_DEATH, PIXEL_SIZE * x,
-                            PIXEL_SIZE * y, null);
-                else
-                    drawAdjacencyCount(g);
-                break;
-            case MARKED:
-                g.drawImage(ImageManager.MARKED, PIXEL_SIZE * x, PIXEL_SIZE * y,
-                        null);
-                break;
-        }
+    public int getAdjCount() {
+        return adjCount;
     }
 
-    public void cover() {
-        state = CellState.COVERED;
+    @Override
+    public void draw(Graphics g) {
+        if (covered) {
+            if (marked)
+                g.drawImage(ImageManager.MARKED, PIXEL_SIZE * x, PIXEL_SIZE * y,
+                        null);
+            else
+                g.drawImage(ImageManager.COVERED, PIXEL_SIZE * x, PIXEL_SIZE * y,
+                        null);
+        }
+        else {
+            if (mined)
+                g.drawImage(ImageManager.BOMB_DEATH, PIXEL_SIZE * x, PIXEL_SIZE * y,
+                        null);
+            else
+                drawAdjacencyCount(g);
+        }
     }
 
     public void uncover() {
-        state = CellState.UNCOVERED;
+        if (!marked)
+            covered = false;
     }
 
-
     public void mark() {
-        switch (state) {
-            case MARKED:
-                state = CellState.COVERED;
-                break;
-            case COVERED:
-                state = CellState.MARKED;
-                break;
+        if (covered) {
+            if (marked)
+                marked = false;
+            else
+                marked = true;
         }
+
     }
 
     private void drawAdjacencyCount(Graphics g) {
