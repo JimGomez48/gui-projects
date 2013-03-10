@@ -37,7 +37,8 @@ public class Board extends JPanel {
                 if (x < numColumns && y < numRows && cells[y][x] != null)
                     switch (e.getButton()) {
                         case MouseEvent.BUTTON1:
-                            cells[y][x].uncover();
+                            //cells[y][x].uncover();
+                            uncoverCell(cells[y][x]);
                             break;
                         case MouseEvent.BUTTON3:
                             cells[y][x].mark();
@@ -88,9 +89,26 @@ public class Board extends JPanel {
             }
     }
 
-    public Cell getAdjacent(Cell cell, Dir d) {
+    public Cell getAdjacent(Cell c, Dir d) {
         //TODO implement
         return new Cell(1, 1, true);
+    }
+
+
+    public void uncoverCell(Cell c) {
+        if (c.isMined() && !c.isMarked()) {
+            for (int i = 0; i < numRows; i++)
+                for (int j = 0; j < numColumns; j++) {
+                    if (cells[i][j] != null)
+                        cells[i][j].uncover();
+                }
+        }
+        else
+            uncoverAdjacent(c);
+    }
+
+    public void uncoverAdjacent(Cell c) {
+        //TODO implement
     }
 
     public void reset(int rows, int columns, int numMines) {
