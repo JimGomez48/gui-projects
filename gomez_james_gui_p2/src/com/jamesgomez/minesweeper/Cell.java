@@ -2,9 +2,14 @@ package com.jamesgomez.minesweeper;
 
 import java.awt.*;
 
-public class Cell implements IDrawable {
+/** The fundamental game component of the <i>Minesweeper</i> game */
+public class Cell implements Drawable {
 
-    public static final int PIXEL_SIZE = 16;
+    /** The width of a {@link Cell} in pixels */
+    public static final int WIDTH = 16;
+    /** The height of a {@link Cell} in pixels */
+    public static final int HEIGHT = 16;
+
     private boolean mined, marked, covered;
     private int x, y, adjCount;
 
@@ -17,26 +22,35 @@ public class Cell implements IDrawable {
         adjCount = 0;
     }
 
+    /** @return true if this Cell contains a mine, false otherwise */
     public boolean isMined() {
         return mined;
     }
 
+    /**
+     * @return true if this Cell contains is currently marked by the player,
+     *         false otherwise
+     */
     public boolean isMarked() {
         return marked;
     }
 
+    /** @return true if this Cell is currently covered, false otherwise */
     public boolean isCovered() {
         return covered;
     }
 
+    /** The x coordinate of the grid location of this Cell */
     public int getX() {
         return x;
     }
 
+    /** The y coordinate of the grid location of this Cell */
     public int getY() {
         return y;
     }
 
+    /** @return the number of mines adjacent to this cell */
     public int getAdjCount() {
         return adjCount;
     }
@@ -45,38 +59,40 @@ public class Cell implements IDrawable {
     public void draw(Graphics g) {
         if (covered) {
             if (marked)
-                g.drawImage(ImageManager.MARKED, PIXEL_SIZE * x, PIXEL_SIZE * y,
-                        null);
+                g.drawImage(ImageManager.MARKED, WIDTH * x, HEIGHT * y, null);
             else
-                g.drawImage(ImageManager.COVERED, PIXEL_SIZE * x, PIXEL_SIZE * y,
-                        null);
+                g.drawImage(ImageManager.COVERED, WIDTH * x, HEIGHT * y, null);
         }
         else {
             if (mined)
-                g.drawImage(ImageManager.BOMB_DEATH, PIXEL_SIZE * x, PIXEL_SIZE * y,
-                        null);
+                g.drawImage(ImageManager.BOMB_DEATH, WIDTH * x, HEIGHT * y, null);
             else
                 drawAdjacencyCount(g);
         }
     }
 
+    /** Uncovers and reveals this Cell. */
     public void uncover() {
         if (!marked)
             covered = false;
     }
 
+    /**
+     * Marks this cell. Cells cannot be uncovered while marked. If this Cell is
+     * already uncovered, this method call will be ignored.
+     */
     public void mark() {
         if (covered) {
-            if (marked)
-                marked = false;
-            else
-                marked = true;
+            if (marked) marked = false;
+            else marked = true;
         }
 
     }
 
+    /** Draws this Cell's adjacent mine count. */
     private void drawAdjacencyCount(Graphics g) {
-        g.drawImage(ImageManager.OPEN_1, PIXEL_SIZE * x, PIXEL_SIZE * y, null);
+        if (!marked)
+            g.drawImage(ImageManager.OPEN_1, WIDTH * x, HEIGHT * y, null);
     }
 
 }

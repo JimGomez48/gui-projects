@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+/** Static class used to create and hold public instances of image files. */
 public class ImageManager {
 
     public static BufferedImage COVERED;
@@ -20,7 +21,19 @@ public class ImageManager {
     public static BufferedImage OPEN_6;
     public static BufferedImage OPEN_7;
     public static BufferedImage OPEN_8;
+    public static BufferedImage TIME_0;
+    public static BufferedImage TIME_1;
+    public static BufferedImage TIME_2;
+    public static BufferedImage TIME_3;
+    public static BufferedImage TIME_4;
+    public static BufferedImage TIME_5;
+    public static BufferedImage TIME_6;
+    public static BufferedImage TIME_7;
+    public static BufferedImage TIME_8;
+    public static BufferedImage TIME_9;
+    public static BufferedImage FACE_SMILE;
 
+    /** Loads image resources into memory and sets public references to them. */
     public static void LoadResources() {
         try {
             COVERED = ImageIO.read(new File(toFullPath("blank")));
@@ -36,8 +49,20 @@ public class ImageManager {
             OPEN_6 = ImageIO.read(new File(toFullPath("open6")));
             OPEN_7 = ImageIO.read(new File(toFullPath("open7")));
             OPEN_8 = ImageIO.read(new File(toFullPath("open8")));
+            TIME_0 = ImageIO.read(new File(toFullPath("time0")));
+            TIME_1 = ImageIO.read(new File(toFullPath("time1")));
+            TIME_2 = ImageIO.read(new File(toFullPath("time2")));
+            TIME_3 = ImageIO.read(new File(toFullPath("time3")));
+            TIME_4 = ImageIO.read(new File(toFullPath("time4")));
+            TIME_5 = ImageIO.read(new File(toFullPath("time5")));
+            TIME_6 = ImageIO.read(new File(toFullPath("time6")));
+            TIME_7 = ImageIO.read(new File(toFullPath("time7")));
+            TIME_8 = ImageIO.read(new File(toFullPath("time8")));
+            TIME_9 = ImageIO.read(new File(toFullPath("time9")));
+            FACE_SMILE = ImageIO.read(new File(toFullPath("facesmile")));
         }
         catch (IOException e) {
+            System.out.println("ImageManager failed to read an image file");
             e.printStackTrace();
         }
     }

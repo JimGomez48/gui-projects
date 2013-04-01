@@ -1,41 +1,42 @@
 package com.jamesgomez.minesweeper;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class GamePanel extends JPanel {
+public class Game extends JPanel {
 
     private static JFrame frame;
+    private static Game instance;
+
     private GameDifficulty difficulty;
     private Board gameBoard;
-    private Display display;
+    private DisplayBar displayBar;
 
     public enum GameDifficulty {BEGINNER, INTERMEDIATE, EXPERT, CUSTOM}
 
-    public GamePanel(LayoutManager manager) {
+    public Game(LayoutManager manager) {
         super(manager, true);
 
+        instance = this;
         difficulty = GameDifficulty.BEGINNER;
 
         gameBoard = new Board(new GridLayout(2, 2), 9, 9, 10);
-        gameBoard.setBackground(Color.LIGHT_GRAY);
-
-        /*Border raisedbevel = BorderFactory.createRaisedBevelBorder();
-        Border loweredbevel = BorderFactory.createLoweredBevelBorder();
-        gameBoard.setBorder(BorderFactory.createCompoundBorder(
-                raisedbevel, loweredbevel));*/
-
-        display = new Display(new BorderLayout(5, 5));
-        display.setBackground(new Color(0, 35, 93));
-
+        displayBar = new DisplayBar(new BorderLayout(5, 5));
         add(gameBoard, BorderLayout.CENTER);
-        add(display, BorderLayout.NORTH);
+        add(displayBar, BorderLayout.NORTH);
 
         frame.add(createMenuBar(), BorderLayout.NORTH);
-        display.setPreferredSize(new Dimension(gameBoard.getPixelWidth(), 30));
+        displayBar.setPreferredSize(new Dimension(gameBoard.getPixelWidth(), 30));
+    }
+
+    /** @return the singleton instance of this game */
+    public static Game getInstance() {
+        if (instance == null)
+            instance = new Game(new BorderLayout());
+
+        return instance;
     }
 
     public JMenuBar createMenuBar() {
@@ -144,8 +145,8 @@ public class GamePanel extends JPanel {
     public static void start() {
         frame = new JFrame("Minesweeper");
         frame.setIconImage(ImageManager.BOMB_REVEALED);
-        GamePanel gamePanel = new GamePanel(new BorderLayout(5, 5));
-        frame.add(gamePanel, BorderLayout.CENTER);
+        Game game = new Game(new BorderLayout(5, 5));
+        frame.add(game, BorderLayout.CENTER);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(500, 360);
         frame.setResizable(false);
@@ -160,7 +161,7 @@ public class GamePanel extends JPanel {
 
     public static void main(String[] args) {
         ImageManager.LoadResources();
-        GamePanel.start();
+        Game.start();
     }
 
     private class CustomDialog extends JDialog {

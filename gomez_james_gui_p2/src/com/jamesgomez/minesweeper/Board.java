@@ -7,13 +7,14 @@ import java.awt.event.MouseListener;
 
 public class Board extends JPanel {
 
-    public enum Dir {N, NW, W, SW, S, SE, E, NE}
+    public enum Direction {N, NW, W, SW, S, SE, E, NE}
 
     private Cell[][] cells;
     private int numRows, numColumns, numMines;
 
     public Board(LayoutManager manager, int rows, int columns, int numMines) {
         super(manager, true);
+        setBackground(Color.LIGHT_GRAY);
 
         numRows = rows;
         numColumns = columns;
@@ -31,8 +32,8 @@ public class Board extends JPanel {
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                int x = e.getX() / Cell.PIXEL_SIZE;
-                int y = e.getY() / Cell.PIXEL_SIZE;
+                int x = e.getX() / Cell.WIDTH;
+                int y = e.getY() / Cell.WIDTH;
 
                 if (x < numColumns && y < numRows && cells[y][x] != null)
                     switch (e.getButton()) {
@@ -71,11 +72,11 @@ public class Board extends JPanel {
     }
 
     public int getPixelWidth() {
-        return numColumns * Cell.PIXEL_SIZE;
+        return numColumns * Cell.WIDTH;
     }
 
     public int getPixelHeight() {
-        return numRows * Cell.PIXEL_SIZE;
+        return numRows * Cell.WIDTH;
     }
 
     @Override
@@ -89,7 +90,7 @@ public class Board extends JPanel {
             }
     }
 
-    public Cell getAdjacent(Cell c, Dir d) {
+    public Cell getAdjacent(Cell c, Direction d) {
         //TODO implement
         return new Cell(1, 1, true);
     }
