@@ -16,14 +16,14 @@ public class Game extends JPanel {
 
     public enum GameDifficulty {BEGINNER, INTERMEDIATE, EXPERT, CUSTOM}
 
-    public Game(LayoutManager manager) {
-        super(manager, true);
+    public Game() {
+        super(new BorderLayout(5, 5), true);
 
         instance = this;
         difficulty = GameDifficulty.BEGINNER;
 
-        gameBoard = new Board(new GridLayout(2, 2), 9, 9, 10);
-        displayBar = new DisplayBar(new BorderLayout(5, 5));
+        gameBoard = new Board(9, 9, 10);
+        displayBar = new DisplayBar();
         add(gameBoard, BorderLayout.CENTER);
         add(displayBar, BorderLayout.NORTH);
 
@@ -34,7 +34,7 @@ public class Game extends JPanel {
     /** @return the singleton instance of this game */
     public static Game getInstance() {
         if (instance == null)
-            instance = new Game(new BorderLayout());
+            instance = new Game();
 
         return instance;
     }
@@ -145,8 +145,8 @@ public class Game extends JPanel {
     public static void start() {
         frame = new JFrame("Minesweeper");
         frame.setIconImage(ImageManager.BOMB_REVEALED);
-        Game game = new Game(new BorderLayout(5, 5));
-        frame.add(game, BorderLayout.CENTER);
+        Game game = new Game();
+        frame.add(game);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(500, 360);
         frame.setResizable(false);

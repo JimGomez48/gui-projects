@@ -12,8 +12,8 @@ public class Board extends JPanel {
     private Cell[][] cells;
     private int numRows, numColumns, numMines;
 
-    public Board(LayoutManager manager, int rows, int columns, int numMines) {
-        super(manager, true);
+    public Board(int rows, int columns, int numMines) {
+        super(true);
         setBackground(Color.LIGHT_GRAY);
 
         numRows = rows;
