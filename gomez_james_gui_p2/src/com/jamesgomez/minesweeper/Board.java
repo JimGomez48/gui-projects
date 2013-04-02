@@ -132,9 +132,40 @@ public class Board extends JPanel {
         return cells[row][column];
     }
 
+    public ArrayList<Cell> getAdjacentCells(Cell cell) {
+        ArrayList<Cell> neighbors = new ArrayList<Cell>();
 
-    public void uncoverCell(Cell c) {
-        if (c.isMined() && !c.isMarked()) {
+        Cell N = getAdjacentCell(cell, Dir.N);
+        Cell NE = getAdjacentCell(cell, Dir.NE);
+        Cell E = getAdjacentCell(cell, Dir.E);
+        Cell SE = getAdjacentCell(cell, Dir.SE);
+        Cell S = getAdjacentCell(cell, Dir.S);
+        Cell SW = getAdjacentCell(cell, Dir.SW);
+        Cell W = getAdjacentCell(cell, Dir.W);
+        Cell NW = getAdjacentCell(cell, Dir.NW);
+
+        if (N != null)
+            neighbors.add(N);
+        if (NE != null)
+            neighbors.add(NE);
+        if (E != null)
+            neighbors.add(E);
+        if (SE != null)
+            neighbors.add(SE);
+        if (S != null)
+            neighbors.add(S);
+        if (SW != null)
+            neighbors.add(SW);
+        if (W != null)
+            neighbors.add(W);
+        if (NW != null)
+            neighbors.add(NW);
+
+        return neighbors;
+    }
+
+    public void uncoverCell(Cell cell) {
+        if (cell.isMined() && !cell.isMarked()) {
             for (int i = 0; i < numRows; i++)
                 for (int j = 0; j < numColumns; j++) {
                     if (cells[i][j] != null)
@@ -142,15 +173,23 @@ public class Board extends JPanel {
                 }
         }
         else
-            uncoverAdjacentCells(c);
+            uncoverAdjacentCells(cell);
     }
 
-    private void uncoverAdjacentCells(Cell c) {
-        ArrayList<Cell>adjList = new ArrayList<Cell>();
-        adjList.add(c);
-        //TODO uncover all cells neighboring this cell up until cells have a non-zero adj count
-
-        c.uncover();
+    private void uncoverAdjacentCells(Cell cell) {
+        if (cell == null)
+            return;
+        else if (!cell.isCovered())
+            return;
+        else {
+            cell.uncover();
+            if (cell.getAdjCount() == 0) {
+                ArrayList<Cell> neighbors = getAdjacentCells(cell);
+                for (Cell c : neighbors) {
+                    uncoverAdjacentCells(c);
+                }
+            }
+        }
     }
 
     /**
@@ -207,21 +246,21 @@ public class Board extends JPanel {
                     Cell NW = getAdjacentCell(currentCell, Dir.NW);
 
                     if (N != null && N.isMined())
-                        mineCount ++;
+                        mineCount++;
                     if (NE != null && NE.isMined())
-                        mineCount ++;
+                        mineCount++;
                     if (E != null && E.isMined())
-                        mineCount ++;
+                        mineCount++;
                     if (SE != null && SE.isMined())
-                        mineCount ++;
+                        mineCount++;
                     if (S != null && S.isMined())
-                        mineCount ++;
+                        mineCount++;
                     if (SW != null && SW.isMined())
-                        mineCount ++;
+                        mineCount++;
                     if (W != null && W.isMined())
-                        mineCount ++;
+                        mineCount++;
                     if (NW != null && NW.isMined())
-                        mineCount ++;
+                        mineCount++;
 
                     currentCell.setAdjCount(mineCount);
                 }
