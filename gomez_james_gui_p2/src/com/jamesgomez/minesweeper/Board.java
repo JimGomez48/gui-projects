@@ -4,6 +4,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Iterator;
 
 public class Board extends JPanel {
 
@@ -100,17 +104,38 @@ public class Board extends JPanel {
         //TODO implement
     }
 
+    /**
+     * Resets the game board with the specified amount of rows, columns,
+     * and mines. The cells are then randomly shuffled within the game board.
+     */
     public void reset(int rows, int columns, int numMines) {
         this.numRows = rows;
         this.numColumns = columns;
         this.numMines = numMines;
 
-        cells = new Cell[rows][columns];
+        ArrayList tempCells = new ArrayList<Cell>();
+        int count = 0;
+        for (int i = 0; i < rows * columns; i++) {
+            if (count < numMines)
+                tempCells.add(new Cell(true));
+            else
+                tempCells.add(new Cell(false));
 
-        for (int i = 0; i < numRows; i++)
-            for (int j = 0; j < numColumns; j++) {
-                cells[i][j] = new Cell(j, i, true);
+            count++;
+        }
+
+        Collections.shuffle(tempCells);
+
+        cells = new Cell[rows][columns];
+        Iterator<Cell> iterator = tempCells.iterator();
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                Cell c = iterator.next();
+                c.setLocation(j, i);
+                cells[i][j] = c;
             }
+        }
 
         repaint();
     }

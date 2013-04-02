@@ -13,6 +13,15 @@ public class Cell implements Drawable {
     private boolean mined, marked, covered;
     private int x, y, adjCount;
 
+    public Cell(boolean isMined) {
+        this.x = 0;
+        this.y = 0;
+        mined = isMined;
+        marked = false;
+        covered = true;
+        adjCount = 0;
+    }
+
     public Cell(int x, int y, boolean isMined) {
         this.x = x;
         this.y = y;
@@ -48,6 +57,19 @@ public class Cell implements Drawable {
     /** The y coordinate of the grid location of this Cell */
     public int getY() {
         return y;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public void setLocation(int x, int y){
+        this.x = x;
+        this.y = y;
     }
 
     /** @return the number of mines adjacent to this cell */

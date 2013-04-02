@@ -9,11 +9,10 @@ public class Game extends JPanel {
 
     private static JFrame frame;
     private static Game instance;
-
-    private GameDifficulty difficulty;
     private Board gameBoard;
     private DisplayBar displayBar;
 
+    private GameDifficulty difficulty;
     public enum GameDifficulty {BEGINNER, INTERMEDIATE, EXPERT, CUSTOM}
 
     public Game() {
@@ -128,17 +127,10 @@ public class Game extends JPanel {
 
     public void newGame() {
         switch (difficulty) {
-            case BEGINNER:
-                gameBoard.reset(9, 9, 10);
-                break;
-            case INTERMEDIATE:
-                gameBoard.reset(16, 16, 40);
-                break;
-            case EXPERT:
-                gameBoard.reset(16, 30, 99);
-                break;
-            case CUSTOM:
-                break;
+            case BEGINNER:      gameBoard.reset(9, 9, 10); break;
+            case INTERMEDIATE:  gameBoard.reset(16, 16, 40); break;
+            case EXPERT:        gameBoard.reset(16, 30, 99); break;
+            case CUSTOM:        break;
         }
     }
 
