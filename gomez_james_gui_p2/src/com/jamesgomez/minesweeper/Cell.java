@@ -11,7 +11,8 @@ public class Cell implements Drawable {
     /** The height of a {@link Cell} in pixels */
     public static final int HEIGHT = 16;
 
-    private boolean mined, marked, covered;
+    private final boolean mined;
+    private boolean marked, covered;
     private int row, column, adjCount;
 
     public Cell(boolean isMined) {
@@ -112,7 +113,7 @@ public class Cell implements Drawable {
      */
     public void mark() {
         if (covered)
-            marked = (marked) ? false : true;
+            marked = !marked;
     }
 
     /** Draws this Cell's adjacent mine count. */

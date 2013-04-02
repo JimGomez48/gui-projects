@@ -21,7 +21,7 @@ public class Game extends JPanel {
         instance = this;
         difficulty = GameDifficulty.BEGINNER;
 
-        gameBoard = new Board(9, 9, 10);
+        gameBoard = new Board();
         displayBar = new DisplayBar();
         add(gameBoard, BorderLayout.CENTER);
         add(displayBar, BorderLayout.NORTH);
@@ -107,6 +107,7 @@ public class Game extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 frame.dispose();
+                System.exit(0);
             }
         });
 
@@ -139,7 +140,8 @@ public class Game extends JPanel {
         frame.setIconImage(ImageManager.BOMB_REVEALED);
         Game game = new Game();
         frame.add(game);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setSize(500, 360);
         frame.setResizable(false);
 

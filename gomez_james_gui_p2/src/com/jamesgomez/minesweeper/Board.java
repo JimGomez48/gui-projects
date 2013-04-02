@@ -15,15 +15,11 @@ public class Board extends JPanel {
     private Cell[][] cells;
     private int numRows, numColumns, numMines;
 
-    public Board(int rows, int columns, int numMines) {
+    public Board() {
         super(true);
         setBackground(Color.LIGHT_GRAY);
 
-        numRows = rows;
-        numColumns = columns;
-        this.numMines = numMines;
-
-        reset(rows, columns, numMines);
+        reset(9, 9, 10);
 
         addMouseListener(new MouseAdapter() {
 
@@ -132,6 +128,10 @@ public class Board extends JPanel {
         return cells[row][column];
     }
 
+    /**
+     * @return an {@link ArrayList} of Cells that are immediately adjacent to the
+     *         argument Cell.
+     */
     public ArrayList<Cell> getAdjacentCells(Cell cell) {
         ArrayList<Cell> neighbors = new ArrayList<Cell>();
 
@@ -164,18 +164,35 @@ public class Board extends JPanel {
         return neighbors;
     }
 
+    /**
+     * Uncovers this Cell and, depending on whether the cell is mined or not,
+     * either uncovers all cells or uncovers just this cell and any neighboring
+     * cells with adjacency count of 0. If the cell is marked,
+     * this method does nothing.
+     */
     public void uncoverCell(Cell cell) {
-        if (cell.isMined() && !cell.isMarked()) {
-            for (int i = 0; i < numRows; i++)
-                for (int j = 0; j < numColumns; j++) {
-                    if (cells[i][j] != null)
-                        cells[i][j].uncover();
-                }
+        if (!cell.isMarked()) {
+            if (cell.isMined())
+                uncoverAllCells();
+            else
+                uncoverAdjacentCells(cell);
         }
-        else
-            uncoverAdjacentCells(cell);
     }
 
+    /** Uncovers all Cells on the game board */
+    private void uncoverAllCells() {
+        for (int i = 0; i < numRows; i++)
+            for (int j = 0; j < numColumns; j++) {
+                if (cells[i][j] != null)
+                    cells[i][j].uncover();
+            }
+    }
+
+    /**
+     * Recursively uncovers all adjacent cells until it reaches cells with
+     * non-zero adjacency counts, or reaches the edge of the board
+     */
+    @SuppressWarnings("UnnecessaryReturnStatement")
     private void uncoverAdjacentCells(Cell cell) {
         if (cell == null)
             return;
@@ -194,7 +211,8 @@ public class Board extends JPanel {
 
     /**
      * Resets the game board with the specified amount of rows, columns,
-     * and mines. The cells are then randomly shuffled within the game board.
+     * and mines. The cells are randomly shuffled within the game board,
+     * and mine adjacency counts are calculated and assigned to each cell.
      */
     public void reset(int rows, int columns, int numMines) {
         this.numRows = rows;
@@ -236,31 +254,12 @@ public class Board extends JPanel {
                 else {
                     int mineCount = 0;
 
-                    Cell N = getAdjacentCell(currentCell, Dir.N);
-                    Cell NE = getAdjacentCell(currentCell, Dir.NE);
-                    Cell E = getAdjacentCell(currentCell, Dir.E);
-                    Cell SE = getAdjacentCell(currentCell, Dir.SE);
-                    Cell S = getAdjacentCell(currentCell, Dir.S);
-                    Cell SW = getAdjacentCell(currentCell, Dir.SW);
-                    Cell W = getAdjacentCell(currentCell, Dir.W);
-                    Cell NW = getAdjacentCell(currentCell, Dir.NW);
+                    ArrayList<Cell> neighbors = getAdjacentCells(currentCell);
 
-                    if (N != null && N.isMined())
-                        mineCount++;
-                    if (NE != null && NE.isMined())
-                        mineCount++;
-                    if (E != null && E.isMined())
-                        mineCount++;
-                    if (SE != null && SE.isMined())
-                        mineCount++;
-                    if (S != null && S.isMined())
-                        mineCount++;
-                    if (SW != null && SW.isMined())
-                        mineCount++;
-                    if (W != null && W.isMined())
-                        mineCount++;
-                    if (NW != null && NW.isMined())
-                        mineCount++;
+                    for (Cell c : neighbors){
+                        if (c.isMined())
+                            mineCount++;
+                    }
 
                     currentCell.setAdjCount(mineCount);
                 }
