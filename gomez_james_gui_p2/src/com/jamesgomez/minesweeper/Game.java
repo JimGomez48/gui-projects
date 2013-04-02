@@ -126,7 +126,7 @@ public class Game extends JPanel {
         return menuBar;
     }
 
-    private void newGame() {
+    public void newGame() {
         switch (difficulty) {
             case BEGINNER:
                 gameBoard.reset(9, 9, 10);

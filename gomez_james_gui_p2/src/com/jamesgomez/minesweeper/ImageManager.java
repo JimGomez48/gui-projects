@@ -32,6 +32,9 @@ public class ImageManager {
     public static BufferedImage TIME_8;
     public static BufferedImage TIME_9;
     public static BufferedImage FACE_SMILE;
+    public static BufferedImage FACE_OOH;
+    public static BufferedImage FACE_WIN;
+    public static BufferedImage FACE_DEAD;
 
     /** Loads image resources into memory and sets public references to them. */
     public static void LoadResources() {
@@ -60,6 +63,9 @@ public class ImageManager {
             TIME_8 = ImageIO.read(new File(toFullPath("time8")));
             TIME_9 = ImageIO.read(new File(toFullPath("time9")));
             FACE_SMILE = ImageIO.read(new File(toFullPath("facesmile")));
+            FACE_OOH = ImageIO.read(new File(toFullPath("faceooh")));
+            FACE_WIN = ImageIO.read(new File(toFullPath("facewin")));
+            FACE_DEAD = ImageIO.read(new File(toFullPath("facedead")));
         }
         catch (IOException e) {
             System.out.println("ImageManager failed to read an image file");

@@ -82,11 +82,8 @@ public class Cell implements Drawable {
      * already uncovered, this method call will be ignored.
      */
     public void mark() {
-        if (covered) {
-            if (marked) marked = false;
-            else marked = true;
-        }
-
+        if (covered)
+            marked = (marked) ? false : true;
     }
 
     /** Draws this Cell's adjacent mine count. */

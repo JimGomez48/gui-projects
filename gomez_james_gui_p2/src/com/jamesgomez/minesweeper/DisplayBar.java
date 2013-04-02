@@ -2,129 +2,121 @@ package com.jamesgomez.minesweeper;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
 public class DisplayBar extends JPanel {
 
-    private DigitalRead unmarkedMinesRead;
-    private DigitalRead timerRead;
-    private JButton newGameButton;
+    private UnmarkedMinesRead unmarkedMinesRead;
+    private TimerRead timerRead;
+    private FaceButton faceButton;
 
     public DisplayBar() {
-        super(true);
+        super(new BorderLayout(2, 2), true);
         setBackground(Color.LIGHT_GRAY);
 
-        newGameButton = new JButton(new ImageIcon(ImageManager.FACE_SMILE));
+        faceButton = new FaceButton();
+        unmarkedMinesRead = new UnmarkedMinesRead();
+        timerRead = new TimerRead();
 
-        unmarkedMinesRead = new DigitalRead() {
-
-            @Override
-            public void draw(Graphics g) {
-                g.drawImage(this.left, 0, 0, null);
-                g.drawImage(this.center, DIGIT_WIDTH, 0, null);
-                g.drawImage(this.right, 2 * DIGIT_WIDTH, 0, null);
-            }
-        };
-
-        timerRead = new DigitalRead() {
+        addMouseListener(new MouseAdapter() {
 
             @Override
-            public void draw(Graphics g) {
-                g.drawImage(this.left, getWidth() - 3 * DIGIT_WIDTH, 0, null);
-                g.drawImage(this.center, getWidth() - 2 * DIGIT_WIDTH, 0, null);
-                g.drawImage(this.right, getWidth() - DIGIT_WIDTH, 0, null);
-            }
-        };
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
 
-//        add(newGameButton, BorderLayout.CENTER);
+                if (faceButton.isPointInButton(e.getX(), e.getY())) {
+                    faceButton.setImage(faceButton.FACE_OOH);
+                }
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                super.mouseReleased(e);
+
+                if (faceButton.isPointInButton(e.getX(), e.getY())) {
+                    faceButton.setImage(faceButton.FACE_SMILE);
+                    Game.getInstance().newGame();
+                }
+            }
+        });
     }
 
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+        faceButton.draw(g);
         unmarkedMinesRead.draw(g);
         timerRead.draw(g);
+        repaint();
     }
 
-    private abstract class DigitalRead implements Drawable {
+    private class FaceButton implements Drawable {
 
-        public static final int DIGIT_WIDTH = 13;
-        public static final int DIGIT_HEIGHT = 23;
-        public static final int WIDTH = 3 * DIGIT_WIDTH;
-        public static final int HEIGHT = DIGIT_HEIGHT;
+        public final int WIDTH = ImageManager.FACE_SMILE.getWidth();
+        public final int HEIGHT = ImageManager.FACE_SMILE.getHeight();
 
-        private int hundredsDigit;
-        private int tensDigit;
-        private int onesDigit;
+        public final int FACE_SMILE = 0;
+        public final int FACE_OOH = 1;
+        public final int FACE_WIN = 2;
+        public final int FACE_DEAD = 3;
 
-        protected BufferedImage left;
-        protected BufferedImage center;
-        protected BufferedImage right;
+        private BufferedImage currentImage;
 
-        public DigitalRead() {
-            hundredsDigit = 0;
-            tensDigit = 0;
-            onesDigit = 0;
-
-            left = ImageManager.TIME_0;
-            center = ImageManager.TIME_0;
-            right = ImageManager.TIME_0;
+        public FaceButton() {
+            currentImage = ImageManager.FACE_SMILE;
         }
 
-        public void setRead(int number) {
-            if (number < 0)
-                System.out.println("Number " + number + " is too small to display");
-            else if (number > 999)
-                System.out.println("Number " + number + " is too large to display");
-            else {
-                hundredsDigit = number / 100;
-                tensDigit = (number % 100) / 10;
-                onesDigit = (number % 10);
-
-                switch (hundredsDigit){
-                    case 0: left = ImageManager.TIME_0; break;
-                    case 1: left = ImageManager.TIME_1; break;
-                    case 2: left = ImageManager.TIME_2; break;
-                    case 3: left = ImageManager.TIME_3; break;
-                    case 4: left = ImageManager.TIME_4; break;
-                    case 5: left = ImageManager.TIME_5; break;
-                    case 6: left = ImageManager.TIME_6; break;
-                    case 7: left = ImageManager.TIME_7; break;
-                    case 8: left = ImageManager.TIME_8; break;
-                    case 9: left = ImageManager.TIME_9; break;
-                }
-
-                switch (tensDigit){
-                    case 0: center = ImageManager.TIME_0; break;
-                    case 1: center = ImageManager.TIME_1; break;
-                    case 2: center = ImageManager.TIME_2; break;
-                    case 3: center = ImageManager.TIME_3; break;
-                    case 4: center = ImageManager.TIME_4; break;
-                    case 5: center = ImageManager.TIME_5; break;
-                    case 6: center = ImageManager.TIME_6; break;
-                    case 7: center = ImageManager.TIME_7; break;
-                    case 8: center = ImageManager.TIME_8; break;
-                    case 9: center = ImageManager.TIME_9; break;
-                }
-
-                switch (onesDigit){
-                    case 0: right = ImageManager.TIME_0; break;
-                    case 1: right = ImageManager.TIME_1; break;
-                    case 2: right = ImageManager.TIME_2; break;
-                    case 3: right = ImageManager.TIME_3; break;
-                    case 4: right = ImageManager.TIME_4; break;
-                    case 5: right = ImageManager.TIME_5; break;
-                    case 6: right = ImageManager.TIME_6; break;
-                    case 7: right = ImageManager.TIME_7; break;
-                    case 8: right = ImageManager.TIME_8; break;
-                    case 9: right = ImageManager.TIME_9; break;
-                }
+        public void setImage(int num) {
+            switch (num){
+                case FACE_SMILE: currentImage = ImageManager.FACE_SMILE; break;
+                case FACE_OOH: currentImage = ImageManager.FACE_OOH; break;
+                case FACE_WIN: currentImage = ImageManager.FACE_WIN; break;
+                case FACE_DEAD: currentImage = ImageManager.FACE_DEAD; break;
             }
         }
 
-        @Override
-        public abstract void draw(Graphics g);
+        public boolean isPointInButton(float x, float y) {
+            Rectangle r = new Rectangle();
+            r.x = (getWidth() / 2) - (WIDTH / 2);
+            r.y = (getHeight() / 2) - (HEIGHT / 2);
+            r.width = WIDTH;
+            r.height = HEIGHT;
 
+            return r.x <= x && r.x + r.width >= x && r.y <= y && r.y + r.height >= y;
+        }
+
+        @Override
+        public void draw(Graphics g) {
+            g.drawImage(currentImage, (getWidth() / 2) - (WIDTH / 2),
+                    (getHeight() / 2) - (HEIGHT / 2), null);
+        }
+    }
+
+    private class UnmarkedMinesRead extends DigitalRead {
+
+        @Override
+        public void draw(Graphics g) {
+            g.drawImage(this.left, 0, (getHeight() / 2) - (HEIGHT / 2), null);
+            g.drawImage(this.center, DIGIT_WIDTH, (getHeight() / 2) - (HEIGHT / 2)
+                    , null);
+            g.drawImage(this.right, 2 * DIGIT_WIDTH, (getHeight() / 2) - (HEIGHT /
+                    2), null);
+        }
+    }
+
+    private class TimerRead extends DigitalRead {
+
+        @Override
+        public void draw(Graphics g) {
+            g.drawImage(this.left, getWidth() - 3 * DIGIT_WIDTH,
+                    (getHeight() / 2) - (HEIGHT / 2), null);
+            g.drawImage(this.center, getWidth() - 2 * DIGIT_WIDTH,
+                    (getHeight() / 2) - (HEIGHT / 2), null);
+            g.drawImage(this.right, getWidth() - DIGIT_WIDTH,
+                    (getHeight() / 2) - (HEIGHT / 2), null);
+        }
     }
 
 }
