@@ -10,7 +10,7 @@ import java.util.Iterator;
 
 public class Board extends JPanel {
 
-    public enum Direction {N, NW, W, SW, S, SE, E, NE}
+    public enum Dir {N, NW, W, SW, S, SE, E, NE}
 
     private Cell[][] cells;
     private int numRows, numColumns, numMines;
@@ -78,6 +78,8 @@ public class Board extends JPanel {
                 if (cells[i][j] != null)
                     cells[i][j].draw(g);
             }
+
+        repaint();
     }
 
     /**
@@ -86,7 +88,7 @@ public class Board extends JPanel {
      *         board,
      *         null is returned.
      */
-    public Cell getAdjacentCell(Cell c, Direction d) {
+    public Cell getAdjacentCell(Cell c, Dir d) {
         int row = -1, column = -1;
 
         switch (d) {
@@ -144,7 +146,11 @@ public class Board extends JPanel {
     }
 
     private void uncoverAdjacentCells(Cell c) {
-        //TODO implement
+        ArrayList<Cell>adjList = new ArrayList<Cell>();
+        adjList.add(c);
+        //TODO uncover all cells neighboring this cell up until cells have a non-zero adj count
+
+        c.uncover();
     }
 
     /**
@@ -178,6 +184,48 @@ public class Board extends JPanel {
                 Cell c = iterator.next();
                 c.setLocation(i, j);
                 cells[i][j] = c;
+            }
+        }
+
+        //set adjacency counts for all cells
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                Cell currentCell = cells[i][j];
+
+                if (currentCell.isMined())
+                    currentCell.setAdjCount(-1);
+                else {
+                    int mineCount = 0;
+
+                    Cell N = getAdjacentCell(currentCell, Dir.N);
+                    Cell NE = getAdjacentCell(currentCell, Dir.NE);
+                    Cell E = getAdjacentCell(currentCell, Dir.E);
+                    Cell SE = getAdjacentCell(currentCell, Dir.SE);
+                    Cell S = getAdjacentCell(currentCell, Dir.S);
+                    Cell SW = getAdjacentCell(currentCell, Dir.SW);
+                    Cell W = getAdjacentCell(currentCell, Dir.W);
+                    Cell NW = getAdjacentCell(currentCell, Dir.NW);
+
+                    if (N != null && N.isMined())
+                        mineCount ++;
+                    if (NE != null && NE.isMined())
+                        mineCount ++;
+                    if (E != null && E.isMined())
+                        mineCount ++;
+                    if (SE != null && SE.isMined())
+                        mineCount ++;
+                    if (S != null && S.isMined())
+                        mineCount ++;
+                    if (SW != null && SW.isMined())
+                        mineCount ++;
+                    if (W != null && W.isMined())
+                        mineCount ++;
+                    if (NW != null && NW.isMined())
+                        mineCount ++;
+
+                    currentCell.setAdjCount(mineCount);
+                }
+
             }
         }
 

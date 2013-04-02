@@ -1,6 +1,7 @@
 package com.jamesgomez.minesweeper;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 /** The fundamental game component of the <i>Minesweeper</i> game */
 public class Cell implements Drawable {
@@ -77,6 +78,10 @@ public class Cell implements Drawable {
         return adjCount;
     }
 
+    public void setAdjCount(int adjCount) {
+        this.adjCount = adjCount;
+    }
+
     @Override
     public void draw(Graphics g) {
         if (covered) {
@@ -112,8 +117,24 @@ public class Cell implements Drawable {
 
     /** Draws this Cell's adjacent mine count. */
     private void drawAdjacencyCount(Graphics g) {
-        if (!marked)
-            g.drawImage(ImageManager.OPEN_1, WIDTH * column, HEIGHT * row, null);
+        BufferedImage image = null;
+
+        if (!marked){
+            switch (adjCount){
+                case 0: image = ImageManager.OPEN_0; break;
+                case 1: image = ImageManager.OPEN_1; break;
+                case 2: image = ImageManager.OPEN_2; break;
+                case 3: image = ImageManager.OPEN_3; break;
+                case 4: image = ImageManager.OPEN_4; break;
+                case 5: image = ImageManager.OPEN_5; break;
+                case 6: image = ImageManager.OPEN_6; break;
+                case 7: image = ImageManager.OPEN_7; break;
+                case 8: image = ImageManager.OPEN_8; break;
+                default: image = ImageManager.OPEN_0;
+            }
+        }
+
+        g.drawImage(image, WIDTH * column, HEIGHT * row, null);
     }
 
 }
