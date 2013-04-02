@@ -11,20 +11,20 @@ public class Cell implements Drawable {
     public static final int HEIGHT = 16;
 
     private boolean mined, marked, covered;
-    private int x, y, adjCount;
+    private int row, column, adjCount;
 
     public Cell(boolean isMined) {
-        this.x = 0;
-        this.y = 0;
+        this.column = 0;
+        this.row = 0;
         mined = isMined;
         marked = false;
         covered = true;
         adjCount = 0;
     }
 
-    public Cell(int x, int y, boolean isMined) {
-        this.x = x;
-        this.y = y;
+    public Cell(int column, int row, boolean isMined) {
+        this.column = column;
+        this.row = row;
         mined = isMined;
         marked = false;
         covered = true;
@@ -49,27 +49,27 @@ public class Cell implements Drawable {
         return covered;
     }
 
-    /** The x coordinate of the grid location of this Cell */
-    public int getX() {
-        return x;
+    /** The column of this Cell within the game board */
+    public int getColumn() {
+        return column;
     }
 
-    /** The y coordinate of the grid location of this Cell */
-    public int getY() {
-        return y;
+    /** The row of this Cell within the game board */
+    public int getRow() {
+        return row;
     }
 
-    public void setX(int x) {
-        this.x = x;
+    public void setColumn(int column) {
+        this.column = column;
     }
 
-    public void setY(int y) {
-        this.y = y;
+    public void setRow(int row) {
+        this.row = row;
     }
 
-    public void setLocation(int x, int y){
-        this.x = x;
-        this.y = y;
+    public void setLocation(int row, int column) {
+        this.row = row;
+        this.column = column;
     }
 
     /** @return the number of mines adjacent to this cell */
@@ -81,13 +81,15 @@ public class Cell implements Drawable {
     public void draw(Graphics g) {
         if (covered) {
             if (marked)
-                g.drawImage(ImageManager.MARKED, WIDTH * x, HEIGHT * y, null);
+                g.drawImage(ImageManager.MARKED, WIDTH * column, HEIGHT * row, null);
             else
-                g.drawImage(ImageManager.COVERED, WIDTH * x, HEIGHT * y, null);
+                g.drawImage(ImageManager.COVERED, WIDTH * column, HEIGHT * row,
+                        null);
         }
         else {
             if (mined)
-                g.drawImage(ImageManager.BOMB_DEATH, WIDTH * x, HEIGHT * y, null);
+                g.drawImage(ImageManager.BOMB_DEATH, WIDTH * column, HEIGHT * row,
+                        null);
             else
                 drawAdjacencyCount(g);
         }
@@ -111,7 +113,7 @@ public class Cell implements Drawable {
     /** Draws this Cell's adjacent mine count. */
     private void drawAdjacencyCount(Graphics g) {
         if (!marked)
-            g.drawImage(ImageManager.OPEN_1, WIDTH * x, HEIGHT * y, null);
+            g.drawImage(ImageManager.OPEN_1, WIDTH * column, HEIGHT * row, null);
     }
 
 }

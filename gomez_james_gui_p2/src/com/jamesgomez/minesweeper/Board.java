@@ -5,7 +5,6 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 
@@ -36,7 +35,6 @@ public class Board extends JPanel {
                 if (x < numColumns && y < numRows && cells[y][x] != null)
                     switch (e.getButton()) {
                         case MouseEvent.BUTTON1:
-                            //cells[y][x].uncover();
                             uncoverCell(cells[y][x]);
                             break;
                         case MouseEvent.BUTTON3:
@@ -82,9 +80,54 @@ public class Board extends JPanel {
             }
     }
 
-    public Cell getAdjacent(Cell c, Direction d) {
-        //TODO implement
-        return new Cell(1, 1, true);
+    /**
+     * @return the neighboring Cell relative to Cell c in the specified direction.
+     *         If the resultant neighboring cell is out of the bounds of the game
+     *         board,
+     *         null is returned.
+     */
+    public Cell getAdjacentCell(Cell c, Direction d) {
+        int row = -1, column = -1;
+
+        switch (d) {
+            case N:
+                row = c.getRow() - 1;
+                column = c.getColumn();
+                break;
+            case NE:
+                row = c.getRow() - 1;
+                column = c.getColumn() + 1;
+                break;
+            case E:
+                row = c.getRow();
+                column = c.getColumn() + 1;
+                break;
+            case SE:
+                row = c.getRow() + 1;
+                column = c.getColumn() + 1;
+                break;
+            case S:
+                row = c.getRow() + 1;
+                column = c.getColumn();
+                break;
+            case SW:
+                row = c.getRow() + 1;
+                column = c.getColumn() - 1;
+                break;
+            case W:
+                row = c.getRow();
+                column = c.getColumn() - 1;
+                break;
+            case NW:
+                row = c.getRow() - 1;
+                column = c.getColumn() - 1;
+                break;
+        }
+
+        if (row < 0 || row >= numRows || column < 0 || column >= numColumns)
+            return null;
+
+        return cells[row][column];
     }
 
 
@@ -97,10 +140,10 @@ public class Board extends JPanel {
                 }
         }
         else
-            uncoverAdjacent(c);
+            uncoverAdjacentCells(c);
     }
 
-    public void uncoverAdjacent(Cell c) {
+    private void uncoverAdjacentCells(Cell c) {
         //TODO implement
     }
 
@@ -113,6 +156,7 @@ public class Board extends JPanel {
         this.numColumns = columns;
         this.numMines = numMines;
 
+        //fill temporary cell list with the correct amount of mined cells
         ArrayList tempCells = new ArrayList<Cell>();
         int count = 0;
         for (int i = 0; i < rows * columns; i++) {
@@ -124,15 +168,15 @@ public class Board extends JPanel {
             count++;
         }
 
+        //shuffle temp cell list and distribute contents within the cell array
         Collections.shuffle(tempCells);
-
         cells = new Cell[rows][columns];
         Iterator<Cell> iterator = tempCells.iterator();
 
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
                 Cell c = iterator.next();
-                c.setLocation(j, i);
+                c.setLocation(i, j);
                 cells[i][j] = c;
             }
         }
