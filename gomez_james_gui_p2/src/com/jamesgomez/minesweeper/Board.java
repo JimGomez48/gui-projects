@@ -65,6 +65,10 @@ public class Board extends JPanel {
         return numMarkedMines;
     }
 
+    /** Toggles the mark flag on Cell {@code c}. This method clamps the number of
+     * marked Cells to the number of mined Cells, so that at any point during the
+     * game the total number of marked Cells cannot exceed the total number of
+     * mined Cells. */
     public void MarkMine(Cell c) {
         c.mark();
         if (c.isMarked()) {
@@ -300,4 +304,5 @@ public class Board extends JPanel {
 
         repaint();
     }
+
 }
