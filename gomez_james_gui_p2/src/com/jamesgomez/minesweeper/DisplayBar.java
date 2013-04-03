@@ -78,6 +78,17 @@ public class DisplayBar extends JPanel {
         timer.stop();
         timerRead.setRead(0);
         unmarkedMinesRead.setRead(Game.getInstance().getGameBoard().getNumMines());
+        faceButton.setImage(FaceButton.FACE_SMILE);
+    }
+
+    public void setLost(){
+        faceButton.setImage(FaceButton.FACE_DEAD);
+        timer.stop();
+    }
+
+    public void setWon(){
+        faceButton.setImage(FaceButton.FACE_WIN);
+        timer.stop();
     }
 
     @Override
@@ -94,10 +105,10 @@ public class DisplayBar extends JPanel {
         public final int WIDTH = ImageManager.FACE_SMILE.getWidth();
         public final int HEIGHT = ImageManager.FACE_SMILE.getHeight();
 
-        public final int FACE_SMILE = 0;
-        public final int FACE_OOH = 1;
-        public final int FACE_WIN = 2;
-        public final int FACE_DEAD = 3;
+        public static final int FACE_SMILE = 0;
+        public static final int FACE_OOH = 1;
+        public static final int FACE_WIN = 2;
+        public static final int FACE_DEAD = 3;
 
         private BufferedImage currentImage;
 

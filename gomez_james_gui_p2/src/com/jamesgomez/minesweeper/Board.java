@@ -203,6 +203,7 @@ public class Board extends JPanel {
                 cell.setExploded(true);
 //                uncoverAllCells();
                 uncoverMines();
+                Game.getInstance().getDisplayBar().setLost();
             }
             else
                 uncoverAdjacentCells(cell);
