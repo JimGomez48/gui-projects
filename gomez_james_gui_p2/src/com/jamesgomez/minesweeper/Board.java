@@ -13,7 +13,7 @@ public class Board extends JPanel {
     public enum Dir {N, NW, W, SW, S, SE, E, NE}
 
     private Cell[][] cells;
-    private int numRows, numColumns, numMines;
+    private int numRows, numColumns, numMines, numMarkedMines;
 
     public Board() {
         super(true);
@@ -28,13 +28,17 @@ public class Board extends JPanel {
                 int x = e.getX() / Cell.WIDTH;
                 int y = e.getY() / Cell.WIDTH;
 
+                if (!Game.getInstance().getDisplayBar().isTimerStarted())
+                    Game.getInstance().getDisplayBar().startTimer();
+
                 if (x < numColumns && y < numRows && cells[y][x] != null)
                     switch (e.getButton()) {
                         case MouseEvent.BUTTON1:
                             uncoverCell(cells[y][x]);
                             break;
                         case MouseEvent.BUTTON3:
-                            cells[y][x].mark();
+                            MarkMine(cells[y][x]);
+                            System.out.println(numMarkedMines);
                             break;
                         default:
                             e.consume();
@@ -55,6 +59,26 @@ public class Board extends JPanel {
 
     public int getNumMines() {
         return numMines;
+    }
+
+    public int getNumMarkedMines() {
+        return numMarkedMines;
+    }
+
+    public void MarkMine(Cell c) {
+        c.mark();
+        if (c.isMarked()) {
+            if (numMarkedMines < numMines) {
+                numMarkedMines++;
+                Game.getInstance().getDisplayBar().decrementMineRead();
+            }
+            else
+                c.mark();
+        }
+        else if (numMarkedMines > 0) {
+            numMarkedMines--;
+            Game.getInstance().getDisplayBar().incrementMineRead();
+        }
     }
 
     public int getPixelWidth() {
@@ -79,10 +103,9 @@ public class Board extends JPanel {
     }
 
     /**
-     * @return the neighboring Cell relative to Cell c in the specified direction.
-     *         If the resultant neighboring cell is out of the bounds of the game
-     *         board,
-     *         null is returned.
+     * @return the neighboring Cell relative to {@code c} in the specified
+     *         direction {@code d}. If the resultant neighboring Cell is out of
+     *         the bounds of the game board, {@code null} is returned.
      */
     public Cell getAdjacentCell(Cell c, Dir d) {
         int row = -1, column = -1;
@@ -129,8 +152,8 @@ public class Board extends JPanel {
     }
 
     /**
-     * @return an {@link ArrayList} of Cells that are immediately adjacent to the
-     *         argument Cell.
+     * @return an {@link ArrayList} of Cells that are immediately adjacent to
+     *         {@code cell}.
      */
     public ArrayList<Cell> getAdjacentCells(Cell cell) {
         ArrayList<Cell> neighbors = new ArrayList<Cell>();
@@ -172,8 +195,11 @@ public class Board extends JPanel {
      */
     public void uncoverCell(Cell cell) {
         if (!cell.isMarked()) {
-            if (cell.isMined())
-                uncoverAllCells();
+            if (cell.isMined()) {
+                cell.setExploded(true);
+//                uncoverAllCells();
+                uncoverMines();
+            }
             else
                 uncoverAdjacentCells(cell);
         }
@@ -188,11 +214,19 @@ public class Board extends JPanel {
             }
     }
 
+    /** Uncovers all mined cells */
+    private void uncoverMines() {
+        for (int i = 0; i < numRows; i++)
+            for (int j = 0; j < numColumns; j++) {
+                if (cells[i][j] != null && cells[i][j].isMined())
+                    cells[i][j].uncover();
+            }
+    }
+
     /**
      * Recursively uncovers all adjacent cells until it reaches cells with
      * non-zero adjacency counts, or reaches the edge of the board
      */
-    @SuppressWarnings("UnnecessaryReturnStatement")
     private void uncoverAdjacentCells(Cell cell) {
         if (cell == null)
             return;
@@ -213,29 +247,29 @@ public class Board extends JPanel {
      * Resets the game board with the specified amount of rows, columns,
      * and mines. The cells are randomly shuffled within the game board,
      * and mine adjacency counts are calculated and assigned to each cell.
+     * <p>Running time is {@code &theta(n^3)}, where {@code n} is the number of
+     * cells on the board.</p>
      */
     public void reset(int rows, int columns, int numMines) {
         this.numRows = rows;
         this.numColumns = columns;
         this.numMines = numMines;
+        numMarkedMines = 0;
 
-        //fill temporary cell list with the correct amount of mined cells
+        //fill temporary cell list with the correct amount of mined and unmined cells
         ArrayList tempCells = new ArrayList<Cell>();
         int count = 0;
         for (int i = 0; i < rows * columns; i++) {
-            if (count < numMines)
+            if (count++ < numMines)
                 tempCells.add(new Cell(true));
             else
                 tempCells.add(new Cell(false));
-
-            count++;
         }
 
         //shuffle temp cell list and distribute contents within the cell array
         Collections.shuffle(tempCells);
         cells = new Cell[rows][columns];
         Iterator<Cell> iterator = tempCells.iterator();
-
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
                 Cell c = iterator.next();
@@ -253,17 +287,14 @@ public class Board extends JPanel {
                     currentCell.setAdjCount(-1);
                 else {
                     int mineCount = 0;
-
                     ArrayList<Cell> neighbors = getAdjacentCells(currentCell);
 
-                    for (Cell c : neighbors){
+                    for (Cell c : neighbors) {
                         if (c.isMined())
                             mineCount++;
                     }
-
                     currentCell.setAdjCount(mineCount);
                 }
-
             }
         }
 

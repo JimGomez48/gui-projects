@@ -2,6 +2,8 @@ package com.jamesgomez.minesweeper;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -12,6 +14,8 @@ public class DisplayBar extends JPanel {
     private TimerRead timerRead;
     private FaceButton faceButton;
 
+    private Timer timer;
+
     public DisplayBar() {
         super(new BorderLayout(2, 2), true);
         setBackground(Color.LIGHT_GRAY);
@@ -19,6 +23,14 @@ public class DisplayBar extends JPanel {
         faceButton = new FaceButton();
         unmarkedMinesRead = new UnmarkedMinesRead();
         timerRead = new TimerRead();
+
+        timer = new Timer(1000, new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                timerRead.setRead(timerRead.getRead() + 1);
+            }
+        });
 
         addMouseListener(new MouseAdapter() {
 
@@ -38,9 +50,34 @@ public class DisplayBar extends JPanel {
                 if (faceButton.isPointInButton(e.getX(), e.getY())) {
                     faceButton.setImage(faceButton.FACE_SMILE);
                     Game.getInstance().newGame();
+//                    reset();
                 }
             }
         });
+
+        reset();
+    }
+
+    public boolean isTimerStarted() {
+        return timer.isRunning();
+    }
+
+    public void startTimer(){
+        timer.start();
+    }
+
+    public void incrementMineRead() {
+        unmarkedMinesRead.setRead(unmarkedMinesRead.getRead() + 1);
+    }
+
+    public void decrementMineRead() {
+        unmarkedMinesRead.setRead(unmarkedMinesRead.getRead() - 1);
+    }
+
+    public void reset(){
+        timer.stop();
+        timerRead.setRead(0);
+        unmarkedMinesRead.setRead(Game.getInstance().getGameBoard().getNumMines());
     }
 
     @Override
@@ -78,13 +115,10 @@ public class DisplayBar extends JPanel {
         }
 
         public boolean isPointInButton(float x, float y) {
-            Rectangle r = new Rectangle();
-            r.x = (getWidth() / 2) - (WIDTH / 2);
-            r.y = (getHeight() / 2) - (HEIGHT / 2);
-            r.width = WIDTH;
-            r.height = HEIGHT;
+            int X = (getWidth() / 2) - (WIDTH / 2);
+            int Y= (getHeight() / 2) - (HEIGHT / 2);
 
-            return r.x <= x && r.x + r.width >= x && r.y <= y && r.y + r.height >= y;
+            return X <= x && X + WIDTH >= x && Y <= y && Y + HEIGHT >= y;
         }
 
         @Override

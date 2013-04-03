@@ -38,6 +38,14 @@ public class Game extends JPanel {
         return instance;
     }
 
+    public Board getGameBoard() {
+        return gameBoard;
+    }
+
+    public DisplayBar getDisplayBar() {
+        return displayBar;
+    }
+
     public JMenuBar createMenuBar() {
         JMenuBar menuBar = new JMenuBar();
         JMenu gameMenu = new JMenu("Game");
@@ -133,6 +141,7 @@ public class Game extends JPanel {
             case EXPERT:        gameBoard.reset(16, 30, 99); break;
             case CUSTOM:        break;
         }
+        displayBar.reset();
     }
 
     public static void start() {

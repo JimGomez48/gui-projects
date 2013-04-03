@@ -12,7 +12,7 @@ public class Cell implements Drawable {
     public static final int HEIGHT = 16;
 
     private final boolean mined;
-    private boolean marked, covered;
+    private boolean marked, covered, exploded;
     private int row, column, adjCount;
 
     public Cell(boolean isMined) {
@@ -21,6 +21,7 @@ public class Cell implements Drawable {
         mined = isMined;
         marked = false;
         covered = true;
+        exploded = false;
         adjCount = 0;
     }
 
@@ -49,6 +50,10 @@ public class Cell implements Drawable {
     /** @return true if this Cell is currently covered, false otherwise */
     public boolean isCovered() {
         return covered;
+    }
+
+    public void setExploded(boolean exploded) {
+        this.exploded = exploded;
     }
 
     /** The column of this Cell within the game board */
@@ -86,16 +91,21 @@ public class Cell implements Drawable {
     @Override
     public void draw(Graphics g) {
         if (covered) {
-            if (marked)
+            if (marked && Game.getInstance().getGameBoard().getNumMarkedMines() >= 0)
                 g.drawImage(ImageManager.MARKED, WIDTH * column, HEIGHT * row, null);
             else
                 g.drawImage(ImageManager.COVERED, WIDTH * column, HEIGHT * row,
                         null);
         }
         else {
-            if (mined)
-                g.drawImage(ImageManager.BOMB_DEATH, WIDTH * column, HEIGHT * row,
-                        null);
+            if (mined) {
+                if (exploded)
+                    g.drawImage(ImageManager.BOMB_DEATH, WIDTH * column,
+                            HEIGHT * row, null);
+                else
+                    g.drawImage(ImageManager.BOMB_REVEALED, WIDTH * column,
+                            HEIGHT * row, null);
+            }
             else
                 drawAdjacencyCount(g);
         }
