@@ -14,10 +14,13 @@ public class Board extends JPanel {
 
     private Cell[][] cells;
     private int numRows, numColumns, numMines, numMarkedMines;
+    private boolean gameOver;
 
     public Board() {
         super(true);
         setBackground(Color.LIGHT_GRAY);
+
+        gameOver = false;
 
 //        reset(9, 9, 10);
 
@@ -25,13 +28,19 @@ public class Board extends JPanel {
 
             @Override
             public void mouseReleased(MouseEvent e) {
+                if (gameOver){
+                    e.consume();
+                    return;
+                }
+
                 int x = e.getX() / Cell.WIDTH;
                 int y = e.getY() / Cell.WIDTH;
 
-                if (!Game.getInstance().getDisplayBar().isTimerStarted())
-                    Game.getInstance().getDisplayBar().startTimer();
+                if (x < numColumns && y < numRows && cells[y][x] != null){
 
-                if (x < numColumns && y < numRows && cells[y][x] != null)
+                    if (!Game.getInstance().getDisplayBar().isTimerStarted())
+                        Game.getInstance().getDisplayBar().startTimer();
+
                     switch (e.getButton()) {
                         case MouseEvent.BUTTON1:
                             uncoverCell(cells[y][x]);
@@ -43,7 +52,7 @@ public class Board extends JPanel {
                         default:
                             e.consume();
                     }
-
+                }
                 repaint();
             }
         });
@@ -196,6 +205,7 @@ public class Board extends JPanel {
 //                uncoverAllCells();
                 uncoverMines();
                 Game.getInstance().getDisplayBar().setLost();
+                gameOver = true;
             }
             else
                 uncoverAdjacentCells(cell);
@@ -295,7 +305,9 @@ public class Board extends JPanel {
             }
         }
 
-        setPreferredSize(new Dimension(numColumns * Cell.WIDTH, numRows * Cell.HEIGHT));
+        gameOver = false;
+        setPreferredSize(new Dimension(numColumns * Cell.WIDTH,
+                numRows * Cell.HEIGHT));
         repaint();
     }
 

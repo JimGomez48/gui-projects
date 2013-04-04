@@ -3,11 +3,6 @@ package com.jamesgomez.minesweeper;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.print.PrinterException;
-import java.beans.Customizer;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
 
 public class Game extends JPanel {
 
@@ -17,7 +12,6 @@ public class Game extends JPanel {
     private DisplayBar displayBar;
     private JMenuBar menuBar;
     private CustomDialog customDialog;
-
     private GameDifficulty difficulty;
 
     public enum GameDifficulty {BEGINNER, INTERMEDIATE, EXPERT, CUSTOM}
@@ -41,6 +35,7 @@ public class Game extends JPanel {
                 .width, 28));
 
         newGame();
+
     }
 
     /** @return the singleton instance of this game */
@@ -179,8 +174,8 @@ public class Game extends JPanel {
     private void resizeAndCenter(){
         //resize the JFrame
         Dimension frameSize = new Dimension(gameBoard.getPreferredSize().width +
-                5, gameBoard.getPreferredSize().height + displayBar
-                .getPreferredSize().height + menuBar.getPreferredSize().height + 32);
+                7, gameBoard.getPreferredSize().height + displayBar
+                .getPreferredSize().height + menuBar.getPreferredSize().height + 34);
         frame.setPreferredSize(frameSize);
         frame.pack();
 
@@ -218,44 +213,116 @@ public class Game extends JPanel {
      */
     private class CustomDialog extends JDialog implements ActionListener {
 
-//        public CustomDialog() {
-//            super(frame, "Customize Game", true);
-//        }
+        private JPanel mainPanel;
+        private JPanel entryPanel;
+        private JPanel buttonPanel;
 
-        private JPanel myPanel = null;
-        private JButton yesButton = null;
-        private JButton noButton = null;
-        private boolean answer = false;
+        private JSpinner width;
+        private JSpinner height;
+        private JSpinner numMines;
 
-        public boolean getAnswer() { return answer; }
+        private JButton okButton;
+        private JButton cancelButton;
 
         public CustomDialog() {
-            super(frame, true);
+            super(frame, "Customize", true);
 
-            myPanel = new JPanel();
-            getContentPane().add(myPanel);
-            myPanel.add(new JLabel("Custom Dialog?"));
-            yesButton = new JButton("Yes");
-            yesButton.addActionListener(this);
-            myPanel.add(yesButton);
-            noButton = new JButton("No");
-            noButton.addActionListener(this);
-            myPanel.add(noButton);
+            mainPanel = new JPanel();
+            mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
+            mainPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+
+            createEntryPanel();
+            createButtonPanel();
+
+            mainPanel.add(entryPanel);
+            mainPanel.add(buttonPanel);
+            getContentPane().add(mainPanel);
+
+            setResizable(false);
             pack();
             setLocationRelativeTo(frame);
             setVisible(false);
         }
 
+        private void createEntryPanel(){
+            entryPanel = new JPanel();
+            GroupLayout groupLayout = new GroupLayout(entryPanel);
+            groupLayout.setAutoCreateGaps(true);
+            groupLayout.setAutoCreateContainerGaps(true);
+            entryPanel.setLayout(groupLayout);
+
+            width = new JSpinner(new SpinnerNumberModel(0, 0, 30, 1));
+            height = new JSpinner(new SpinnerNumberModel(0, 0, 16, 1));
+            numMines = new JSpinner(new SpinnerNumberModel(0, 0, 99, 1));
+
+            JLabel widthLabel = new JLabel("Width (9-30): ");
+            JLabel heightLabel = new JLabel("Height (9-16): ");
+            JLabel minesLabel = new JLabel("Mines (10-668): ");
+
+            //use GroupLayout to set up the layout of the spinners and labels
+            GroupLayout.SequentialGroup hGroup = groupLayout.createSequentialGroup();
+            hGroup.addGroup(groupLayout.createParallelGroup()
+                    .addComponent(widthLabel)
+                    .addComponent(heightLabel)
+                    .addComponent(minesLabel));
+            hGroup.addGroup(groupLayout.createParallelGroup()
+                    .addComponent(width)
+                    .addComponent(height)
+                    .addComponent(numMines));
+            groupLayout.setHorizontalGroup(hGroup);
+
+            GroupLayout.SequentialGroup vGroup = groupLayout.createSequentialGroup();
+            vGroup.addGroup(groupLayout.createParallelGroup()
+                    .addComponent(widthLabel)
+                    .addComponent(width));
+            vGroup.addGroup(groupLayout.createParallelGroup()
+                    .addComponent(heightLabel)
+                    .addComponent(height));
+            vGroup.addGroup(groupLayout.createParallelGroup()
+                    .addComponent(minesLabel)
+                    .addComponent(numMines));
+            groupLayout.setVerticalGroup(vGroup);
+        }
+
+        private void createButtonPanel(){
+            buttonPanel= new JPanel(new FlowLayout(FlowLayout.TRAILING, 10, 10));
+
+            okButton = new JButton("Ok");
+            okButton.setPreferredSize(new Dimension(80, 26));
+            okButton.addActionListener(this);
+            cancelButton = new JButton("Cancel");
+            cancelButton.setPreferredSize(new Dimension(80, 26));
+            cancelButton.addActionListener(this);
+            buttonPanel.add(okButton);
+            buttonPanel.add(cancelButton);
+        }
+
+        private void initializeSpinners(){
+            width.setModel(new SpinnerNumberModel(gameBoard.getNumColumns(), 9,
+                    30, 1));
+            height.setModel(new SpinnerNumberModel(gameBoard.getNumRows(), 9, 16, 1));
+            numMines.setModel(new SpinnerNumberModel(gameBoard.getNumMines(), 10, 668, 1));
+        }
+
+        @Override
+        public void setVisible(boolean visible){
+            if (visible)
+                initializeSpinners();
+
+            super.setVisible(visible);
+        }
+
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (yesButton == e.getSource()) {
-                System.out.println("User chose yes.");
-                answer = true;
+            if (okButton == e.getSource()) {
+                difficulty = GameDifficulty.CUSTOM;
+                gameBoard.reset((Integer) height.getValue(),
+                        (Integer) width.getValue(), (Integer) numMines.getValue());
+                displayBar.reset();
+                resizeAndCenter();
                 setVisible(false);
             }
-            else if (noButton == e.getSource()) {
-                System.out.println("User chose no.");
-                answer = false;
+            else if (cancelButton == e.getSource()) {
                 setVisible(false);
             }
         }
