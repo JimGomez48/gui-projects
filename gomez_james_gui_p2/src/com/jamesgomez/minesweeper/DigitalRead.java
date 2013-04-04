@@ -29,9 +29,9 @@ public abstract class DigitalRead implements Drawable{
 
     public void setRead(int number) {
         if (number < 0)
-            System.out.println("Number " + number + " is too small to display");
+            System.err.println("Number " + number + " is too small to display");
         else if (number > 999)
-            System.out.println("Number " + number + " is too large to display");
+            System.err.println("Number " + number + " is too large to display");
         else {
             currentRead = number;
 

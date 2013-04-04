@@ -19,7 +19,7 @@ public class Board extends JPanel {
         super(true);
         setBackground(Color.LIGHT_GRAY);
 
-        reset(9, 9, 10);
+//        reset(9, 9, 10);
 
         addMouseListener(new MouseAdapter() {
 
@@ -83,14 +83,6 @@ public class Board extends JPanel {
             numMarkedMines--;
             Game.getInstance().getDisplayBar().incrementMineRead();
         }
-    }
-
-    public int getPixelWidth() {
-        return numColumns * Cell.WIDTH;
-    }
-
-    public int getPixelHeight() {
-        return numRows * Cell.WIDTH;
     }
 
     @Override
@@ -303,6 +295,7 @@ public class Board extends JPanel {
             }
         }
 
+        setPreferredSize(new Dimension(numColumns * Cell.WIDTH, numRows * Cell.HEIGHT));
         repaint();
     }
 
