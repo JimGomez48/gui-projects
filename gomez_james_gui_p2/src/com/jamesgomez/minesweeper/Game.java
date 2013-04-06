@@ -224,12 +224,15 @@ public class Game extends JPanel {
         private JButton okButton;
         private JButton cancelButton;
 
+        private final int MAX_WIDTH = 30;
+        private final int MAX_HEIGHT = 16;
+
         public CustomDialog() {
             super(frame, "Customize", true);
 
             mainPanel = new JPanel();
             mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
-            mainPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+            mainPanel.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
 
             createEntryPanel();
             createButtonPanel();
@@ -255,9 +258,9 @@ public class Game extends JPanel {
             height = new JSpinner(new SpinnerNumberModel(0, 0, 16, 1));
             numMines = new JSpinner(new SpinnerNumberModel(0, 0, 99, 1));
 
-            JLabel widthLabel = new JLabel("Width (9-30): ");
-            JLabel heightLabel = new JLabel("Height (9-16): ");
-            JLabel minesLabel = new JLabel("Mines (10-668): ");
+            JLabel widthLabel = new JLabel("Width (9 - 30): ");
+            JLabel heightLabel = new JLabel("Height (9 - 16): ");
+            JLabel minesLabel = new JLabel("Mines (10 - 432): ");
 
             //use GroupLayout to set up the layout of the spinners and labels
             GroupLayout.SequentialGroup hGroup = groupLayout.createSequentialGroup();
@@ -311,10 +314,24 @@ public class Game extends JPanel {
 
             super.setVisible(visible);
         }
-
+        //TODO bug after setting custom. New Game fails
         @Override
         public void actionPerformed(ActionEvent e) {
             if (okButton == e.getSource()) {
+
+                //Show warning dialog if user attempts to set number of mines to
+                // greater than 90% of the total number of cells. Then set number
+                // of mines to max allowed.
+                int maxMines = (int) ((Integer) width.getValue() * (Integer)
+                        height.getValue() * 0.9);
+                if ((Integer) numMines.getValue() > maxMines) {
+                    JOptionPane.showMessageDialog(this, "Number of mines cannot " +
+                            "exceed " + maxMines + " for the current Board setting",
+                            "Warning", JOptionPane.WARNING_MESSAGE);
+                    numMines.setValue(new Integer(maxMines));
+                    return;
+                }
+
                 difficulty = GameDifficulty.CUSTOM;
                 gameBoard.reset((Integer) height.getValue(),
                         (Integer) width.getValue(), (Integer) numMines.getValue());
