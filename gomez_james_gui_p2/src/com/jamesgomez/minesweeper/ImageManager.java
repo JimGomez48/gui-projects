@@ -68,7 +68,7 @@ public class ImageManager {
             FACE_DEAD = ImageIO.read(new File(toFullPath("facedead")));
         }
         catch (IOException e) {
-            System.out.println("ImageManager failed to read an image file");
+            System.err.println("ImageManager failed to read an image file");
             e.printStackTrace();
         }
     }

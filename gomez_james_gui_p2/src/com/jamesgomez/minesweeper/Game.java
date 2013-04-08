@@ -222,7 +222,7 @@ public class Game extends JPanel {
 
             mainPanel = new JPanel();
             mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
-            mainPanel.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
+            mainPanel.setBorder(BorderFactory.createEmptyBorder(6, 6, 6, 6));
 
             createEntryPanel();
             createButtonPanel();
@@ -278,7 +278,7 @@ public class Game extends JPanel {
         }
 
         private void createButtonPanel(){
-            buttonPanel= new JPanel(new FlowLayout(FlowLayout.TRAILING, 10, 10));
+            buttonPanel= new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
 
             okButton = new JButton("Ok");
             okButton.setPreferredSize(new Dimension(80, 26));

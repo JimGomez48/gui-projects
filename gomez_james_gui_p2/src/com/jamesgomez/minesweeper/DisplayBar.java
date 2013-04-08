@@ -87,7 +87,15 @@ public class DisplayBar extends JPanel {
 
     public void setWon(){
         faceButton.setImage(FaceButton.FACE_WIN);
+        unmarkedMinesRead.setRead(0);
         timer.stop();
+    }
+
+    public void setFaceClicked(boolean clicked){
+        if (clicked)
+            faceButton.setImage(FaceButton.FACE_OOH);
+        else
+            faceButton.setImage(FaceButton.FACE_SMILE);
     }
 
     @Override
@@ -154,7 +162,7 @@ public class DisplayBar extends JPanel {
 
         @Override
         public void draw(Graphics g) {
-            g.drawImage(this.left, getWidth() - 3 * DIGIT_WIDTH,
+            g.drawImage(this.left, getWidth() - WIDTH,
                     (getHeight() / 2) - (HEIGHT / 2), null);
             g.drawImage(this.center, getWidth() - 2 * DIGIT_WIDTH,
                     (getHeight() / 2) - (HEIGHT / 2), null);

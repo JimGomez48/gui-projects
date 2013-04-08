@@ -18,13 +18,18 @@ public class Board extends JPanel {
 
     public Board() {
         super(true);
-        setBackground(Color.LIGHT_GRAY);
 
+        setBackground(Color.LIGHT_GRAY);
         gameOver = false;
 
-//        reset(9, 9, 10);
-
         addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                if (!gameOver)
+                    Game.getInstance().getDisplayBar().setFaceClicked(true);
+            }
 
             @Override
             public void mouseReleased(MouseEvent e) {
@@ -32,6 +37,8 @@ public class Board extends JPanel {
                     e.consume();
                     return;
                 }
+
+                Game.getInstance().getDisplayBar().setFaceClicked(false);
 
                 int x = e.getX() / Cell.WIDTH;
                 int y = e.getY() / Cell.WIDTH;
@@ -47,7 +54,6 @@ public class Board extends JPanel {
                             break;
                         case MouseEvent.BUTTON3:
                             MarkMine(cells[y][x]);
-                            System.out.println(numMarkedMines);
                             break;
                         default:
                             e.consume();
@@ -84,6 +90,10 @@ public class Board extends JPanel {
             if (numMarkedMines < numMines) {
                 numMarkedMines++;
                 Game.getInstance().getDisplayBar().decrementMineRead();
+                if (allMinesMarked()){
+                    Game.getInstance().getDisplayBar().setWon();
+                    gameOver = true;
+                }
             }
             else
                 c.mark();
@@ -105,6 +115,30 @@ public class Board extends JPanel {
             }
 
         repaint();
+    }
+
+    /** @return true if all mined cells are marked, false otherwise. */
+    private boolean allMinesMarked(){
+        for (int i = 0; i < numRows; i++){
+            for (int j =0; j< numColumns; j++){
+                if (cells[i][j].isMined())
+                    if (!cells[i][j].isMarked())
+                        return false;
+            }
+        }
+
+        return true;
+    }
+
+    /** Marks all remaining mines on the board with red flags. */
+    private void setAllMinesMarked(){
+        for (int i = 0; i < numRows; i++){
+            for (int j =0; j< numColumns; j++){
+                if (cells[i][j].isMined())
+                    if (!cells[i][j].isMarked())
+                        cells[i][j].mark();
+            }
+        }
     }
 
     /**
@@ -202,14 +236,31 @@ public class Board extends JPanel {
         if (!cell.isMarked()) {
             if (cell.isMined()) {
                 cell.setExploded(true);
-//                uncoverAllCells();
                 uncoverMines();
                 Game.getInstance().getDisplayBar().setLost();
                 gameOver = true;
             }
-            else
+            else{
                 uncoverAdjacentCells(cell);
+                if (allNonMinesUncovered()){
+                    setAllMinesMarked();
+                    Game.getInstance().getDisplayBar().setWon();
+                    gameOver = true;
+                }
+            }
         }
+    }
+
+    /** @return true if all non-mined cells on the board have been uncovered,
+     * false otherwise. */
+    private boolean allNonMinesUncovered(){
+        for (int i = 0; i < numRows; i++)
+            for (int j = 0; j < numColumns; j++) {
+                if (!cells[i][j].isMined() && cells[i][j].isCovered())
+                    return  false;
+            }
+
+        return true;
     }
 
     /** Uncovers all Cells on the game board */
