@@ -8,8 +8,8 @@ public class Game extends JPanel {
 
     private static JFrame frame;
     private static Game instance;
-    private Board gameBoard;
-    private DisplayBar displayBar;
+    private final Board gameBoard;
+    private final DisplayBar displayBar;
     private JMenuBar menuBar;
     private CustomDialog customDialog;
     private GameDifficulty difficulty;

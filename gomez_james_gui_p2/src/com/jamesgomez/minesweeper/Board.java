@@ -90,10 +90,10 @@ public class Board extends JPanel {
             if (numMarkedMines < numMines) {
                 numMarkedMines++;
                 Game.getInstance().getDisplayBar().decrementMineRead();
-                if (allMinesMarked()){
+                /*if (allMinesMarked()){
                     Game.getInstance().getDisplayBar().setWon();
                     gameOver = true;
-                }
+                }*/
             }
             else
                 c.mark();
@@ -236,7 +236,7 @@ public class Board extends JPanel {
         if (!cell.isMarked()) {
             if (cell.isMined()) {
                 cell.setExploded(true);
-                uncoverMines();
+                uncoverAllMines();
                 Game.getInstance().getDisplayBar().setLost();
                 gameOver = true;
             }
@@ -273,7 +273,7 @@ public class Board extends JPanel {
     }
 
     /** Uncovers all mined cells */
-    private void uncoverMines() {
+    private void uncoverAllMines() {
         for (int i = 0; i < numRows; i++)
             for (int j = 0; j < numColumns; j++) {
                 if (/*cells[i][j] != null &&*/ cells[i][j].isMined())

@@ -10,11 +10,11 @@ import java.awt.image.BufferedImage;
 
 public class DisplayBar extends JPanel {
 
-    private UnmarkedMinesRead unmarkedMinesRead;
-    private TimerRead timerRead;
-    private FaceButton faceButton;
+    private final UnmarkedMinesRead unmarkedMinesRead;
+    private final TimerRead timerRead;
+    private final FaceButton faceButton;
 
-    private Timer timer;
+    private final Timer timer;
 
     public DisplayBar() {
         super(new BorderLayout(2, 2), true);
