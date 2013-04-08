@@ -20,8 +20,6 @@ public class Game extends JPanel {
         super(new BorderLayout(5, 5), true);
 
         instance = this;
-        difficulty = GameDifficulty.BEGINNER;
-
         gameBoard = new Board();
         displayBar = new DisplayBar();
         customDialog = new CustomDialog();
@@ -34,8 +32,7 @@ public class Game extends JPanel {
         displayBar.setPreferredSize(new Dimension(gameBoard.getPreferredSize()
                 .width, 28));
 
-        newGame();
-
+        newGame(GameDifficulty.BEGINNER);
     }
 
     /** @return the singleton instance of this game */
@@ -56,80 +53,64 @@ public class Game extends JPanel {
         return displayBar;
     }
 
+    /** @return the current game difficulty */
+    public GameDifficulty getDifficulty() {
+        return difficulty;
+    }
+
     /**
-     * Creates the menu bar at the top of this Game's JFrame and set listeners to
-     * them.
+     * Creates the menu bar at the top of this Game's JFrame and sets a custom
+     * ActionListener class to them.
      */
-    public JMenuBar createMenuBar() {
+    private JMenuBar createMenuBar() {
         menuBar = new JMenuBar();
-        JMenu gameMenu = new JMenu("Game");
-        JMenuItem newGame = new JMenuItem("New Game");
-        JMenuItem exit = new JMenuItem("Exit");
-        JMenu difficultyMenu = new JMenu("Difficulty");
-        JMenuItem beginner = new JMenuItem("Beginner");
-        JMenuItem intermediate = new JMenuItem("Intermediate");
-        JMenuItem expert = new JMenuItem("Expert");
-        JMenuItem custom = new JMenuItem("Customize...");
+        final JMenu gameMenu = new JMenu("Game");
+        final JMenu difficultyMenu = new JMenu("Difficulty");
+        final JMenuItem newGame = new JMenuItem("New Game");
+        final JMenuItem exit = new JMenuItem("Exit");
+        final JMenuItem beginner = new JMenuItem("Beginner");
+        final JMenuItem intermediate = new JMenuItem("Intermediate");
+        final JMenuItem expert = new JMenuItem("Expert");
+        final JMenuItem custom = new JMenuItem("Customize...");
 
-        beginner.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                difficulty = GameDifficulty.BEGINNER;
-                newGame();
-                gameBoard.repaint();
-            }
-        });
-
-        intermediate.addActionListener(new ActionListener() {
+        class MenuListener implements ActionListener {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                difficulty = GameDifficulty.INTERMEDIATE;
-                newGame();
-                gameBoard.repaint();
+                JMenuItem selectedItem = (JMenuItem) e.getSource();
+
+                if (selectedItem.equals(newGame)) {
+                    newGame(difficulty);
+                }
+                else if (selectedItem.equals(exit)) {
+                    frame.dispose();
+                    System.exit(0);
+                }
+                else if (selectedItem.equals(beginner)) {
+                    newGame(GameDifficulty.BEGINNER);
+                }
+                else if (selectedItem.equals(intermediate)) {
+                    newGame(GameDifficulty.INTERMEDIATE);
+                }
+                else if (selectedItem.equals(expert)) {
+                    newGame(GameDifficulty.EXPERT);
+                }
+                else if (selectedItem.equals(custom)) {
+                    customDialog.setLocationRelativeTo(frame);
+                    customDialog.setVisible(true);
+                }
+
+                repaint();
             }
-        });
+        }
 
-        expert.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                difficulty = GameDifficulty.EXPERT;
-                newGame();
-                gameBoard.repaint();
-            }
-        });
-
-        //TODO implement "custom" click with new CustomDialog
-        custom.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                difficulty = GameDifficulty.CUSTOM;
-
-                customDialog.setLocationRelativeTo(frame);
-                customDialog.setVisible(true);
-                gameBoard.repaint();
-            }
-        });
-
-        newGame.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                newGame();
-            }
-        });
-
-        exit.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                frame.dispose();
-                System.exit(0);
-            }
-        });
+        MenuListener menuListener = new MenuListener();
+        newGame.addActionListener(menuListener);
+        exit.addActionListener(menuListener);
+        beginner.addActionListener(menuListener);
+        intermediate.addActionListener(menuListener);
+        expert.addActionListener(menuListener);
+        custom.addActionListener(menuListener);
 
         //add menu items to game menu
         gameMenu.add(newGame);
@@ -148,10 +129,13 @@ public class Game extends JPanel {
 
     /**
      * Resets this Game to a new game state, including this Game's Board and
-     * DisplayBar. If the difficulty of the game has changed. The board is
-     * initialized to reflect this change.
+     * DisplayBar. If the difficulty of the game has changed, the board is
+     * initialized to reflect this change. This method must be called on creation of
+     * the Minesweeper game application.
      */
-    public void newGame() {
+    public void newGame(GameDifficulty d) {
+        difficulty = d;
+
         switch (difficulty) {
             case BEGINNER:
                 gameBoard.reset(9, 9, 10);
@@ -163,9 +147,21 @@ public class Game extends JPanel {
                 gameBoard.reset(16, 30, 99);
                 break;
             case CUSTOM:
-                break;
+                int rows = getGameBoard().getNumRows();
+                int columns = getGameBoard().getNumColumns();
+                int mines = getGameBoard().getNumMines();
+                newCustomGame(rows, columns, mines);
+                return;
         }
 
+        displayBar.reset();
+        resizeAndCenter();
+    }
+
+    /** Resets this Game to a new customized game state */
+    public void newCustomGame(int rows, int columns, int mines){
+        difficulty = GameDifficulty.CUSTOM;
+        gameBoard.reset(rows, columns, mines);
         displayBar.reset();
         resizeAndCenter();
     }
@@ -197,7 +193,6 @@ public class Game extends JPanel {
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 //        frame.setSize(500, 360);
         frame.setResizable(false);
-
         frame.setVisible(true);
     }
 
@@ -207,8 +202,8 @@ public class Game extends JPanel {
     }
 
     /**
-     * A customized Dialog Window used for setting user-desirde parameters to the
-     * Game. The Dialog is shown when the user selects the customize menu item
+     * A customized Dialog Window used for setting user-desired parameters to the
+     * Game. The Dialog is shown when the user selects the "customize" menu item
      * from the menu bar.
      */
     private class CustomDialog extends JDialog implements ActionListener {
@@ -216,16 +211,11 @@ public class Game extends JPanel {
         private JPanel mainPanel;
         private JPanel entryPanel;
         private JPanel buttonPanel;
-
         private JSpinner width;
         private JSpinner height;
         private JSpinner numMines;
-
         private JButton okButton;
         private JButton cancelButton;
-
-        private final int MAX_WIDTH = 30;
-        private final int MAX_HEIGHT = 16;
 
         public CustomDialog() {
             super(frame, "Customize", true);
@@ -241,8 +231,8 @@ public class Game extends JPanel {
             mainPanel.add(buttonPanel);
             getContentPane().add(mainPanel);
 
-            setResizable(false);
             pack();
+            setResizable(false);
             setLocationRelativeTo(frame);
             setVisible(false);
         }
@@ -303,8 +293,10 @@ public class Game extends JPanel {
         private void initializeSpinners(){
             width.setModel(new SpinnerNumberModel(gameBoard.getNumColumns(), 9,
                     30, 1));
-            height.setModel(new SpinnerNumberModel(gameBoard.getNumRows(), 9, 16, 1));
-            numMines.setModel(new SpinnerNumberModel(gameBoard.getNumMines(), 10, 668, 1));
+            height.setModel(new SpinnerNumberModel(gameBoard.getNumRows(), 9, 16,
+                    1));
+            numMines.setModel(new SpinnerNumberModel(gameBoard.getNumMines(), 10,
+                    668, 1));
         }
 
         @Override
@@ -314,28 +306,26 @@ public class Game extends JPanel {
 
             super.setVisible(visible);
         }
-        //TODO bug after setting custom. New Game fails
+
         @Override
         public void actionPerformed(ActionEvent e) {
             if (okButton == e.getSource()) {
 
-                //Show warning dialog if user attempts to set number of mines to
+                // Show warning dialog if user attempts to set number of mines to
                 // greater than 90% of the total number of cells. Then set number
                 // of mines to max allowed.
                 int maxMines = (int) ((Integer) width.getValue() * (Integer)
                         height.getValue() * 0.9);
                 if ((Integer) numMines.getValue() > maxMines) {
                     JOptionPane.showMessageDialog(this, "Number of mines cannot " +
-                            "exceed " + maxMines + " for the current Board setting",
+                            "exceed " + maxMines + " for the current Board settings",
                             "Warning", JOptionPane.WARNING_MESSAGE);
                     numMines.setValue(new Integer(maxMines));
                     return;
                 }
 
-                difficulty = GameDifficulty.CUSTOM;
-                gameBoard.reset((Integer) height.getValue(),
+                newCustomGame((Integer) height.getValue(),
                         (Integer) width.getValue(), (Integer) numMines.getValue());
-                displayBar.reset();
                 resizeAndCenter();
                 setVisible(false);
             }

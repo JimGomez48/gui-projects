@@ -49,8 +49,7 @@ public class DisplayBar extends JPanel {
 
                 if (faceButton.isPointInButton(e.getX(), e.getY())) {
                     faceButton.setImage(faceButton.FACE_SMILE);
-                    Game.getInstance().newGame();
-//                    reset();
+                    Game.getInstance().newGame(Game.getInstance().getDifficulty());
                 }
             }
         });
