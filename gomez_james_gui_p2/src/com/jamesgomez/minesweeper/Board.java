@@ -276,8 +276,12 @@ public class Board extends JPanel {
     private void uncoverMines() {
         for (int i = 0; i < numRows; i++)
             for (int j = 0; j < numColumns; j++) {
-                if (cells[i][j] != null && cells[i][j].isMined())
+                if (/*cells[i][j] != null &&*/ cells[i][j].isMined())
                     cells[i][j].uncover();
+                else{
+                    if (cells[i][j].isMarked())
+                        cells[i][j].setIncorrectlyMarked(true);
+                }
             }
     }
 
