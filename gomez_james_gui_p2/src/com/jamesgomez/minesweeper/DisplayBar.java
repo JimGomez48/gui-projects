@@ -10,11 +10,11 @@ import java.awt.image.BufferedImage;
 
 public class DisplayBar extends JPanel {
 
-    private UnmarkedMinesRead unmarkedMinesRead;
-    private TimerRead timerRead;
-    private FaceButton faceButton;
+    private final UnmarkedMinesRead unmarkedMinesRead;
+    private final TimerRead timerRead;
+    private final FaceButton faceButton;
 
-    private Timer timer;
+    private final Timer timer;
 
     public DisplayBar() {
         super(new BorderLayout(2, 2), true);
@@ -49,8 +49,7 @@ public class DisplayBar extends JPanel {
 
                 if (faceButton.isPointInButton(e.getX(), e.getY())) {
                     faceButton.setImage(faceButton.FACE_SMILE);
-                    Game.getInstance().newGame();
-//                    reset();
+                    Game.getInstance().newGame(Game.getInstance().getDifficulty());
                 }
             }
         });
@@ -88,7 +87,15 @@ public class DisplayBar extends JPanel {
 
     public void setWon(){
         faceButton.setImage(FaceButton.FACE_WIN);
+        unmarkedMinesRead.setRead(0);
         timer.stop();
+    }
+
+    public void setFaceClicked(boolean clicked){
+        if (clicked)
+            faceButton.setImage(FaceButton.FACE_OOH);
+        else
+            faceButton.setImage(FaceButton.FACE_SMILE);
     }
 
     @Override
@@ -155,7 +162,7 @@ public class DisplayBar extends JPanel {
 
         @Override
         public void draw(Graphics g) {
-            g.drawImage(this.left, getWidth() - 3 * DIGIT_WIDTH,
+            g.drawImage(this.left, getWidth() - WIDTH,
                     (getHeight() / 2) - (HEIGHT / 2), null);
             g.drawImage(this.center, getWidth() - 2 * DIGIT_WIDTH,
                     (getHeight() / 2) - (HEIGHT / 2), null);

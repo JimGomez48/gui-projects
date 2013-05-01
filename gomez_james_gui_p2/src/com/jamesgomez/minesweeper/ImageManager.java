@@ -10,6 +10,7 @@ public class ImageManager {
 
     public static BufferedImage COVERED;
     public static BufferedImage MARKED;
+    public static BufferedImage MIS_MARKED;
     public static BufferedImage BOMB_DEATH;
     public static BufferedImage BOMB_REVEALED;
     public static BufferedImage OPEN_0;
@@ -41,6 +42,7 @@ public class ImageManager {
         try {
             COVERED = ImageIO.read(new File(toFullPath("blank")));
             MARKED = ImageIO.read(new File(toFullPath("bombflagged")));
+            MIS_MARKED = ImageIO.read(new File(toFullPath("bombmisflagged")));
             BOMB_DEATH = ImageIO.read(new File(toFullPath("bombdeath")));
             BOMB_REVEALED = ImageIO.read(new File(toFullPath("bombrevealed")));
             OPEN_0 = ImageIO.read(new File(toFullPath("open0")));
@@ -68,7 +70,7 @@ public class ImageManager {
             FACE_DEAD = ImageIO.read(new File(toFullPath("facedead")));
         }
         catch (IOException e) {
-            System.out.println("ImageManager failed to read an image file");
+            System.err.println("ImageManager failed to read an image file");
             e.printStackTrace();
         }
     }
