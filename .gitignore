@@ -8,5 +8,5 @@
 /*/*/obj/
 *.suo
 *.config
-*.csproj
+
 *.csproj.user
