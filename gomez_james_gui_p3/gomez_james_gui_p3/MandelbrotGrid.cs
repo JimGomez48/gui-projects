@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Numerics;
 
 namespace gomez_james_gui_p3
 {
@@ -24,6 +25,7 @@ namespace gomez_james_gui_p3
 
             //TODO direct assignment properties 
 
+            
             // calculated properties 
             xIntervals = cols - 1;
             yIntervals = rows - 1;
