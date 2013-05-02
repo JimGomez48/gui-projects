@@ -50,7 +50,6 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Complex.cs" />
     <Compile Include="MandelbrotGrid.cs" />
     <Compile Include="MandelbrotWindow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">

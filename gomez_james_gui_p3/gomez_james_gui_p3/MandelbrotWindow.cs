@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
+using System.Numerics;
 
 namespace gomez_james_gui_p3
 {
@@ -31,6 +32,15 @@ namespace gomez_james_gui_p3
             //    Array, 
             //    int
             //);
+
+            Complex x = new Complex(0.1, 0.1);
+            Complex y = new Complex(0.1, 0.12);
+            Console.WriteLine(x); 
+            Console.WriteLine(y);
+
+            //x.Mod() == x.Mag * x.Mag
+            Console.WriteLine(x.Magnitude * x.Magnitude);
+            Console.WriteLine(y.Magnitude * y.Magnitude);
         }
 
         public Canvas Canvas {

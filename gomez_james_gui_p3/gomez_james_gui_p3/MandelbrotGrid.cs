@@ -25,7 +25,10 @@ namespace gomez_james_gui_p3
 
             //TODO direct assignment properties 
 
-            
+            Complex c1 = new Complex(1, 1);
+            Complex c2 = new Complex(2, 4);
+            Console.WriteLine(c1 + c2);
+
             // calculated properties 
             xIntervals = cols - 1;
             yIntervals = rows - 1;
