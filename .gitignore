@@ -1,4 +1,12 @@
 /.idea/*
+/out/*
 /*/bin/
 /*/*/bin/
-/*/*/*/bin/
+/*/properties/
+/*/*/properties/
+/*/obj/
+/*/*/obj/
+*.suo
+*.config
+*.csproj
+*.csproj.user
