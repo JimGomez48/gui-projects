@@ -1,9 +1,7 @@
 /.idea/*
 /out/*
-/*/bin/
-/*/*/bin/
-/*/obj/
-/*/*/obj/
-*.suo
+*/*/bin/*
+/*/*/obj/*
 
+*.suo
 *.csproj.user
