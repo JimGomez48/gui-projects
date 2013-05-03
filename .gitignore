@@ -2,8 +2,6 @@
 /out/*
 /*/bin/
 /*/*/bin/
-/*/properties/
-/*/*/properties/
 /*/obj/
 /*/*/obj/
 *.suo
