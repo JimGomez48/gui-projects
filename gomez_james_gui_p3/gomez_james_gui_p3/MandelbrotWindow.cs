@@ -14,12 +14,13 @@ namespace gomez_james_gui_p3
     {
         private Canvas canvas;
         private Image image;
-        private BitmapSource bmpsource;
+        private BitmapSource bmpSource;
+        private MandelbrotGrid grid;
 
         public MandelbrotWindow()
             : base() {
             canvas = new Canvas();
-            this.Content = canvas;
+            this.Content = canvas;            
 
             image = new Image();
             //bmpsource = BitmapSource.Create(
@@ -32,15 +33,7 @@ namespace gomez_james_gui_p3
             //    Array, 
             //    int
             //);
-
-            Complex x = new Complex(0.1, 0.1);
-            Complex y = new Complex(0.1, 0.12);
-            Console.WriteLine(x); 
-            Console.WriteLine(y);
-
-            //x.Mod() == x.Mag * x.Mag
-            Console.WriteLine(x.Magnitude * x.Magnitude);
-            Console.WriteLine(y.Magnitude * y.Magnitude);
+            grid = new MandelbrotGrid(0, 0, 720, 720, 100, 100, 1000, 1000);
         }
 
         public Canvas Canvas {
@@ -51,7 +44,7 @@ namespace gomez_james_gui_p3
         public static void Main(String[] args) {
             MandelbrotWindow window = new MandelbrotWindow();
             Application app = new Application();
-            app.Run(window);
+            //app.Run(window);
         }
     }
 }
