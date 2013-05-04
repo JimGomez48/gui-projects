@@ -79,10 +79,10 @@ namespace gomez_james_gui_p3
         }
 
         private Complex toComplex(int row, int col) {
-            double x, y;
-            x = (double)(col - cols / 2) * 0.1;
-            y = (double)(row - row / 2) * 0.1;
-
+            double x = col - cols / 2;
+            double y = row - rows / 2;
+            x *= 0.01;
+            y *= 0.01;
             return new Complex(x, y);
         }
 
