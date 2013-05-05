@@ -50,13 +50,14 @@ namespace gomez_james_gui_p3
             yIntervals = numRows - 1;
             dx = width / xIntervals;
             dy = height / yIntervals;
-
-            generateCounts();
-            printData();
+            
             //testPrint();
         }
 
-        private void generateCounts() {
+        public byte [] generateCounts() {
+            byte[] returnData = new byte[rows * cols];
+            int counter = 0;
+
             for (int i = 0; i < rows; i++) {
                 for (int j = 0; j < cols; j++) {
                     Complex c = toComplex(i, j);
@@ -74,8 +75,16 @@ namespace gomez_james_gui_p3
                         data[i, j] = 0;
                     else
                         data[i, j] = iterations;
+
+                    returnData[counter] = (byte)data[i, j];
+
+                    counter++;
                 }
             }
+
+            printData();
+
+            return returnData;
         }
 
         private Complex toComplex(int row, int col) {
@@ -98,7 +107,6 @@ namespace gomez_james_gui_p3
         //for testing only
         private void testPrint() {
             Complex z;
-
             z = new Complex(0.1, 0.1); Console.WriteLine(z + " " + z.Magnitude * z.Magnitude);
             z = new Complex(0.1, 0.12); Console.WriteLine(z + " " + z.Magnitude * z.Magnitude);
             z = new Complex(0.0956, 0.124); Console.WriteLine(z + " " + z.Magnitude * z.Magnitude);
