@@ -19,49 +19,31 @@ namespace gomez_james_gui_p3
         private MandelbrotGrid grid;
 
         private readonly int width = 512;
-        private readonly int height = 256;
-        private readonly int stride = 64;
+        private readonly int height = 512;
+        private readonly int stride;
 
         public MandelbrotWindow()
             : base() {
             canvas = new Canvas();
             this.Content = canvas;
             image = new Image();
-            this.Width = width;
-            this.Height = height;
-            //int width = 128;
-            //int height = width;
-            //int stride = width / 8;
-            //byte[] pixels = new byte[height * stride];
-
-            //bmpSource = BitmapSource.Create(
-            //    width,
-            //    height,
-            //    96,
-            //    96,
-            //    PixelFormats.Indexed1,
-            //    BitmapPalettes.Gray16,
-            //    pixels,
-            //    stride
-            //);
-
-            grid = new MandelbrotGrid(0, 0, 720, 720, width, height, 1000, 1000);
+            this.Width = width * 1.2;
+            this.Height = height * 1.2;
+            stride = width;
 
             byte[] data = new byte[height * stride];
-            Random random = new Random();
-            for (int i = 0; i < data.Length; i++) {
-                data[i] = (byte)random.Next(0, 65535);
-            }
-
-            //data = grid.generateCounts();
+            //Random random = new Random();
+            //random.NextBytes(data);
+            grid = new MandelbrotGrid(0, 0, width, height, width, height, 200, 200);
+            data = grid.generateCounts();
 
             bmpSource = BitmapSource.Create(
                 width,
                 height,
                 96,
                 96,
-                PixelFormats.Indexed1,
-                BitmapPalettes.Gray16,
+                PixelFormats.Gray8,
+                BitmapPalettes.Gray256,
                 data,
                 stride);
             image.Source = bmpSource;
