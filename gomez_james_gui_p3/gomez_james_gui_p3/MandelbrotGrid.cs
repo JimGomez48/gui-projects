@@ -50,13 +50,19 @@ namespace gomez_james_gui_p3
             yIntervals = numRows - 1;
             dx = width / xIntervals;
             dy = height / yIntervals;
-            
-            //testPrint();
         }
 
-        public byte [] generateCounts() {
-            byte[] returnData = new byte[rows * cols];
-            int counter = 0;
+        /// <summary>
+        /// Generates a 2-D array containing divergance iteration counts for each pixel. 
+        /// This array is persistent within this class until this method is called again, 
+        /// whereupon it will be recalculated. A second 1-D array containing corresponding
+        /// pixel data is also generated.
+        /// </summary>
+        /// <returns>A 1-D array containing pixel data representative of the divergance 
+        /// iteration counts for each point in the comlex plain.
+        /// </returns>
+        public byte[] generateCounts() {
+            byte[] pixelData = new byte[rows * cols];
 
             for (int i = 0; i < rows; i++) {
                 for (int j = 0; j < cols; j++) {
@@ -76,15 +82,14 @@ namespace gomez_james_gui_p3
                     else
                         data[i, j] = iterations;
 
-                    returnData[counter] = (byte)(data[i, j] * 6);
-
-                    counter++;
+                    //store pixel data and scale up by 6 for a better looking image                    
+                    pixelData[i * cols + j] = (byte)(data[i, j] * 6);
                 }
             }
 
-            printData();
+            //printData();
 
-            return returnData;
+            return pixelData;
         }
 
         private Complex toComplex(int row, int col) {
@@ -104,15 +109,5 @@ namespace gomez_james_gui_p3
             }
         }
 
-        //for testing only
-        private void testPrint() {
-            Complex z;
-            z = new Complex(0.1, 0.1); Console.WriteLine(z + " " + z.Magnitude * z.Magnitude);
-            z = new Complex(0.1, 0.12); Console.WriteLine(z + " " + z.Magnitude * z.Magnitude);
-            z = new Complex(0.0956, 0.124); Console.WriteLine(z + " " + z.Magnitude * z.Magnitude);
-            z = new Complex(0.09376, 0.1237088); Console.WriteLine(z + " " + z.Magnitude * z.Magnitude);
-            z = new Complex(0.09348, 0.123198705499136); Console.WriteLine(z + " " + z.Magnitude * z.Magnitude);
-            z = new Complex(0.09362, 0.12303); Console.WriteLine(z + " " + z.Magnitude * z.Magnitude);            
-        }
     }
 }
