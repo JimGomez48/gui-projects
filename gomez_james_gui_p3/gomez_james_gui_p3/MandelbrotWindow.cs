@@ -13,57 +13,61 @@ namespace gomez_james_gui_p3
 {
     class MandelbrotWindow : Window
     {
-        private Grid contentGrid;
+        private DockPanel dockPanel;
+        private Menu menu;
+        private Grid gridParams;
         private Canvas canvas;
         private Image image;
-        private BitmapSource bmpSource;
+        //private BitmapSource bmpSource;
         private MandelbrotGrid grid;
 
-        private readonly int width = 1024;
-        private readonly int height = 1024;
+        private readonly int width = 720;
+        private readonly int height = 720;
         private readonly int stride;
 
         public MandelbrotWindow()
             : base() {
-            contentGrid = new Grid();
+            dockPanel = new DockPanel();
+            this.Content = dockPanel;
+            this.ResizeMode = System.Windows.ResizeMode.NoResize;
+            createMenu();
+            DockPanel.SetDock(menu, Dock.Top);
+            dockPanel.Children.Add(menu);
+            gridParams = new Grid();
+            DockPanel.SetDock(gridParams, Dock.Left);
+            dockPanel.Children.Add(gridParams);
             canvas = new Canvas();
-            this.Content = contentGrid;
+            DockPanel.SetDock(canvas, Dock.Bottom);
+            dockPanel.Children.Add(canvas);
 
             image = new Image();
-            this.Width = width * 0.8;
-            //this.Height = height * 0.6;
+            this.Width = width;
+            this.Height = height;
             stride = width;
 
             grid = new MandelbrotGrid(0, 0, width, height, width, height, 500, 500);
             byte[] data = grid.generateCounts();
-            bmpSource = BitmapSource.Create(
-                width,
-                height,
-                96,
-                96,
-                PixelFormats.Gray8,
-                null,
-                data,
-                stride);
+            image.Source = BitmapSource.Create(width, height, 96, 96,
+                PixelFormats.Gray8, null, data, stride);
 
-            image.Source = bmpSource;            
+            //image.Source = bmpSource;
             canvas.Children.Add(image);
-            contentGrid.Children.Add(createMenu());
-            contentGrid.Children.Add(Canvas);
-            Canvas.SetTop(image, 0 - height * 0.22);
-            Canvas.SetTop(image, 25);
-            Canvas.SetLeft(image, 0);
+            //Canvas.SetTop(image, 0 - height * 0.22);
+            //Canvas.SetTop(image, 0);
+            //Canvas.SetLeft(image, 0);
         }
 
-        public Canvas Canvas {
-            get { return canvas; }
-        }
+        public Menu MainMenu { get { return menu; } }
 
-        private Menu createMenu() {
-            Menu menu = new Menu();
+        public Canvas Canvas { get { return canvas; } }
+
+        public Grid Grid { get { return gridParams; } }
+
+        private void createMenu() {
+            menu = new Menu();
             menu.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
             menu.VerticalAlignment = System.Windows.VerticalAlignment.Top;
-            menu.Width = width;            
+            menu.Width = width;
             menu.IsMainMenu = true;
 
             MenuItem fileItem = new MenuItem();
@@ -76,7 +80,7 @@ namespace gomez_james_gui_p3
             fileItem.Items.Add(loadFromFileItem);
             MenuItem saveFromFileItem = new MenuItem();
             saveFromFileItem.Header = "Save Parameters From File...";
-            saveFromFileItem.Click += saveFromFileItem_Click;            
+            saveFromFileItem.Click += saveFromFileItem_Click;
             fileItem.Items.Add(saveFromFileItem);
             fileItem.Items.Add(new Separator());
             MenuItem generateImageItem = new MenuItem();
@@ -90,26 +94,24 @@ namespace gomez_james_gui_p3
             fileItem.Items.Add(new Separator());
             MenuItem exitItem = new MenuItem();
             exitItem.Header = "Exit";
-            exitItem.Click += exitItem_Click;            
+            exitItem.Click += exitItem_Click;
             fileItem.Items.Add(exitItem);
-
-            return menu;
-        }        
+        }
 
         private void loadFromFileItem_Click(object sender, RoutedEventArgs e) {
-            MessageBox.Show("Load Params");
+            MessageBox.Show(this, "Load Params");
         }
 
         public void saveFromFileItem_Click(object sender, RoutedEventArgs e) {
-            MessageBox.Show("Save Params");
+            MessageBox.Show(this, "Save Params");
         }
 
         public void generateImageItem_Click(object sender, RoutedEventArgs e) {
-            MessageBox.Show("Generate Image");
+            MessageBox.Show(this, "Generate Image");
         }
 
         public void saveImageItem_Click(object sender, RoutedEventArgs e) {
-            MessageBox.Show("Save Image");
+            MessageBox.Show(this, "Save Image");
         }
 
         private void exitItem_Click(object sender, RoutedEventArgs e) {
