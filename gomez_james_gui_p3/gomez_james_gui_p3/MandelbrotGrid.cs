@@ -76,7 +76,7 @@ namespace gomez_james_gui_p3
                     else
                         data[i, j] = iterations;
 
-                    returnData[counter] = (byte)(data[i, j] * 8);
+                    returnData[counter] = (byte)(data[i, j] * 6);
 
                     counter++;
                 }

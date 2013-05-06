@@ -27,16 +27,12 @@ namespace gomez_james_gui_p3
             canvas = new Canvas();
             this.Content = canvas;
             image = new Image();
-            this.Width = width * 1;
-            this.Height = height * 1;
+            this.Width = width * 0.8;
+            this.Height = height * 0.7;
             stride = width;
-
-            byte[] data = new byte[height * stride];
-            //Random random = new Random();
-            //random.NextBytes(data);
+                        
             grid = new MandelbrotGrid(0, 0, width, height, width, height, 500, 500);
-            data = grid.generateCounts();
-
+            byte[] data = grid.generateCounts();
             bmpSource = BitmapSource.Create(
                 width,
                 height,
@@ -48,7 +44,7 @@ namespace gomez_james_gui_p3
                 stride);
             image.Source = bmpSource;
             canvas.Children.Add(image);
-            Canvas.SetTop(image, 0);
+            Canvas.SetTop(image, 0 - height / 6);
             Canvas.SetLeft(image, 0);
         }
 
