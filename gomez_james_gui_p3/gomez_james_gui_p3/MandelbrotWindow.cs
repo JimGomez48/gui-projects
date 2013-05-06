@@ -33,7 +33,7 @@ namespace gomez_james_gui_p3
             createMenu();
             DockPanel.SetDock(menu, Dock.Top);
             dockPanel.Children.Add(menu);
-            gridParams = new Grid();
+            createParamsPanel();
             DockPanel.SetDock(gridParams, Dock.Left);
             dockPanel.Children.Add(gridParams);
             canvas = new Canvas();
@@ -41,8 +41,9 @@ namespace gomez_james_gui_p3
             dockPanel.Children.Add(canvas);
 
             image = new Image();
-            this.Width = width;
+            this.Width = width + gridParams.Width;
             this.Height = height;
+            menu.Width += gridParams.Width;
             stride = width;
 
             grid = new MandelbrotGrid(0, 0, width, height, width, height, 500, 500);
@@ -96,6 +97,92 @@ namespace gomez_james_gui_p3
             exitItem.Header = "Exit";
             exitItem.Click += exitItem_Click;
             fileItem.Items.Add(exitItem);
+        }
+
+        private void createParamsPanel() {
+            gridParams = new Grid();
+            gridParams.Width = 200;
+            gridParams.HorizontalAlignment = HorizontalAlignment.Left;
+            gridParams.VerticalAlignment = VerticalAlignment.Top;
+            gridParams.ShowGridLines = false;
+
+            //Add rows to grid
+            ColumnDefinition col0 = new ColumnDefinition();
+            gridParams.ColumnDefinitions.Add(col0);
+            ColumnDefinition col1 = new ColumnDefinition();
+            gridParams.ColumnDefinitions.Add(col1);
+
+            //Add columns to grid
+            RowDefinition row0 = new RowDefinition();
+            gridParams.RowDefinitions.Add(row0);
+            RowDefinition row1 = new RowDefinition();
+            gridParams.RowDefinitions.Add(row1);
+            RowDefinition row2 = new RowDefinition();
+            gridParams.RowDefinitions.Add(row2);
+            RowDefinition row3 = new RowDefinition();
+            gridParams.RowDefinitions.Add(row3);
+            RowDefinition row4 = new RowDefinition();
+            gridParams.RowDefinitions.Add(row4);
+            RowDefinition row5 = new RowDefinition();
+            gridParams.RowDefinitions.Add(row5);
+            RowDefinition row6 = new RowDefinition();
+            gridParams.RowDefinitions.Add(row6);
+            RowDefinition row7 = new RowDefinition();
+            gridParams.RowDefinitions.Add(row7);
+            
+            //Create labels
+            Label xStartLabel = new Label();  xStartLabel.Content = "X Start";
+            Label yStartLabel = new Label(); yStartLabel.Content = "Y Start";
+            Label rowsLabel = new Label(); rowsLabel.Content = "Rows";
+            Label columnsLabel = new Label(); columnsLabel.Content = "Columns";
+            Label widthLabel = new Label(); widthLabel.Content = "Content";
+            Label heightLabel = new Label(); heightLabel.Content = "Height";
+            Label maxIterationsLabel = new Label(); maxIterationsLabel.Content = "Max Iterations";
+            Label maxModulusLabel = new Label(); maxModulusLabel.Content = "Max Modulus";
+
+            //Create Textboxes
+            TextBox xStartText = new TextBox();
+            TextBox yStartText = new TextBox();
+            TextBox rowsText = new TextBox();
+            TextBox columnsText = new TextBox();
+            TextBox widthText = new TextBox();
+            TextBox heightText = new TextBox();
+            TextBox maxIterationsText = new TextBox();
+            TextBox maxModulusText = new TextBox();
+
+            Grid.SetRow(xStartLabel, 0); Grid.SetColumn(xStartLabel, 0);
+            Grid.SetRow(xStartText, 0); Grid.SetColumn(xStartText, 1);
+            Grid.SetRow(yStartLabel, 1); Grid.SetColumn(yStartLabel, 0);
+            Grid.SetRow(yStartText, 1); Grid.SetColumn(yStartText, 1);
+            Grid.SetRow(rowsLabel, 2); Grid.SetColumn(rowsLabel, 0);
+            Grid.SetRow(rowsText, 2); Grid.SetColumn(rowsText, 1);
+            Grid.SetRow(columnsLabel, 3); Grid.SetColumn(columnsLabel, 0);
+            Grid.SetRow(columnsText, 3); Grid.SetColumn(columnsText, 1);
+            Grid.SetRow(widthLabel, 4); Grid.SetColumn(widthLabel, 0);
+            Grid.SetRow(widthText, 4); Grid.SetColumn(widthText, 1);
+            Grid.SetRow(heightLabel, 5); Grid.SetColumn(heightLabel, 0);
+            Grid.SetRow(heightText, 5); Grid.SetColumn(heightText, 1);
+            Grid.SetRow(maxIterationsLabel, 6); Grid.SetColumn(maxIterationsLabel, 0);
+            Grid.SetRow(maxIterationsText, 6); Grid.SetColumn(maxIterationsText, 1);
+            Grid.SetRow(maxModulusLabel, 7); Grid.SetColumn(maxModulusLabel, 0);
+            Grid.SetRow(maxModulusText, 7); Grid.SetColumn(maxModulusText, 1);
+            
+            gridParams.Children.Add(xStartLabel);
+            gridParams.Children.Add(xStartText);
+            gridParams.Children.Add(yStartLabel);
+            gridParams.Children.Add(yStartText);
+            gridParams.Children.Add(rowsLabel);
+            gridParams.Children.Add(rowsText);
+            gridParams.Children.Add(columnsLabel);
+            gridParams.Children.Add(columnsText);
+            gridParams.Children.Add(widthLabel);
+            gridParams.Children.Add(widthText);
+            gridParams.Children.Add(heightLabel);
+            gridParams.Children.Add(heightText);
+            gridParams.Children.Add(maxIterationsLabel);
+            gridParams.Children.Add(maxIterationsText);
+            gridParams.Children.Add(maxModulusLabel);
+            gridParams.Children.Add(maxModulusText);
         }
 
         private void loadFromFileItem_Click(object sender, RoutedEventArgs e) {
