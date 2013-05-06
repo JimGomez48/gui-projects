@@ -18,8 +18,8 @@ namespace gomez_james_gui_p3
         private BitmapSource bmpSource;
         private MandelbrotGrid grid;
 
-        private readonly int width = 512;
-        private readonly int height = 512;
+        private readonly int width = 1024;
+        private readonly int height = 1024;
         private readonly int stride;
 
         public MandelbrotWindow()
@@ -27,14 +27,14 @@ namespace gomez_james_gui_p3
             canvas = new Canvas();
             this.Content = canvas;
             image = new Image();
-            this.Width = width * 1.2;
-            this.Height = height * 1.2;
+            this.Width = width * 1;
+            this.Height = height * 1;
             stride = width;
 
             byte[] data = new byte[height * stride];
             //Random random = new Random();
             //random.NextBytes(data);
-            grid = new MandelbrotGrid(0, 0, width, height, width, height, 200, 200);
+            grid = new MandelbrotGrid(0, 0, width, height, width, height, 500, 500);
             data = grid.generateCounts();
 
             bmpSource = BitmapSource.Create(

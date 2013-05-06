@@ -76,7 +76,7 @@ namespace gomez_james_gui_p3
                     else
                         data[i, j] = iterations;
 
-                    returnData[counter] = (byte)data[i, j];
+                    returnData[counter] = (byte)(data[i, j] * 8);
 
                     counter++;
                 }
@@ -90,8 +90,8 @@ namespace gomez_james_gui_p3
         private Complex toComplex(int row, int col) {
             double x = col - cols / 2;
             double y = row - rows / 2;
-            x *= 0.01;
-            y *= 0.01;
+            x *= 0.005;
+            y *= 0.005;
             return new Complex(x, y);
         }
 
