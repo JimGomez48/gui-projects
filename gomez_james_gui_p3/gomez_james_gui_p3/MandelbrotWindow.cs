@@ -19,7 +19,7 @@ namespace gomez_james_gui_p3
         private Canvas canvas;
         private Image image;
         //private BitmapSource bmpSource;
-        private MandelbrotGrid grid;
+        private MandelbrotGrid mandelbrotGrid;
 
         private readonly int width = 720;
         private readonly int height = 720;
@@ -46,8 +46,8 @@ namespace gomez_james_gui_p3
             menu.Width += gridParams.Width;
             stride = width;
 
-            grid = new MandelbrotGrid(0, 0, width, height, width, height, 500, 500);
-            byte[] data = grid.generateCounts();
+            mandelbrotGrid = new MandelbrotGrid(0, 0, width, height, width, height, 500, 500);
+            byte[] data = mandelbrotGrid.generateCounts();
             image.Source = BitmapSource.Create(width, height, 96, 96,
                 PixelFormats.Gray8, null, data, stride);
 
@@ -101,72 +101,95 @@ namespace gomez_james_gui_p3
 
         private void createParamsPanel() {
             gridParams = new Grid();
-            gridParams.Width = 200;
+            gridParams.Width = 120;
             gridParams.HorizontalAlignment = HorizontalAlignment.Left;
             gridParams.VerticalAlignment = VerticalAlignment.Top;
             gridParams.ShowGridLines = false;
 
-            //Add rows to grid
+            //Add rows  with single column to gridParams
             ColumnDefinition col0 = new ColumnDefinition();
             gridParams.ColumnDefinitions.Add(col0);
-            ColumnDefinition col1 = new ColumnDefinition();
-            gridParams.ColumnDefinitions.Add(col1);
+            for (int i = 0; i < 16; i++) {
+                gridParams.RowDefinitions.Add(new RowDefinition());
+            }
 
-            //Add columns to grid
-            RowDefinition row0 = new RowDefinition();
-            gridParams.RowDefinitions.Add(row0);
-            RowDefinition row1 = new RowDefinition();
-            gridParams.RowDefinitions.Add(row1);
-            RowDefinition row2 = new RowDefinition();
-            gridParams.RowDefinitions.Add(row2);
-            RowDefinition row3 = new RowDefinition();
-            gridParams.RowDefinitions.Add(row3);
-            RowDefinition row4 = new RowDefinition();
-            gridParams.RowDefinitions.Add(row4);
-            RowDefinition row5 = new RowDefinition();
-            gridParams.RowDefinitions.Add(row5);
-            RowDefinition row6 = new RowDefinition();
-            gridParams.RowDefinitions.Add(row6);
-            RowDefinition row7 = new RowDefinition();
-            gridParams.RowDefinitions.Add(row7);
-            
             //Create labels
-            Label xStartLabel = new Label();  xStartLabel.Content = "X Start";
-            Label yStartLabel = new Label(); yStartLabel.Content = "Y Start";
-            Label rowsLabel = new Label(); rowsLabel.Content = "Rows";
-            Label columnsLabel = new Label(); columnsLabel.Content = "Columns";
-            Label widthLabel = new Label(); widthLabel.Content = "Content";
-            Label heightLabel = new Label(); heightLabel.Content = "Height";
-            Label maxIterationsLabel = new Label(); maxIterationsLabel.Content = "Max Iterations";
-            Label maxModulusLabel = new Label(); maxModulusLabel.Content = "Max Modulus";
+            Label xStartLabel = new Label();
+            xStartLabel.Content = "X Start";
+            xStartLabel.Margin = new Thickness(10, 10, 10, 0);
+            Label yStartLabel = new Label();
+            yStartLabel.Content = "Y Start";
+            yStartLabel.Margin = new Thickness(10, 10, 10, 0);
+            Label rowsLabel = new Label();
+            rowsLabel.Content = "Rows";
+            rowsLabel.Margin = new Thickness(10, 10, 10, 0);
+            Label columnsLabel = new Label();
+            columnsLabel.Content = "Columns";
+            columnsLabel.Margin = new Thickness(10, 10, 10, 0);
+            Label widthLabel = new Label();
+            widthLabel.Content = "Content";
+            widthLabel.Margin = new Thickness(10, 10, 10, 0);
+            Label heightLabel = new Label();
+            heightLabel.Content = "Height";
+            heightLabel.Margin = new Thickness(10, 10, 10, 0);
+            Label maxIterationsLabel = new Label();
+            maxIterationsLabel.Content = "Max Iterations";
+            maxIterationsLabel.Margin = new Thickness(10, 10, 10, 0);
+            Label maxModulusLabel = new Label();
+            maxModulusLabel.Content = "Max Modulus";
+            maxModulusLabel.Margin = new Thickness(10, 10, 10, 0);
 
             //Create Textboxes
             TextBox xStartText = new TextBox();
+            xStartText.Margin = new Thickness(10, 0, 10, 10);
             TextBox yStartText = new TextBox();
+            yStartText.Margin = new Thickness(10, 2, 10, 10);
             TextBox rowsText = new TextBox();
+            rowsText.Margin = new Thickness(10, 2, 10, 10);
             TextBox columnsText = new TextBox();
+            columnsText.Margin = new Thickness(10, 2, 10, 10);
             TextBox widthText = new TextBox();
+            widthText.Margin = new Thickness(10, 2, 10, 10);
             TextBox heightText = new TextBox();
+            heightText.Margin = new Thickness(10, 2, 10, 10);
             TextBox maxIterationsText = new TextBox();
+            maxIterationsText.Margin = new Thickness(10, 2, 10, 10);
             TextBox maxModulusText = new TextBox();
+            maxModulusText.Margin = new Thickness(10, 2, 10, 10);
 
-            Grid.SetRow(xStartLabel, 0); Grid.SetColumn(xStartLabel, 0);
-            Grid.SetRow(xStartText, 0); Grid.SetColumn(xStartText, 1);
-            Grid.SetRow(yStartLabel, 1); Grid.SetColumn(yStartLabel, 0);
-            Grid.SetRow(yStartText, 1); Grid.SetColumn(yStartText, 1);
-            Grid.SetRow(rowsLabel, 2); Grid.SetColumn(rowsLabel, 0);
-            Grid.SetRow(rowsText, 2); Grid.SetColumn(rowsText, 1);
-            Grid.SetRow(columnsLabel, 3); Grid.SetColumn(columnsLabel, 0);
-            Grid.SetRow(columnsText, 3); Grid.SetColumn(columnsText, 1);
-            Grid.SetRow(widthLabel, 4); Grid.SetColumn(widthLabel, 0);
-            Grid.SetRow(widthText, 4); Grid.SetColumn(widthText, 1);
-            Grid.SetRow(heightLabel, 5); Grid.SetColumn(heightLabel, 0);
-            Grid.SetRow(heightText, 5); Grid.SetColumn(heightText, 1);
-            Grid.SetRow(maxIterationsLabel, 6); Grid.SetColumn(maxIterationsLabel, 0);
-            Grid.SetRow(maxIterationsText, 6); Grid.SetColumn(maxIterationsText, 1);
-            Grid.SetRow(maxModulusLabel, 7); Grid.SetColumn(maxModulusLabel, 0);
-            Grid.SetRow(maxModulusText, 7); Grid.SetColumn(maxModulusText, 1);
-            
+            Grid.SetRow(xStartLabel, 0);
+            Grid.SetColumn(xStartLabel, 0);
+            Grid.SetRow(xStartText, 1);
+            Grid.SetColumn(xStartText, 0);
+            Grid.SetRow(yStartLabel, 2);
+            Grid.SetColumn(yStartLabel, 0);
+            Grid.SetRow(yStartText, 3);
+            Grid.SetColumn(yStartText, 0);
+            Grid.SetRow(rowsLabel, 4);
+            Grid.SetColumn(rowsLabel, 0);
+            Grid.SetRow(rowsText, 5);
+            Grid.SetColumn(rowsText, 0);
+            Grid.SetRow(columnsLabel, 6);
+            Grid.SetColumn(columnsLabel, 0);
+            Grid.SetRow(columnsText, 7);
+            Grid.SetColumn(columnsText, 0);
+            Grid.SetRow(widthLabel, 8);
+            Grid.SetColumn(widthLabel, 0);
+            Grid.SetRow(widthText, 9);
+            Grid.SetColumn(widthText, 0);
+            Grid.SetRow(heightLabel, 10);
+            Grid.SetColumn(heightLabel, 0);
+            Grid.SetRow(heightText, 11);
+            Grid.SetColumn(heightText, 0);
+            Grid.SetRow(maxIterationsLabel, 12);
+            Grid.SetColumn(maxIterationsLabel, 0);
+            Grid.SetRow(maxIterationsText, 13);
+            Grid.SetColumn(maxIterationsText, 0);
+            Grid.SetRow(maxModulusLabel, 14);
+            Grid.SetColumn(maxModulusLabel, 0);
+            Grid.SetRow(maxModulusText, 15);
+            Grid.SetColumn(maxModulusText, 0);
+
             gridParams.Children.Add(xStartLabel);
             gridParams.Children.Add(xStartText);
             gridParams.Children.Add(yStartLabel);
