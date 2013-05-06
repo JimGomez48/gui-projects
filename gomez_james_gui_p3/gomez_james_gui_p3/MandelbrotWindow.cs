@@ -27,18 +27,32 @@ namespace gomez_james_gui_p3
 
         public MandelbrotWindow()
             : base() {
+                this.ResizeMode = System.Windows.ResizeMode.NoResize;
             dockPanel = new DockPanel();
+            dockPanel.HorizontalAlignment = HorizontalAlignment.Left;
+            dockPanel.VerticalAlignment = VerticalAlignment.Top;
             this.Content = dockPanel;
-            this.ResizeMode = System.Windows.ResizeMode.NoResize;
+
+            ScrollViewer canvasScroller = new ScrollViewer();
+            ScrollViewer paramsScroller = new ScrollViewer();
+            canvasScroller.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
+            canvasScroller.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
+            paramsScroller.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
+            paramsScroller.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;                        
+            
             createMenu();
             DockPanel.SetDock(menu, Dock.Top);
             dockPanel.Children.Add(menu);
             createParamsPanel();
-            DockPanel.SetDock(gridParams, Dock.Left);
-            dockPanel.Children.Add(gridParams);
+            
+            DockPanel.SetDock(paramsScroller, Dock.Left);
+            dockPanel.Children.Add(paramsScroller);
+            paramsScroller.Content = gridParams;
+
             canvas = new Canvas();
-            DockPanel.SetDock(canvas, Dock.Bottom);
-            dockPanel.Children.Add(canvas);
+            DockPanel.SetDock(canvasScroller, Dock.Bottom);
+            dockPanel.Children.Add(canvasScroller);
+            canvasScroller.Content = canvas;
 
             image = new Image();
             this.Width = width + gridParams.Width;
@@ -53,9 +67,11 @@ namespace gomez_james_gui_p3
 
             //image.Source = bmpSource;
             canvas.Children.Add(image);
+            canvas.Width = width;
+            canvas.Height = height;
             //Canvas.SetTop(image, 0 - height * 0.22);
-            //Canvas.SetTop(image, 0);
-            //Canvas.SetLeft(image, 0);
+            Canvas.SetTop(image, 0);
+            Canvas.SetLeft(image, 0);
         }
 
         public Menu MainMenu { get { return menu; } }
@@ -127,7 +143,7 @@ namespace gomez_james_gui_p3
             columnsLabel.Content = "Columns";
             columnsLabel.Margin = new Thickness(10, 10, 10, 0);
             Label widthLabel = new Label();
-            widthLabel.Content = "Content";
+            widthLabel.Content = "Width";
             widthLabel.Margin = new Thickness(10, 10, 10, 0);
             Label heightLabel = new Label();
             heightLabel.Content = "Height";
