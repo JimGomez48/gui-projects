@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Numerics;
+using Microsoft.Win32;
 
 namespace gomez_james_gui_p3
 {
@@ -91,21 +92,21 @@ namespace gomez_james_gui_p3
             fileItem.Header = "File";
             menu.Items.Add(fileItem);
 
-            MenuItem loadFromFileItem = new MenuItem();
-            loadFromFileItem.Header = "Load Parameters From File...";
-            loadFromFileItem.Click += loadFromFileItem_Click;
-            fileItem.Items.Add(loadFromFileItem);
-            MenuItem saveFromFileItem = new MenuItem();
-            saveFromFileItem.Header = "Save Parameters From File...";
-            saveFromFileItem.Click += saveFromFileItem_Click;
-            fileItem.Items.Add(saveFromFileItem);
+            MenuItem loadParamsItem = new MenuItem();
+            loadParamsItem.Header = "Load Parameters...";
+            loadParamsItem.Click += loadFromFileItem_Click;
+            fileItem.Items.Add(loadParamsItem);
+            MenuItem saveParamsItem = new MenuItem();
+            saveParamsItem.Header = "Save Parameters...";
+            saveParamsItem.Click += saveFromFileItem_Click;
+            fileItem.Items.Add(saveParamsItem);
             fileItem.Items.Add(new Separator());
             MenuItem generateImageItem = new MenuItem();
             generateImageItem.Header = "Generate Image";
             generateImageItem.Click += generateImageItem_Click;
             fileItem.Items.Add(generateImageItem);
             MenuItem saveImageItem = new MenuItem();
-            saveImageItem.Header = "Save Image";
+            saveImageItem.Header = "Save Image...";
             saveImageItem.Click += saveImageItem_Click;
             fileItem.Items.Add(saveImageItem);
             fileItem.Items.Add(new Separator());
@@ -236,8 +237,15 @@ namespace gomez_james_gui_p3
             MessageBox.Show(this, "Generate Image");
         }
 
-        public void saveImageItem_Click(object sender, RoutedEventArgs e) {
-            MessageBox.Show(this, "Save Image");
+        public void saveImageItem_Click(object sender, RoutedEventArgs e) {            
+            SaveFileDialog dialog = new SaveFileDialog();
+            dialog.DefaultExt = ".jpg";
+            dialog.Filter = "JPEG (.jpg)|*.jpg";
+            Nullable<bool> result = dialog.ShowDialog();
+
+            if (result == true) {
+                //save file
+            }
         }
 
         private void exitItem_Click(object sender, RoutedEventArgs e) {
