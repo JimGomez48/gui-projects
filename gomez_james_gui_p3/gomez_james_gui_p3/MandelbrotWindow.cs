@@ -9,6 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Numerics;
 using Microsoft.Win32;
+using System.IO;
 
 namespace gomez_james_gui_p3
 {
@@ -19,7 +20,7 @@ namespace gomez_james_gui_p3
         private Grid gridParams;
         private Canvas canvas;
         private Image image;
-        //private BitmapSource bmpSource;
+        private BitmapSource bmpSource;
         private MandelbrotGrid mandelbrotGrid;
 
         private readonly int width = 720;
@@ -63,10 +64,10 @@ namespace gomez_james_gui_p3
 
             mandelbrotGrid = new MandelbrotGrid(0, 0, width, height, width, height, 500, 500);
             byte[] data = mandelbrotGrid.generateCounts();
-            image.Source = BitmapSource.Create(width, height, 96, 96,
+            bmpSource = BitmapSource.Create(width, height, 96, 96,
                 PixelFormats.Gray8, null, data, stride);
+            image.Source = bmpSource;
 
-            //image.Source = bmpSource;
             canvas.Children.Add(image);
             canvas.Width = width;
             canvas.Height = height;
@@ -244,7 +245,11 @@ namespace gomez_james_gui_p3
             Nullable<bool> result = dialog.ShowDialog();
 
             if (result == true) {
-                //save file
+                using (FileStream fileStream = File.Create(dialog.FileName)) {
+                    BitmapEncoder encoder = new JpegBitmapEncoder();
+                    encoder.Frames.Add(BitmapFrame.Create(bmpSource));
+                    encoder.Save(fileStream);
+                }
             }
         }
 
