@@ -122,7 +122,7 @@ namespace gomez_james_gui_p3
         }
 
         private void loadParamsItem_Click(object sender, RoutedEventArgs e) {
-            loadParamsXML();            
+            loadParamsXML();
         }
 
         public void saveParamsItem_Click(object sender, RoutedEventArgs e) {
@@ -134,7 +134,7 @@ namespace gomez_james_gui_p3
         }
 
         public void generateImageItem_Click(object sender, RoutedEventArgs e) {
-            MessageBox.Show(this, "Generate Image");
+            MessageBox.Show(this, "TODO: Generate Image");
         }
 
         public void saveImageItem_Click(object sender, RoutedEventArgs e) {            
