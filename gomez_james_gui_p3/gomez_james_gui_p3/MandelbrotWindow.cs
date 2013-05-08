@@ -10,6 +10,7 @@ using System.Windows.Media.Imaging;
 using System.Numerics;
 using Microsoft.Win32;
 using System.IO;
+using System.Xml;
 
 namespace gomez_james_gui_p3
 {
@@ -17,7 +18,7 @@ namespace gomez_james_gui_p3
     {
         private DockPanel dockPanel;
         private Menu menu;
-        private Grid gridParams;
+        private ParamsPanel paramsPanel;
         private Canvas canvas;
         private Image image;
         private BitmapSource bmpSource;
@@ -45,11 +46,11 @@ namespace gomez_james_gui_p3
             createMenu();
             DockPanel.SetDock(menu, Dock.Top);
             dockPanel.Children.Add(menu);
-            createParamsPanel();
+            paramsPanel = new ParamsPanel();
             
             DockPanel.SetDock(paramsScroller, Dock.Left);
             dockPanel.Children.Add(paramsScroller);
-            paramsScroller.Content = gridParams;
+            paramsScroller.Content = paramsPanel;
 
             canvas = new Canvas();
             DockPanel.SetDock(canvasScroller, Dock.Bottom);
@@ -57,9 +58,9 @@ namespace gomez_james_gui_p3
             canvasScroller.Content = canvas;
 
             image = new Image();
-            this.Width = width + gridParams.Width;
+            this.Width = width + paramsPanel.Width;
             this.Height = height;
-            menu.Width += gridParams.Width;
+            menu.Width += paramsPanel.Width;
             stride = width;
 
             mandelbrotGrid = new MandelbrotGrid(0, 0, width, height, width, height, 500, 500);
@@ -80,7 +81,7 @@ namespace gomez_james_gui_p3
 
         public Canvas Canvas { get { return canvas; } }
 
-        public Grid Grid { get { return gridParams; } }
+        public Grid Grid { get { return paramsPanel; } }
 
         private void createMenu() {
             menu = new Menu();
@@ -95,11 +96,11 @@ namespace gomez_james_gui_p3
 
             MenuItem loadParamsItem = new MenuItem();
             loadParamsItem.Header = "Load Parameters...";
-            loadParamsItem.Click += loadFromFileItem_Click;
+            loadParamsItem.Click += loadParamsItem_Click;
             fileItem.Items.Add(loadParamsItem);
             MenuItem saveParamsItem = new MenuItem();
             saveParamsItem.Header = "Save Parameters...";
-            saveParamsItem.Click += saveFromFileItem_Click;
+            saveParamsItem.Click += saveParamsItem_Click;
             fileItem.Items.Add(saveParamsItem);
             fileItem.Items.Add(new Separator());
             MenuItem generateImageItem = new MenuItem();
@@ -117,121 +118,24 @@ namespace gomez_james_gui_p3
             fileItem.Items.Add(exitItem);
         }
 
-        private void createParamsPanel() {
-            gridParams = new Grid();
-            gridParams.Width = 120;
-            gridParams.HorizontalAlignment = HorizontalAlignment.Left;
-            gridParams.VerticalAlignment = VerticalAlignment.Top;
-            gridParams.ShowGridLines = false;
-
-            //Add rows  with single column to gridParams
-            ColumnDefinition col0 = new ColumnDefinition();
-            gridParams.ColumnDefinitions.Add(col0);
-            for (int i = 0; i < 16; i++) {
-                gridParams.RowDefinitions.Add(new RowDefinition());
-            }
-
-            //Create labels
-            Label xStartLabel = new Label();
-            xStartLabel.Content = "X Start";
-            xStartLabel.Margin = new Thickness(10, 10, 10, 0);
-            Label yStartLabel = new Label();
-            yStartLabel.Content = "Y Start";
-            yStartLabel.Margin = new Thickness(10, 10, 10, 0);
-            Label rowsLabel = new Label();
-            rowsLabel.Content = "Rows";
-            rowsLabel.Margin = new Thickness(10, 10, 10, 0);
-            Label columnsLabel = new Label();
-            columnsLabel.Content = "Columns";
-            columnsLabel.Margin = new Thickness(10, 10, 10, 0);
-            Label widthLabel = new Label();
-            widthLabel.Content = "Width";
-            widthLabel.Margin = new Thickness(10, 10, 10, 0);
-            Label heightLabel = new Label();
-            heightLabel.Content = "Height";
-            heightLabel.Margin = new Thickness(10, 10, 10, 0);
-            Label maxIterationsLabel = new Label();
-            maxIterationsLabel.Content = "Max Iterations";
-            maxIterationsLabel.Margin = new Thickness(10, 10, 10, 0);
-            Label maxModulusLabel = new Label();
-            maxModulusLabel.Content = "Max Modulus";
-            maxModulusLabel.Margin = new Thickness(10, 10, 10, 0);
-
-            //Create Textboxes
-            TextBox xStartText = new TextBox();
-            xStartText.Margin = new Thickness(10, 0, 10, 10);
-            TextBox yStartText = new TextBox();
-            yStartText.Margin = new Thickness(10, 2, 10, 10);
-            TextBox rowsText = new TextBox();
-            rowsText.Margin = new Thickness(10, 2, 10, 10);
-            TextBox columnsText = new TextBox();
-            columnsText.Margin = new Thickness(10, 2, 10, 10);
-            TextBox widthText = new TextBox();
-            widthText.Margin = new Thickness(10, 2, 10, 10);
-            TextBox heightText = new TextBox();
-            heightText.Margin = new Thickness(10, 2, 10, 10);
-            TextBox maxIterationsText = new TextBox();
-            maxIterationsText.Margin = new Thickness(10, 2, 10, 10);
-            TextBox maxModulusText = new TextBox();
-            maxModulusText.Margin = new Thickness(10, 2, 10, 10);
-
-            Grid.SetRow(xStartLabel, 0);
-            Grid.SetColumn(xStartLabel, 0);
-            Grid.SetRow(xStartText, 1);
-            Grid.SetColumn(xStartText, 0);
-            Grid.SetRow(yStartLabel, 2);
-            Grid.SetColumn(yStartLabel, 0);
-            Grid.SetRow(yStartText, 3);
-            Grid.SetColumn(yStartText, 0);
-            Grid.SetRow(rowsLabel, 4);
-            Grid.SetColumn(rowsLabel, 0);
-            Grid.SetRow(rowsText, 5);
-            Grid.SetColumn(rowsText, 0);
-            Grid.SetRow(columnsLabel, 6);
-            Grid.SetColumn(columnsLabel, 0);
-            Grid.SetRow(columnsText, 7);
-            Grid.SetColumn(columnsText, 0);
-            Grid.SetRow(widthLabel, 8);
-            Grid.SetColumn(widthLabel, 0);
-            Grid.SetRow(widthText, 9);
-            Grid.SetColumn(widthText, 0);
-            Grid.SetRow(heightLabel, 10);
-            Grid.SetColumn(heightLabel, 0);
-            Grid.SetRow(heightText, 11);
-            Grid.SetColumn(heightText, 0);
-            Grid.SetRow(maxIterationsLabel, 12);
-            Grid.SetColumn(maxIterationsLabel, 0);
-            Grid.SetRow(maxIterationsText, 13);
-            Grid.SetColumn(maxIterationsText, 0);
-            Grid.SetRow(maxModulusLabel, 14);
-            Grid.SetColumn(maxModulusLabel, 0);
-            Grid.SetRow(maxModulusText, 15);
-            Grid.SetColumn(maxModulusText, 0);
-
-            gridParams.Children.Add(xStartLabel);
-            gridParams.Children.Add(xStartText);
-            gridParams.Children.Add(yStartLabel);
-            gridParams.Children.Add(yStartText);
-            gridParams.Children.Add(rowsLabel);
-            gridParams.Children.Add(rowsText);
-            gridParams.Children.Add(columnsLabel);
-            gridParams.Children.Add(columnsText);
-            gridParams.Children.Add(widthLabel);
-            gridParams.Children.Add(widthText);
-            gridParams.Children.Add(heightLabel);
-            gridParams.Children.Add(heightText);
-            gridParams.Children.Add(maxIterationsLabel);
-            gridParams.Children.Add(maxIterationsText);
-            gridParams.Children.Add(maxModulusLabel);
-            gridParams.Children.Add(maxModulusText);
-        }
-
-        private void loadFromFileItem_Click(object sender, RoutedEventArgs e) {
+        private void loadParamsItem_Click(object sender, RoutedEventArgs e) {
             MessageBox.Show(this, "Load Params");
         }
 
-        public void saveFromFileItem_Click(object sender, RoutedEventArgs e) {
+        public void saveParamsItem_Click(object sender, RoutedEventArgs e) {
             MessageBox.Show(this, "Save Params");
+            XmlWriterSettings settings = new XmlWriterSettings();
+            settings.Indent = true;
+            XmlWriter writer = XmlWriter.Create("params.xml", settings);
+
+            writer.WriteStartDocument();
+            writer.WriteStartElement("Params");
+            //write elements here
+            writer.WriteEndElement();
+            writer.WriteEndDocument();
+
+            writer.Flush();
+            writer.Close();
         }
 
         public void generateImageItem_Click(object sender, RoutedEventArgs e) {

@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="MandelbrotGrid.cs" />
     <Compile Include="MandelbrotWindow.cs" />
+    <Compile Include="ParamsPanel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
