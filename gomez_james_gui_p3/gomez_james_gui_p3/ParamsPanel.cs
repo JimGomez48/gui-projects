@@ -38,9 +38,9 @@ namespace gomez_james_gui_p3
         
         public TextBox Columns {get { return columns; }}        
 
-        public TextBox Width1 {get { return width; }}
+        public TextBox ImageWidth {get { return width; }}
         
-        public TextBox Height1 {get { return height; }}        
+        public TextBox ImageHeight {get { return height; }}        
 
         public TextBox MaxIterations {get { return maxIterations; }}        
 

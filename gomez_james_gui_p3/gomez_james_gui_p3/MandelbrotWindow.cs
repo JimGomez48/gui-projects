@@ -122,18 +122,33 @@ namespace gomez_james_gui_p3
             MessageBox.Show(this, "Load Params");
         }
 
-        public void saveParamsItem_Click(object sender, RoutedEventArgs e) {
-            MessageBox.Show(this, "Save Params");
-            XmlWriterSettings settings = new XmlWriterSettings();
+        public void saveParamsItem_Click(object sender, RoutedEventArgs e) {            
+            XmlWriterSettings settings = new XmlWriterSettings();            
             settings.Indent = true;
             XmlWriter writer = XmlWriter.Create("params.xml", settings);
 
+            string writeValue;
             writer.WriteStartDocument();
             writer.WriteStartElement("Params");
-            //write elements here
+            writeValue = (paramsPanel.XStart.Text == null || paramsPanel.XStart.Text == "") ? "0" : paramsPanel.XStart.Text;
+            writer.WriteElementString("XStart", writeValue);
+            writeValue = (paramsPanel.YStart.Text == null || paramsPanel.YStart.Text == "") ? "0" : paramsPanel.YStart.Text;
+            writer.WriteElementString("YStart", writeValue);
+            writeValue = (paramsPanel.Rows.Text == null || paramsPanel.Rows.Text == "") ? "720" : paramsPanel.Rows.Text;
+            writer.WriteElementString("Rows", writeValue);
+            writeValue = (paramsPanel.Columns.Text == null || paramsPanel.Columns.Text == "") ? "720" : paramsPanel.Columns.Text;
+            writer.WriteElementString("Columns", writeValue);
+            writeValue = (paramsPanel.ImageWidth.Text == null || paramsPanel.ImageWidth.Text == "") ? "720" : paramsPanel.ImageWidth.Text;
+            writer.WriteElementString("Width", writeValue);
+            writeValue = (paramsPanel.ImageHeight.Text == null || paramsPanel.ImageHeight.Text == "") ? "720" : paramsPanel.ImageHeight.Text;
+            writer.WriteElementString("Height", writeValue);
+            writeValue = (paramsPanel.MaxIterations.Text == null || paramsPanel.MaxIterations.Text == "") ? "500" : paramsPanel.MaxIterations.Text;
+            writer.WriteElementString("MaxIterations", writeValue);
+            writeValue = (paramsPanel.MaxModulus.Text == null || paramsPanel.MaxModulus.Text == "") ? "500" : paramsPanel.MaxModulus.Text;
+            writer.WriteElementString("MaxModulus", writeValue);
             writer.WriteEndElement();
             writer.WriteEndDocument();
-
+            
             writer.Flush();
             writer.Close();
         }
