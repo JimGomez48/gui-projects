@@ -26,9 +26,7 @@ namespace gomez_james_gui_p3
 
         private readonly int width = 720;
         private readonly int height = 720;
-        private readonly int stride;
-
-        private const string paramsFileString = "params.xml";
+        private readonly int stride;        
 
         public MandelbrotWindow()
             : base() {
@@ -76,8 +74,7 @@ namespace gomez_james_gui_p3
             canvas.Height = height;
             //Canvas.SetTop(image, 0 - height * 0.22);
             Canvas.SetTop(image, 0);
-            Canvas.SetLeft(image, 0);
-            loadParamsXML();
+            Canvas.SetLeft(image, 0);            
         }
 
         public Menu MainMenu { get { return menu; } }
@@ -122,11 +119,11 @@ namespace gomez_james_gui_p3
         }
 
         private void loadParamsItem_Click(object sender, RoutedEventArgs e) {
-            loadParamsXML();
+            paramsPanel.loadParamsXML();
         }
 
         public void saveParamsItem_Click(object sender, RoutedEventArgs e) {
-            if (writeParamsXML()) {
+            if (paramsPanel.writeParamsXML()) {
                 MessageBox.Show(this, "Paramaters have been saved.");
             }
             else
@@ -154,89 +151,7 @@ namespace gomez_james_gui_p3
 
         private void exitItem_Click(object sender, RoutedEventArgs e) {
             Application.Current.Shutdown();
-        }
-        
-        /// <returns> true if write was succesful, false otherwise</returns>
-        private bool writeParamsXML() {
-            bool success = true;
-            XmlWriterSettings settings = new XmlWriterSettings();
-            settings.Indent = true;
-            XmlWriter writer = XmlWriter.Create(paramsFileString, settings);
-
-            try {                
-                string writeValue;
-                writer.WriteStartDocument();
-                writer.WriteStartElement("Params");
-                writeValue = (paramsPanel.XStart.Text == null || paramsPanel.XStart.Text == "") ? "0" : paramsPanel.XStart.Text;
-                writer.WriteElementString("XStart", writeValue);
-                writeValue = (paramsPanel.YStart.Text == null || paramsPanel.YStart.Text == "") ? "0" : paramsPanel.YStart.Text;
-                writer.WriteElementString("YStart", writeValue);
-                writeValue = (paramsPanel.Rows.Text == null || paramsPanel.Rows.Text == "") ? "720" : paramsPanel.Rows.Text;
-                writer.WriteElementString("Rows", writeValue);
-                writeValue = (paramsPanel.Columns.Text == null || paramsPanel.Columns.Text == "") ? "720" : paramsPanel.Columns.Text;
-                writer.WriteElementString("Columns", writeValue);
-                writeValue = (paramsPanel.ImageWidth.Text == null || paramsPanel.ImageWidth.Text == "") ? "720" : paramsPanel.ImageWidth.Text;
-                writer.WriteElementString("Width", writeValue);
-                writeValue = (paramsPanel.ImageHeight.Text == null || paramsPanel.ImageHeight.Text == "") ? "720" : paramsPanel.ImageHeight.Text;
-                writer.WriteElementString("Height", writeValue);
-                writeValue = (paramsPanel.MaxIterations.Text == null || paramsPanel.MaxIterations.Text == "") ? "500" : paramsPanel.MaxIterations.Text;
-                writer.WriteElementString("MaxIterations", writeValue);
-                writeValue = (paramsPanel.MaxModulus.Text == null || paramsPanel.MaxModulus.Text == "") ? "500" : paramsPanel.MaxModulus.Text;
-                writer.WriteElementString("MaxModulus", writeValue);
-                writer.WriteEndElement();
-                writer.WriteEndDocument();
-                writer.Flush();
-            }
-            catch(Exception e){
-                Console.WriteLine(e.Data);                
-                success = false;
-            }
-            finally{
-                writer.Close();                
-            }
-
-            return success;
-        }
-
-        private void loadParamsXML() {
-            if (!File.Exists(paramsFileString)){
-                writeParamsXML();
-            }
-            XmlDocument paramsDoc = new XmlDocument();
-            paramsDoc.Load(paramsFileString);
-            XmlNodeReader reader = new XmlNodeReader(paramsDoc);
-
-            while (reader.Read()) {
-                if (reader.NodeType == XmlNodeType.Element) {
-                    switch (reader.Name) {
-                        case "XStart":
-                            paramsPanel.XStart.Text = reader.ReadString();
-                            break;
-                        case "YStart":
-                            paramsPanel.YStart.Text = reader.ReadString();
-                            break;
-                        case "Rows":
-                            paramsPanel.Rows.Text = reader.ReadString();
-                            break;
-                        case "Columns":
-                            paramsPanel.Columns.Text = reader.ReadString();
-                            break;
-                        case "Width":
-                            paramsPanel.ImageWidth.Text = reader.ReadString();
-                            break;
-                        case "Height":
-                            paramsPanel.ImageHeight.Text = reader.ReadString();
-                            break;
-                        case "MaxIterations":
-                            paramsPanel.MaxIterations.Text = reader.ReadString();
-                            break;
-                        case "MaxModulus":
-                            paramsPanel.MaxModulus.Text = reader.ReadString();
-                            break;
-                    }
-                }
-            }
-        }
+        }               
     
         [STAThread]
         public static void Main(String[] args) {

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Xml;
 
 namespace gomez_james_gui_p3
 {
@@ -29,6 +31,8 @@ namespace gomez_james_gui_p3
         private Label height_label;
         private Label maxIterations_label;
         private Label maxModulus_label;
+
+        private const string paramsFileString = "params.xml";
 
         public TextBox XStart {get { return xStart; }}
         
@@ -61,7 +65,8 @@ namespace gomez_james_gui_p3
 
             createLabels();
             createTextBoxes();
-            arrangeAndAddUiItems();            
+            arrangeAndAddUiItems();
+            loadParamsXML();
         }
 
         private void createLabels() {
@@ -162,5 +167,88 @@ namespace gomez_james_gui_p3
             Children.Add(maxModulus);
         }
 
+        /// <returns> true if write was succesful, false otherwise</returns>
+        public bool writeParamsXML() {
+            bool success = true;
+            XmlWriterSettings settings = new XmlWriterSettings();
+            settings.Indent = true;
+            XmlWriter writer = XmlWriter.Create(paramsFileString, settings);
+
+            try {
+                string writeValue;
+                writer.WriteStartDocument();
+                writer.WriteStartElement("Params");
+                writeValue = (xStart.Text == null || xStart.Text == "") ? "0" : xStart.Text;
+                writer.WriteElementString("XStart", writeValue);
+                writeValue = (yStart.Text == null || yStart.Text == "") ? "0" : yStart.Text;
+                writer.WriteElementString("YStart", writeValue);
+                writeValue = (rows.Text == null || rows.Text == "") ? "720" : rows.Text;
+                writer.WriteElementString("Rows", writeValue);
+                writeValue = (columns.Text == null || columns.Text == "") ? "720" : columns.Text;
+                writer.WriteElementString("Columns", writeValue);
+                writeValue = (width.Text == null || width.Text == "") ? "720" : width.Text;
+                writer.WriteElementString("Width", writeValue);
+                writeValue = (height.Text == null || height.Text == "") ? "720" : height.Text;
+                writer.WriteElementString("Height", writeValue);
+                writeValue = (maxIterations.Text == null || maxIterations.Text == "") ? "500" : maxIterations.Text;
+                writer.WriteElementString("MaxIterations", writeValue);
+                writeValue = (maxModulus.Text == null || maxModulus.Text == "") ? "500" : maxModulus.Text;
+                writer.WriteElementString("MaxModulus", writeValue);
+                writer.WriteEndElement();
+                writer.WriteEndDocument();
+                writer.Flush();
+            }
+            catch (Exception e) {
+                Console.WriteLine(e.Data);
+                success = false;
+            }
+            finally {
+                writer.Close();
+            }
+
+            return success;
+        }
+
+        public void loadParamsXML() {
+            if (!File.Exists(paramsFileString)) {
+                writeParamsXML();
+            }
+            XmlDocument paramsDoc = new XmlDocument();
+            paramsDoc.Load(paramsFileString);
+            XmlNodeReader reader = new XmlNodeReader(paramsDoc);
+
+            while (reader.Read()) {
+                if (reader.NodeType == XmlNodeType.Element) {
+                    switch (reader.Name) {
+                        case "XStart":
+                            xStart.Text = reader.ReadString();
+                            break;
+                        case "YStart":
+                            yStart.Text = reader.ReadString();
+                            break;
+                        case "Rows":
+                            rows.Text = reader.ReadString();
+                            break;
+                        case "Columns":
+                            columns.Text = reader.ReadString();
+                            break;
+                        case "Width":
+                            width.Text = reader.ReadString();
+                            break;
+                        case "Height":
+                            height.Text = reader.ReadString();
+                            break;
+                        case "MaxIterations":
+                            maxIterations.Text = reader.ReadString();
+                            break;
+                        case "MaxModulus":
+                            maxModulus.Text = reader.ReadString();
+                            break;
+                    }
+                }
+            }
+        }
+
     }
+
 }
