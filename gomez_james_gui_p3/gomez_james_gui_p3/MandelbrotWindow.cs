@@ -26,11 +26,11 @@ namespace gomez_james_gui_p3
 
         private readonly int width = 720;
         private readonly int height = 720;
-        private readonly int stride;        
+        private readonly int stride;
 
         public MandelbrotWindow()
             : base() {
-                this.ResizeMode = System.Windows.ResizeMode.NoResize;
+            this.ResizeMode = System.Windows.ResizeMode.NoResize;
             dockPanel = new DockPanel();
             dockPanel.HorizontalAlignment = HorizontalAlignment.Left;
             dockPanel.VerticalAlignment = VerticalAlignment.Top;
@@ -41,13 +41,13 @@ namespace gomez_james_gui_p3
             canvasScroller.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
             canvasScroller.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
             paramsScroller.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
-            paramsScroller.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;                        
-            
+            paramsScroller.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
+
             createMenu();
             DockPanel.SetDock(menu, Dock.Top);
             dockPanel.Children.Add(menu);
             paramsPanel = new ParamsPanel();
-            
+
             DockPanel.SetDock(paramsScroller, Dock.Left);
             dockPanel.Children.Add(paramsScroller);
             paramsScroller.Content = paramsPanel;
@@ -74,7 +74,7 @@ namespace gomez_james_gui_p3
             canvas.Height = height;
             //Canvas.SetTop(image, 0 - height * 0.22);
             Canvas.SetTop(image, 0);
-            Canvas.SetLeft(image, 0);            
+            Canvas.SetLeft(image, 0);
         }
 
         public Menu MainMenu { get { return menu; } }
@@ -123,18 +123,27 @@ namespace gomez_james_gui_p3
         }
 
         public void saveParamsItem_Click(object sender, RoutedEventArgs e) {
-            if (paramsPanel.writeParamsXML()) {
-                MessageBox.Show(this, "Paramaters have been saved.");
+            if (paramsPanel.isValid()) {
+                if (paramsPanel.writeParamsXML()) {
+                    MessageBox.Show(this, "Paramaters have been saved.");
+                }
+                else
+                    MessageBox.Show(this, "Failed to save parameters");
             }
-            else
-                MessageBox.Show(this, "Failed to save parameters");
+            else {
+                MessageBox.Show(this, "Parameters must be numeric (0-9) values only");
+            }
         }
 
         public void generateImageItem_Click(object sender, RoutedEventArgs e) {
-            MessageBox.Show(this, "TODO: Generate Image");
+            if (paramsPanel.isValid())
+                MessageBox.Show(this, "TODO: Generate Image");
+            else
+                MessageBox.Show(this, "Parameters must be numeric (0-9) values only");
+
         }
 
-        public void saveImageItem_Click(object sender, RoutedEventArgs e) {            
+        public void saveImageItem_Click(object sender, RoutedEventArgs e) {
             SaveFileDialog dialog = new SaveFileDialog();
             dialog.DefaultExt = ".jpg";
             dialog.Filter = "JPEG (.jpg)|*.jpg";
@@ -151,8 +160,8 @@ namespace gomez_james_gui_p3
 
         private void exitItem_Click(object sender, RoutedEventArgs e) {
             Application.Current.Shutdown();
-        }               
-    
+        }
+
         [STAThread]
         public static void Main(String[] args) {
             MandelbrotWindow window = new MandelbrotWindow();

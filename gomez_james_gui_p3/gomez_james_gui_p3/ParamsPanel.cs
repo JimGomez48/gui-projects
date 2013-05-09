@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -21,6 +22,7 @@ namespace gomez_james_gui_p3
         private TextBox height;
         private TextBox maxIterations;
         private TextBox maxModulus;
+        private List<TextBox> textBoxes;
 
         //labels
         private Label xStart_label;
@@ -33,6 +35,7 @@ namespace gomez_james_gui_p3
         private Label maxModulus_label;
 
         private const string paramsFileString = "params.xml";
+        private const string allowedRegexVals = "[^0-9]+";
 
         public TextBox XStart {get { return xStart; }}
         
@@ -96,23 +99,32 @@ namespace gomez_james_gui_p3
             maxModulus_label.Margin = new Thickness(10, 10, 10, 0);
         }
 
-        private void createTextBoxes() {            
+        private void createTextBoxes() {
+            textBoxes = new List<TextBox>();
             xStart = new TextBox();
             xStart.Margin = new Thickness(10, 0, 10, 10);
+            textBoxes.Add(xStart);
             yStart = new TextBox();
             yStart.Margin = new Thickness(10, 2, 10, 10);
+            textBoxes.Add(yStart);
             rows = new TextBox();
             rows.Margin = new Thickness(10, 2, 10, 10);
+            textBoxes.Add(rows);
             columns = new TextBox();
             columns.Margin = new Thickness(10, 2, 10, 10);
+            textBoxes.Add(columns);
             width = new TextBox();
             width.Margin = new Thickness(10, 2, 10, 10);
+            textBoxes.Add(width);
             height = new TextBox();
             height.Margin = new Thickness(10, 2, 10, 10);
+            textBoxes.Add(height);
             maxIterations = new TextBox();
             maxIterations.Margin = new Thickness(10, 2, 10, 10);
+            textBoxes.Add(maxIterations);
             maxModulus = new TextBox();
             maxModulus.Margin = new Thickness(10, 2, 10, 10);
+            textBoxes.Add(maxModulus);
         }
 
         private void arrangeAndAddUiItems() {
@@ -166,7 +178,7 @@ namespace gomez_james_gui_p3
             Children.Add(maxModulus_label);
             Children.Add(maxModulus);
         }
-
+        /// <summary></summary>
         /// <returns> true if write was succesful, false otherwise</returns>
         public bool writeParamsXML() {
             bool success = true;
@@ -247,6 +259,16 @@ namespace gomez_james_gui_p3
                     }
                 }
             }
+        }
+
+        public bool isValid() {
+            Regex regex = new Regex(allowedRegexVals);
+            foreach (TextBox t in textBoxes) {
+                if (regex.IsMatch(t.Text))
+                    return false;
+            }
+            
+            return true;
         }
 
     }
