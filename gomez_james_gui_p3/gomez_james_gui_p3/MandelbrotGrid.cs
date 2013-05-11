@@ -10,47 +10,18 @@ namespace gomez_james_gui_p3
     class MandelbrotGrid
     {
         int[,] data;
-        private double xStart, yStart, width, height;
-
-        private readonly int rows;
-        private readonly int cols;
-        private readonly int maxIterations;
-        private readonly double maxModulus;
-
+        private double xStart;
+        private double yStart;
+        private double width;
+        private double height;
+        private int rows;
+        private int cols;
+        private int maxIterations;
+        private double maxModulus;
         int xIntervals;
         int yIntervals;
         double dx, dy;
 
-        /// <summary>
-        /// Creates a new two-dimensional Mandelbgrot grid representing a complex plain
-        /// </summary>
-        /// <param name="xStart">The x starting position</param>
-        /// <param name="yStart">The y starting position</param>
-        /// <param name="width">The width of the Mandelbrot grid</param>
-        /// <param name="height">the height of the Mandelbrot grid</param>
-        /// <param name="numRows">the number of rows to be contained within the Mandelbrot grid</param>
-        /// <param name="numCols">the number of columns to be contained within the Mandelbrot grid</param>
-        /// <param name="maxIterations">the maximum amount of iterations before we consider any complex point to diverge</param>
-        /// <param name="maxModulus">the maximum complex modulus value before we consider any complex point to diverge</param>
-        public MandelbrotGrid(double xStart, double yStart, double width, double height,
-            int numRows, int numCols, int maxIterations, double maxModulus) {
-
-            this.xStart = xStart;
-            this.yStart = yStart;
-            this.width = width;
-            this.height = height;
-            this.rows = numRows;
-            this.cols = numCols;
-            this.maxIterations = maxIterations;
-            this.maxModulus = maxModulus;
-            data = new int[rows, cols];
-
-            // calculated properties 
-            xIntervals = cols - 1;
-            yIntervals = numRows - 1;
-            dx = width / xIntervals;
-            dy = height / yIntervals;
-        }
 
         /// <summary>
         /// Generates a 2-D array containing divergance iteration counts for each pixel. 
@@ -88,8 +59,27 @@ namespace gomez_james_gui_p3
             }
 
             //printData();
-
             return pixelData;
+        }
+
+        public void setParams(double xStart, double yStart, double width, double height,
+            int numRows, int numCols, int maxIterations, double maxModulus) {
+
+            this.xStart = xStart;
+            this.yStart = yStart;
+            this.width = width;
+            this.height = height;
+            this.rows = numRows;
+            this.cols = numCols;
+            this.maxIterations = maxIterations;
+            this.maxModulus = maxModulus;
+            data = new int[rows, cols];
+
+            // calculated properties 
+            xIntervals = cols - 1;
+            yIntervals = numRows - 1;
+            dx = width / xIntervals;
+            dy = height / yIntervals;
         }
 
         private Complex toComplex(int row, int col) {

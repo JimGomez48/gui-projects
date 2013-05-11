@@ -63,11 +63,9 @@ namespace gomez_james_gui_p3
             menu.Width += paramsPanel.Width;
             stride = width;
 
-            mandelbrotGrid = new MandelbrotGrid(0, 0, width, height, width, height, 500, 500);
-            byte[] data = mandelbrotGrid.generateCounts();
-            bmpSource = BitmapSource.Create(width, height, 96, 96,
-                PixelFormats.Gray8, null, data, stride);
-            image.Source = bmpSource;
+            mandelbrotGrid = new MandelbrotGrid();
+            mandelbrotGrid.setParams(0, 0, width, height, width, height, 500, 500);
+            generateImage();
 
             canvas.Children.Add(image);
             canvas.Width = width;
@@ -137,7 +135,8 @@ namespace gomez_james_gui_p3
 
         public void generateImageItem_Click(object sender, RoutedEventArgs e) {
             if (paramsPanel.isValid())
-                MessageBox.Show(this, "TODO: Generate Image");
+                //MessageBox.Show(this, "TODO: Generate Image");
+                generateImage();
             else
                 MessageBox.Show(this, "Parameters must be numeric (0-9) values only");
 
@@ -160,6 +159,14 @@ namespace gomez_james_gui_p3
 
         private void exitItem_Click(object sender, RoutedEventArgs e) {
             Application.Current.Shutdown();
+        }
+
+        private void generateImage() {
+            mandelbrotGrid.setParams(0, 0, width, height, width, height, 500, 500);
+            byte[] data = mandelbrotGrid.generateCounts();
+            bmpSource = BitmapSource.Create(width, height, 96, 96,
+                PixelFormats.Gray8, null, data, stride);
+            image.Source = bmpSource;
         }
 
         [STAThread]
