@@ -53,7 +53,7 @@ namespace gomez_james_gui_p3
             paramsScroller.Content = paramsPanel;
 
             canvas = new Canvas();
-            DockPanel.SetDock(canvasScroller, Dock.Bottom);
+            DockPanel.SetDock(canvasScroller, Dock.Bottom);            
             dockPanel.Children.Add(canvasScroller);
             canvasScroller.Content = canvas;
 
@@ -67,7 +67,7 @@ namespace gomez_james_gui_p3
             mandelbrotGrid.setParams(0, 0, width, height, width, height, 500, 500);
             generateImage();
 
-            canvas.Children.Add(image);
+            canvas.Children.Add(image);            
             canvas.Width = width;
             canvas.Height = height;
             //Canvas.SetTop(image, 0 - height * 0.22);
