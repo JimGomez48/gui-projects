@@ -134,9 +134,9 @@ namespace gomez_james_gui_p3
         }
 
         public void generateImageItem_Click(object sender, RoutedEventArgs e) {
-            if (paramsPanel.isValid())
-                //MessageBox.Show(this, "TODO: Generate Image");
+            if (paramsPanel.isValid()) {                                                
                 generateImage();
+            }
             else
                 MessageBox.Show(this, "Parameters must be numeric (0-9) values only");
 
@@ -162,11 +162,29 @@ namespace gomez_james_gui_p3
         }
 
         private void generateImage() {
-            mandelbrotGrid.setParams(0, 0, width, height, width, height, 500, 500);
+            mandelbrotGrid.setParams(
+                Int32.Parse(paramsPanel.XStart.Text),
+                Int32.Parse(paramsPanel.YStart.Text),
+                Int32.Parse(paramsPanel.ImageWidth.Text),
+                Int32.Parse(paramsPanel.ImageHeight.Text),
+                Int32.Parse(paramsPanel.Rows.Text),
+                Int32.Parse(paramsPanel.Columns.Text),
+                Int32.Parse(paramsPanel.MaxIterations.Text),
+                Int32.Parse(paramsPanel.MaxModulus.Text));
+
             byte[] data = mandelbrotGrid.generateCounts();
-            bmpSource = BitmapSource.Create(width, height, 96, 96,
-                PixelFormats.Gray8, null, data, stride);
+            bmpSource = BitmapSource.Create(
+                Int32.Parse(paramsPanel.Rows.Text),
+                Int32.Parse(paramsPanel.Columns.Text), 
+                96, 
+                96,
+                PixelFormats.Gray8, 
+                null,
+                data,
+                Int32.Parse(paramsPanel.Rows.Text));
             image.Source = bmpSource;
+            canvas.Width = Int32.Parse(paramsPanel.Columns.Text);
+            canvas.Height = Int32.Parse(paramsPanel.Rows.Text);
         }
 
         [STAThread]

@@ -37,7 +37,7 @@ namespace gomez_james_gui_p3
 
             for (int i = 0; i < rows; i++) {
                 for (int j = 0; j < cols; j++) {
-                    Complex c = toComplex(i, j);
+                    Complex c = toComplex(i + (int)xStart, j + (int)yStart);
                     Complex z = new Complex(0, 0);
 
                     int iterations = 0;
